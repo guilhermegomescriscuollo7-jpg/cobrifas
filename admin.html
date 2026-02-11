@@ -80,6 +80,13 @@
         input, select { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid #333; color: #fff; border-radius: 6px; font-family: 'Rajdhani'; margin-bottom: 15px; }
         .btn-save { width:100%; padding:15px; background:var(--primary); border:none; font-weight:900; cursor:pointer; font-family: 'Orbitron'; color: #000; border-radius: 6px; }
 
+        .btn-toggle-history {
+            width: 100%; padding: 15px; background: #1a1a1a; color: #888;
+            border: 1px solid #333; font-family: 'Orbitron'; font-weight: bold;
+            cursor: pointer; margin-top: 10px; border-radius: 8px; transition: 0.3s;
+        }
+        .btn-toggle-history:hover { background: var(--primary); color: #000; }
+
         /* --- DASHBOARD STATS --- */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: var(--glass-bg); padding: 30px; border-radius: 12px; border: var(--glass-border); text-align: center; }
@@ -146,7 +153,9 @@
 
             <section id="pagamentos" class="tab-content">
                 <div class="header-title">APROVAR PAGAMENTOS</div>
+                
                 <div class="glass-panel">
+                    <h3 style="font-family:Orbitron; margin-bottom:15px; color:#fff;">PENDENTES</h3>
                     <table>
                         <thead>
                             <tr>
@@ -159,6 +168,29 @@
                         </thead>
                         <tbody id="listaPagamentos"></tbody>
                     </table>
+                </div>
+
+                <button class="btn-toggle-history" onclick="toggleHistorico()">📜 VER HISTÓRICO DE APROVADOS ▼</button>
+                
+                <div id="areaHistorico" style="display:none; margin-top:20px;">
+                    <div class="glass-panel" style="border: 1px solid var(--green);">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                            <input type="text" id="buscaHistNome" placeholder="🔍 Filtrar Histórico por Nome..." onkeyup="filtrarHistoricoPagamentos()">
+                            <input type="text" id="buscaHistCPF" placeholder="🔍 Filtrar Histórico por CPF..." onkeyup="filtrarHistoricoPagamentos()">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>DATA APROVAÇÃO</th>
+                                    <th>USER</th>
+                                    <th>CPF</th> 
+                                    <th>RIFA</th>
+                                    <th>VALOR</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaPagamentosHistorico"></tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -235,7 +267,8 @@
         const db = firebase.database();
 
         let chatAtivoCPF = null;
-        let listaMembrosCache = {}; // Variável para guardar os membros e filtrar rápido
+        let listaMembrosCache = {};
+        let listaHistoricoPagamentosCache = {}; // Cache para histórico
 
         function openTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
@@ -245,7 +278,6 @@
             if(id === 'chat') renderChat();
         }
 
-        /* --- DASHBOARD --- */
         function updateDash() {
             db.ref('/').on('value', s => {
                 const data = s.val() || {};
@@ -257,7 +289,6 @@
             });
         }
 
-        /* --- RIFAS COM BÔNUS --- */
         function addRifa() {
             const n=document.getElementById('rifaNome').value, i=document.getElementById('rifaImg').value, p=document.getElementById('rifaPreco').value, t=document.getElementById('rifaTotal').value;
             const bn=document.getElementById('bNome').value, bi=document.getElementById('bImg').value;
@@ -272,41 +303,89 @@
                 document.getElementById('listaRifasAdm').innerHTML = Object.keys(rifas).map(id => {
                     const r = rifas[id];
                     const v = r.numerosVendidos ? r.numerosVendidos.length : 0;
-                    // CALCULO DAS COTAS RESTANTES
                     const restantes = parseInt(r.total) - v;
-                    
                     let btn = r.ganhador ? '🏆 FINALIZADA' : (v >= r.total ? `<button class="btn-action btn-gold" onclick="abrirSorteio('${id}')">SORTEAR</button>` : 'EM ANDAMENTO');
-                    
                     return `<div class="glass-panel" style="display:flex; justify-content:space-between; align-items:center;">
-                        <div style="display:flex; align-items:center; gap:15px;">
-                            <img src="${r.img}" style="width:50px;">
-                            <div>
-                                <b>${r.nome}</b>
-                                <div style="font-size:0.75rem; color:#aaa;">Restam: <span style="color:var(--primary); font-weight:bold;">${restantes}</span> / ${r.total}</div>
-                            </div>
+                        <div style="display:flex; align-items:center; gap:15px;"><img src="${r.img}" style="width:50px;">
+                            <div><b>${r.nome}</b><div style="font-size:0.75rem; color:#aaa;">Restam: <span style="color:var(--primary); font-weight:bold;">${restantes}</span> / ${r.total}</div></div>
                         </div>
                         <div>${btn} <button class="btn-action btn-red" onclick="if(confirm('Excluir?')) db.ref('rifas/${id}').remove()">X</button></div></div>`;
                 }).join('');
             });
         }
 
-        /* --- PAGAMENTOS ATUALIZADOS --- */
+        /* --- PAGAMENTOS (COM HISTÓRICO AGORA) --- */
         function renderPagamentos() {
             db.ref('pagamentos').on('value', s => {
                 const pags = s.val() || {};
-                document.getElementById('listaPagamentos').innerHTML = Object.keys(pags).filter(id => pags[id].status === 'pendente').map(id => {
+                const pendentesHTML = [];
+                listaHistoricoPagamentosCache = {}; // Limpa cache para reconstruir
+
+                Object.keys(pags).forEach(id => {
                     const p = pags[id];
-                    return `<tr>
-                        <td><b>${p.usuario}</b></td>
-                        <td>${p.cpf}</td> <td>${p.rifa}</td>
-                        <td>R$ ${p.valor}</td>
-                        <td><a href="${p.comprovante}" download target="_blank" style="color:var(--primary)">BAIXAR</a></td>
-                        <td>
-                            <button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${p.rifaId}',${p.cotas})">OK</button>
-                            <button class="btn-action btn-red" onclick="reprovarPagamento('${id}')">X</button> </td>
-                    </tr>`;
-                }).join('') || '<tr><td colspan="6" align="center">Vazio.</td></tr>';
+                    
+                    if (p.status === 'pendente') {
+                        // Lista principal (Pendentes)
+                        pendentesHTML.push(`<tr>
+                            <td><b>${p.usuario}</b></td>
+                            <td>${p.cpf}</td> <td>${p.rifa}</td>
+                            <td>R$ ${p.valor}</td>
+                            <td><a href="${p.comprovante}" download target="_blank" style="color:var(--primary)">BAIXAR</a></td>
+                            <td>
+                                <button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${p.rifaId}',${p.cotas})">OK</button>
+                                <button class="btn-action btn-red" onclick="reprovarPagamento('${id}')">X</button> </td>
+                        </tr>`);
+                    } else if (p.status === 'aprovado') {
+                        // Salva no cache do histórico
+                        listaHistoricoPagamentosCache[id] = p;
+                    }
+                });
+
+                document.getElementById('listaPagamentos').innerHTML = pendentesHTML.join('') || '<tr><td colspan="6" align="center">Vazio.</td></tr>';
+                
+                // Atualiza a tabela do histórico com os novos dados
+                filtrarHistoricoPagamentos();
             });
+        }
+
+        // Função para alternar visibilidade do histórico
+        function toggleHistorico() {
+            const el = document.getElementById('areaHistorico');
+            el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+        }
+
+        // Função para filtrar e renderizar o histórico
+        function filtrarHistoricoPagamentos() {
+            const nome = document.getElementById('buscaHistNome').value.toLowerCase();
+            const cpf = document.getElementById('buscaHistCPF').value;
+            
+            // Ordenar por data (opcional, mas legal para ver os mais recentes primeiro)
+            const html = Object.keys(listaHistoricoPagamentosCache).reverse().map(id => {
+                const p = listaHistoricoPagamentosCache[id];
+                
+                const matchNome = (p.usuario || "").toLowerCase().includes(nome);
+                const matchCPF = (p.cpf || "").includes(cpf);
+
+                if (matchNome && matchCPF) {
+                    // Formata Data
+                    let dataFormatada = "--/--/--";
+                    if(p.dataAprovacao) {
+                        const d = new Date(p.dataAprovacao);
+                        dataFormatada = d.toLocaleDateString() + ' ' + d.toLocaleTimeString().slice(0,5);
+                    }
+
+                    return `<tr>
+                        <td style="color:var(--green)">${dataFormatada}</td>
+                        <td><b>${p.usuario}</b></td>
+                        <td>${p.cpf}</td> 
+                        <td>${p.rifa}</td>
+                        <td>R$ ${p.valor}</td>
+                    </tr>`;
+                }
+                return "";
+            }).join('');
+
+            document.getElementById('listaPagamentosHistorico').innerHTML = html || '<tr><td colspan="5" align="center">Nenhum aprovado encontrado.</td></tr>';
         }
 
         function aprovarPagamento(pagId, rifaId, qtd) {
@@ -320,7 +399,9 @@
                     if(!existentes.includes(f) && !novos.includes(f)) novos.push(f);
                 }
                 db.ref(`rifas/${rifaId}`).update({ vendidas: (r.vendidas||0)+qtd, numerosVendidos: [...existentes, ...novos] });
-                db.ref(`pagamentos/${pagId}`).update({ status: 'aprovado', numeros: novos });
+                
+                // ATUALIZADO: Salva a data de aprovação agora
+                db.ref(`pagamentos/${pagId}`).update({ status: 'aprovado', numeros: novos, dataAprovacao: new Date().toISOString() });
                 alert("Aprovado!");
             });
         }
@@ -331,7 +412,7 @@
             }
         }
 
-        /* --- SORTEIO REALTIME --- */
+        /* --- OUTRAS FUNÇÕES --- */
         function abrirSorteio(id) {
             db.ref(`rifas/${id}`).once('value', s => {
                 const r = s.val();
@@ -359,7 +440,6 @@
             });
         }
 
-        /* --- CHAT INTELIGENTE --- */
         function renderChat() {
             db.ref('membros').once('value', sMemb => {
                 const membros = sMemb.val() || {};
@@ -404,7 +484,6 @@
             document.getElementById('respAdm').value = '';
         }
 
-        /* --- PIX E MEMBROS --- */
         function carregarPix() {
             db.ref('config/pix').on('value', s => {
                 const data = s.val();
@@ -422,49 +501,34 @@
             }).then(() => alert("Salvo!")); 
         }
 
-        // --- FUNÇÕES DE MEMBROS E FILTROS (NOVA LÓGICA) ---
         function renderMembros() {
-            // Apenas carrega os dados e salva na variavel cache
             db.ref('membros').on('value', s => {
                 listaMembrosCache = s.val() || {};
-                filtrarTabelaMembros(); // Chama o filtro que gera a tabela
+                filtrarTabelaMembros();
             });
         }
 
         function filtrarTabelaMembros() {
-            // Pega os valores digitados
             const nomeFiltro = document.getElementById('buscaNome').value.toLowerCase();
             const cpfFiltro = document.getElementById('buscaCPF').value;
-
-            // Gera o HTML filtrando os dados
             const html = Object.keys(listaMembrosCache).map(id => {
                 const m = listaMembrosCache[id];
-                
-                // Lógica de Filtro
                 const matchNome = (m.nome || "").toLowerCase().includes(nomeFiltro);
                 const matchCPF = (m.cpf || "").includes(cpfFiltro);
-
                 if (matchNome && matchCPF) {
                     return `<tr>
                         <td><div class="user-cell"><img src="${m.avatar}" class="user-img"><b>${m.nome}</b></div></td>
-                        <td>${m.cpf}</td>
-                        <td>${m.tel}</td>
-                        <td>
-                            <button class="btn-action btn-orange" onclick="db.ref('membros/${id}').update({status:'BANIDO'})">BANIR</button>
-                            <button class="btn-action btn-red" onclick="if(confirm('Apagar?')) db.ref('membros/${id}').remove()">X</button>
-                        </td>
+                        <td>${m.cpf}</td> <td>${m.tel}</td>
+                        <td><button class="btn-action btn-orange" onclick="db.ref('membros/${id}').update({status:'BANIDO'})">BANIR</button>
+                        <button class="btn-action btn-red" onclick="if(confirm('Apagar?')) db.ref('membros/${id}').remove()">X</button></td>
                     </tr>`;
-                } else {
-                    return ""; // Não exibe se não bater com o filtro
-                }
+                } else { return ""; }
             }).join('');
-
             document.getElementById('listaMembrosBody').innerHTML = html;
         }
 
         window.onload = () => { 
             updateDash(); renderMembros(); renderRifas(); renderPagamentos(); carregarPix(); 
-            
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('openChat')) {
                 openTab(null, 'chat');

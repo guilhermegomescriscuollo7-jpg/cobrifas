@@ -41,8 +41,25 @@
         .logo { font-family: 'Orbitron'; font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 900; color: #fff; text-decoration: none; letter-spacing: 1px; }
         .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
         
-        .auth-nav { display: flex; align-items: center; gap: 15px; }
-        .btn-register { background: var(--primary); color: #000; padding: 10px 20px; border-radius: 4px; font-family: 'Orbitron'; font-weight: 900; text-decoration: none; transition: 0.3s; font-size: 0.8rem; }
+        .auth-nav { display: flex; align-items: center; }
+        .btn-login { 
+            background: transparent; 
+            color: var(--primary); 
+            padding: 10px 25px; 
+            border: 1px solid var(--primary); 
+            border-radius: 4px; 
+            font-family: 'Orbitron'; 
+            font-weight: 900; 
+            text-decoration: none; 
+            transition: 0.3s; 
+            font-size: 0.85rem; 
+            letter-spacing: 1px;
+        }
+        .btn-login:hover { 
+            background: var(--primary); 
+            color: #000; 
+            box-shadow: 0 0 20px var(--primary-glow); 
+        }
 
         /* --- TICKER --- */
         .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid #333; height: 35px; display: flex; align-items: center; }
@@ -50,7 +67,7 @@
         .ticker-item { display: inline-block; padding: 0 1.5rem; font-size: 0.8rem; color: #ccc; font-family: 'Orbitron'; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* --- HERO RESPONSIVO --- */
+        /* --- HERO --- */
         .hero { padding: 60px 5% 40px; text-align: center; }
         .hero h1 { font-family: 'Orbitron'; font-size: clamp(1.8rem, 8vw, 4.5rem); font-style: italic; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; line-height: 1.1; }
         .hero h1 span { color: var(--primary); display: block; }
@@ -61,7 +78,7 @@
         .section-title { font-family: 'Orbitron'; font-size: clamp(1.1rem, 4vw, 1.5rem); margin-bottom: 30px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
         .section-title::before { content: '⚡'; color: var(--primary); }
 
-        /* --- CARDS RIFAS --- */
+        /* --- CARDS --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 20px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
         .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 6px 15px; font-size: 0.9rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
@@ -70,13 +87,13 @@
         .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; transition: 0.5s; }
         .btn-participar { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; font-size: 0.85rem; }
 
-        /* --- RANKINGS RESPONSIVOS --- */
+        /* --- RANKINGS --- */
         .rankings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 50px; }
         .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px; }
         .rank-title { font-family: 'Orbitron'; font-size: 0.9rem; color: #fff; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
         .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 8px; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
 
-        /* --- MODAL RESPONSIVO --- */
+        /* --- MODAL DETALHES --- */
         #modalDetails { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:4500; align-items:center; justify-content:center; backdrop-filter: blur(10px); padding: 20px; }
         .details-card { width: 100%; max-width: 450px; background: #111; border: 2px solid var(--primary); padding: 25px; border-radius: 12px; position: relative; max-height: 90vh; overflow-y: auto; }
         .winner-img-box { text-align: center; margin-bottom: 15px; }
@@ -85,13 +102,10 @@
 
         footer { text-align: center; padding: 40px 20px; color: #444; font-family: 'Orbitron'; font-size: 0.65rem; border-top: 1px solid #111; margin-top: 40px; }
 
-        /* --- MEDIA QUERIES PARA CELULARES PEQUENOS --- */
         @media (max-width: 480px) {
-            header { flex-direction: column; gap: 15px; padding: 15px 5%; }
-            .auth-nav { width: 100%; justify-content: center; gap: 20px; }
+            header { padding: 15px 5%; }
             .hero { padding: 40px 5% 30px; }
             .grid { grid-template-columns: 1fr; }
-            .details-card { padding: 15px; }
         }
     </style>
 </head>
@@ -100,8 +114,7 @@
     <header>
         <a href="index.html" class="logo">COB<span>RIFAS</span></a>
         <div class="auth-nav">
-            <a href="login.html" style="color:#888; text-decoration:none; font-family:Orbitron; font-size: 0.8rem;">LOGIN</a>
-            <a href="cadastro.html" class="btn-register">CRIAR CONTA</a>
+            <a href="login.html" class="btn-login">LOGIN OPERADOR</a>
         </div>
     </header>
 
@@ -122,7 +135,7 @@
                 <div id="recentWinnersList"></div>
             </div>
             <div class="rank-card">
-                <div class="rank-title">💎 TOP MEMBROS (COTAS)</div>
+                <div class="rank-title">💎 TOP COMPRADORES</div>
                 <div id="globalRankingList"></div>
             </div>
         </div>
@@ -142,7 +155,7 @@
             <div class="detail-row"><span>CPF:</span><span style="color:#888" id="dtCpf">---</span></div>
             
             <div id="dtBonusArea" class="bonus-result" style="background: rgba(255,204,0,0.1); border: 1px dashed var(--primary); padding: 12px; border-radius: 8px; margin-top: 15px; display: none;">
-                <span style="font-family:'Orbitron'; font-size:0.6rem; color:var(--primary); display:block; margin-bottom:5px;">🏆 PRÊMIO EXTRA (TOP COMPRADOR):</span>
+                <span style="font-family:'Orbitron'; font-size:0.6rem; color:var(--primary); display:block; margin-bottom:5px;">🏆 PRÊMIO EXTRA:</span>
                 <div style="display:flex; align-items:center; gap:10px;">
                     <img src="" id="dtBonusImg" style="width:40px; height:30px; object-fit:contain;">
                     <b id="dtBonusName" style="font-size:0.8rem;">---</b>
@@ -154,6 +167,7 @@
     <footer>COBRIFAS © 2026 - TODOS OS DIREITOS RESERVADOS.</footer>
 
     <script>
+        // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg",
             authDomain: "cobrifas.firebaseapp.com",
@@ -189,7 +203,7 @@
                 grid.innerHTML = ativas.map(id => {
                     const r = rifas[id];
                     const pct = ((r.vendidas || 0) / r.total) * 100;
-                    const bonusHtml = r.bonus ? `<div style="border:1px dashed var(--primary); padding:8px; margin-bottom:12px; font-size:0.6rem; color:var(--primary); font-family:Orbitron; display:flex; align-items:center; gap:8px;"><img src="${r.bonus.img}" style="width:25px;"> TOP COMPRADOR: ${r.bonus.nome}</div>` : '';
+                    const bonusHtml = r.bonus ? `<div style="border:1px dashed var(--primary); padding:8px; margin-bottom:12px; font-size:0.6rem; color:var(--primary); font-family:Orbitron; display:flex; align-items:center; gap:8px;"><img src="${r.bonus.img}" style="width:25px;"> TOP: ${r.bonus.nome}</div>` : '';
                     
                     return `
                     <div class="card">
@@ -204,7 +218,7 @@
                         ${bonusHtml}
                         <button class="btn-participar" onclick="location.href='login.html'">PARTICIPAR</button>
                     </div>`;
-                }).join('') || '<p style="grid-column:1/-1; text-align:center; padding:50px; color:#555;">Nenhuma rifa ativa no momento.</p>';
+                }).join('') || '<p style="grid-column:1/-1; text-align:center; padding:50px; color:#555;">Aguardando novas rifas...</p>';
             });
         }
 

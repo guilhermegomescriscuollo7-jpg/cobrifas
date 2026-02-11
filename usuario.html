@@ -96,7 +96,6 @@
         .mini-rank-item:first-child { color: var(--primary); font-weight: bold; }
 
         /* --- ESTILO DAS RIFAS DETALHADAS --- */
-        .rifa-group-title { color: #888; font-family: 'Orbitron'; margin: 40px 0 20px; border-bottom: 1px solid #333; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
         .rifa-detalhada { background: linear-gradient(145deg, #111, #0a0a0a); border: 1px solid #333; border-radius: 12px; padding: 25px; display: flex; gap: 25px; margin-bottom: 25px; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s; }
         .rifa-detalhada:hover { transform: translateY(-3px); border-color: #444; }
         .rd-img { width: 120px; height: 120px; object-fit: contain; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid #222; }
@@ -147,7 +146,7 @@
         .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; }
         .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 10px; }
 
-        /* --- PERFIL (AJUSTADO) --- */
+        /* --- PERFIL --- */
         .profile-container { display: flex; flex-direction: column; align-items: center; max-width: 600px; margin: 0 auto; }
         .avatar-edit-wrapper { position: relative; cursor: pointer; width: 120px; height: 120px; margin-bottom: 30px; }
         .avatar-main { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; box-shadow: 0 0 20px rgba(255,204,0,0.3); transition: 0.3s; }
@@ -156,14 +155,10 @@
         .avatar-edit-wrapper:hover .avatar-main { filter: blur(2px); }
         .section-separator { width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 30px 0; }
         .section-subtitle { font-family: 'Orbitron'; color: var(--primary); margin-bottom: 15px; font-size: 1rem; text-align: left; width: 100%; }
-
-        /* ESTILOS ESPECÍFICOS PARA FORMULÁRIO DE PERFIL */
+        
         .input-group { display: flex; flex-direction: column; }
         .input-group label { color: #888; font-size: 0.7rem; font-family: 'Orbitron'; margin-bottom: 5px; }
-        .input-group input { 
-            background: #000; border: 1px solid #333; color: #fff; padding: 12px; 
-            border-radius: 5px; font-family: 'Rajdhani', sans-serif; 
-        }
+        .input-group input { background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 5px; font-family: 'Rajdhani', sans-serif; }
         .input-group input:focus { border-color: var(--primary); outline: none; }
         .input-group input:disabled { background: #111; cursor: not-allowed; }
 
@@ -172,6 +167,16 @@
         .avatar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
         .avatar-option { width: 70px; height: 70px; border-radius: 50%; cursor: pointer; border: 2px solid #333; transition: 0.2s; object-fit: cover; }
         .avatar-option:hover { border-color: var(--primary); transform: scale(1.1); }
+
+        /* --- NOVO: ESTILOS PARA OS SUBMENUS --- */
+        .sub-menu-container { display: flex; gap: 15px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sub-btn { background: transparent; border: none; color: #666; font-family: 'Orbitron'; font-size: 0.9rem; cursor: pointer; padding: 10px 15px; transition: 0.3s; white-space: nowrap; font-weight: bold; }
+        .sub-btn:hover { color: #fff; }
+        .sub-btn.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        
+        /* Oculta o conteúdo por padrão */
+        .sub-content { display: none; animation: fadeIn 0.4s ease; }
+        .sub-content.active { display: block; }
     </style>
 </head>
 <body>
@@ -217,14 +222,29 @@
 
         <section id="minhas" class="tab-content">
             <h2 class="section-title">MINHAS PARTICIPAÇÕES</h2>
-            <div id="containerGanhas" style="display:none;">
-                <div class="rifa-group-title"><span style="color:var(--primary)">🏆</span> RIFAS GANHAS</div>
-                <div id="listaGanhas"></div>
+            
+            <div class="sub-menu-container">
+                <button class="sub-btn" id="btn-ganhas" onclick="openSubTab('ganhas')">🏆 RIFAS GANHAS</button>
+                <button class="sub-btn active" id="btn-compradas" onclick="openSubTab('compradas')">✅ RIFAS COMPRADAS</button>
+                <button class="sub-btn" id="btn-pendentes" onclick="openSubTab('pendentes')">⏳ RIFAS PENDENTES</button>
             </div>
-            <div class="rifa-group-title"><span style="color:var(--green)">✅</span> RIFAS COMPRADAS</div>
-            <div id="listaAprovadas"></div>
-            <div class="rifa-group-title"><span style="color:var(--red)">⏳</span> RIFAS PENDENTES</div>
-            <div id="listaPendentes"></div>
+
+            <div id="view-ganhas" class="sub-content">
+                <div id="containerGanhas" style="display:none;">
+                     <div id="listaGanhas"></div>
+                </div>
+                <div id="msgSemGanhas" style="display:none; text-align:center; color:#555; margin-top:30px;">
+                    Nenhum prêmio ganho... ainda! 🍀
+                </div>
+            </div>
+
+            <div id="view-compradas" class="sub-content active">
+                <div id="listaAprovadas"></div>
+            </div>
+
+            <div id="view-pendentes" class="sub-content">
+                <div id="listaPendentes"></div>
+            </div>
         </section>
 
         <section id="suporte" class="tab-content">
@@ -245,7 +265,6 @@
                     <img src="" id="profileAvatarPreview" class="avatar-main">
                     <div class="avatar-edit-overlay">📷</div>
                 </div>
-                
                 <div style="width: 100%;">
                     <div class="section-subtitle">DADOS PESSOAIS</div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
@@ -254,16 +273,13 @@
                         <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
                         <div class="input-group"><label>CPF</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
                     </div>
-
                     <div class="section-separator"></div>
-
                     <div class="section-subtitle">SEGURANÇA (ALTERAR SENHA)</div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                         <div class="input-group"><label>NOVA SENHA</label><input type="password" id="pNewPass" placeholder="Deixe vazio para manter"></div>
                         <div class="input-group"><label>CONFIRMAR SENHA</label><input type="password" id="pConfPass" placeholder="Repita a nova senha"></div>
                     </div>
                 </div>
-                
                 <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none; width:100%; padding:15px; font-weight:900;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
             </div>
         </section>
@@ -441,7 +457,90 @@
         function abrirCheckoutPix() { if(!carrinho.length) return alert("Carrinho vazio!"); db.ref('config/pix/chave').once('value', s => { document.getElementById('txtChavePix').innerText = s.val() || "---"; document.getElementById('modalPix').style.display = 'flex'; toggleCart(); }); }
         function validarArquivo() { const file = document.getElementById('compInput').files[0]; if(file) { document.getElementById('fileName').innerText = "✔ " + file.name; const reader = new FileReader(); reader.onload = e => { comprovanteBase64 = e.target.result; document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); }; reader.readAsDataURL(file); } }
         function enviarPedidoFirebase() { if(!comprovanteBase64) return alert("Anexe o comprovante!"); carrinho.forEach(it => { db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64, data: new Date().toLocaleString() }); }); carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none'; alert("Enviado!"); tab('minhas'); }
-        function loadMinhas() { db.ref('rifas').once('value', sRifas => { const mapRifas = sRifas.val() || {}; db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => { const pags = Object.values(s.val() || {}).reverse(); let htmlGanhas = '', htmlAprovadas = '', htmlPendentes = '', hasWins = false; pags.forEach(p => { const rDetails = mapRifas[p.rifaId] || {}; const img = rDetails.img || 'https://via.placeholder.com/100?text=Rifa'; const unitVal = (parseFloat(p.valor) / parseInt(p.cotas)).toFixed(2); const isWinner = rDetails.ganhador && rDetails.ganhador.cpf === userAtivo.cpf; const numerosHtml = p.numeros ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>'; const cardHtml = `<div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}"><img src="${img}" class="rd-img"><div class="rd-info"><div class="rd-header"><div class="rd-title">${p.rifa}</div><div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div></div><div class="rd-stats-row"><span class="rd-stat">Cotas: <b>${p.cotas}</b></span><span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span><span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span></div><div><span class="rd-nums-label">SEUS NÚMEROS:</span><div class="rd-nums-container">${numerosHtml}</div></div></div></div>`; if (isWinner && p.status === 'aprovado') { htmlGanhas += cardHtml; hasWins = true; } if (p.status === 'aprovado') { htmlAprovadas += cardHtml; } else if (p.status === 'pendente' || p.status === 'recusado') { htmlPendentes += cardHtml; } }); document.getElementById('listaGanhas').innerHTML = htmlGanhas; document.getElementById('containerGanhas').style.display = hasWins ? 'block' : 'none'; document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>'; document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>'; }); }); }
+        
+        // --- FUNÇÃO PARA ALTERNAR ABAS (SUBMENUS) ---
+        function openSubTab(tabName) {
+            // Remove active de todos os botões
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            // Esconde todo conteúdo
+            document.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
+            
+            // Ativa o botão clicado e o conteúdo correspondente
+            document.getElementById('btn-' + tabName).classList.add('active');
+            document.getElementById('view-' + tabName).classList.add('active');
+        }
+
+        /* --- MINHAS RIFAS (ATUALIZADO PARA EXIBIR NUMEROS EM BADGES) --- */
+        function loadMinhas() {
+            db.ref('rifas').once('value', sRifas => {
+                const mapRifas = sRifas.val() || {};
+                
+                db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
+                    const pags = Object.values(s.val() || {}).reverse();
+                    
+                    let htmlGanhas = '';
+                    let htmlAprovadas = '';
+                    let htmlPendentes = '';
+                    let hasWins = false;
+
+                    pags.forEach(p => {
+                        const rDetails = mapRifas[p.rifaId] || {};
+                        const img = rDetails.img || 'https://via.placeholder.com/100?text=Rifa';
+                        const unitVal = (parseFloat(p.valor) / parseInt(p.cotas)).toFixed(2);
+                        const isWinner = rDetails.ganhador && rDetails.ganhador.cpf === userAtivo.cpf;
+                        
+                        const numerosHtml = p.numeros 
+                            ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') 
+                            : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>';
+                        
+                        const cardHtml = `
+                            <div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}">
+                                <img src="${img}" class="rd-img">
+                                <div class="rd-info">
+                                    <div class="rd-header">
+                                        <div class="rd-title">${p.rifa}</div>
+                                        <div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div>
+                                    </div>
+                                    <div class="rd-stats-row">
+                                        <span class="rd-stat">Cotas: <b>${p.cotas}</b></span>
+                                        <span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span>
+                                        <span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span>
+                                    </div>
+                                    <div>
+                                        <span class="rd-nums-label">SEUS NÚMEROS:</span>
+                                        <div class="rd-nums-container">
+                                            ${numerosHtml}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                        if (isWinner && p.status === 'aprovado') {
+                            htmlGanhas += cardHtml;
+                            hasWins = true;
+                        } 
+                        
+                        if (p.status === 'aprovado') {
+                            htmlAprovadas += cardHtml;
+                        } else if (p.status === 'pendente' || p.status === 'recusado') {
+                            htmlPendentes += cardHtml;
+                        }
+                    });
+
+                    document.getElementById('listaGanhas').innerHTML = htmlGanhas;
+                    if(hasWins) {
+                        document.getElementById('containerGanhas').style.display = 'block'; 
+                    } else {
+                        // Se não tiver ganhas, mostra mensagem vazia na aba de ganhas
+                         document.getElementById('msgSemGanhas').style.display = 'block';
+                    }
+                    
+                    document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>';
+                    document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>';
+                });
+            });
+        }
+
         function renderGlobalRanking() { db.ref('pagamentos').on('value', s => { const rank = {}; Object.values(s.val() || {}).filter(p => p.status === 'aprovado').forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); }); const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5); document.getElementById('globalRankingList').innerHTML = sorted.map((it, i) => `<div class="rank-item"><span>${i+1}. ${it[0]}</span><b>${it[1]} Cotas</b></div>`).join('') || 'Sem dados.'; }); }
         function renderGanhadoresRecentes() { db.ref('rifas').on('value', s => { const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5); document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `<div class="rank-item"><span>${r.ganhador.nome.split(' ')[0]}... <br> <small>${r.nome}</small></span><b>#${r.ganhador.numero}</b></div>`).join('') || 'Aguardando sorteios...'; }); }
         function checkVitorias() { db.ref('rifas').on('value', s => { const rifas = s.val() || {}; Object.keys(rifas).forEach(id => { const r = rifas[id]; if(r.ganhador && r.ganhador.cpfReal === userAtivo.cpf && !r.ganhador.vistoPeloUser) { document.getElementById('vicItemName').innerText = r.nome; document.getElementById('vicNumber').innerText = r.ganhador.numero; document.getElementById('modalVictory').style.display = 'flex'; db.ref(`rifas/${id}/ganhador`).update({vistoPeloUser: true}); } }); }); }

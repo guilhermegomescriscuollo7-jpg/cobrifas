@@ -390,7 +390,24 @@
         }
 
         /* --- PIX E MEMBROS --- */
-        function salvarPix() { db.ref('config/pix').set({ tipo: document.getElementById('pixTipo').value, chave: document.getElementById('pixChave').value }).then(() => alert("Salvo!")); }
+        // NOVA FUNÇÃO: CARREGAR PIX (Mantém fixo na tela)
+        function carregarPix() {
+            db.ref('config/pix').on('value', s => {
+                const data = s.val();
+                if(data) {
+                    if(data.tipo) document.getElementById('pixTipo').value = data.tipo;
+                    if(data.chave) document.getElementById('pixChave').value = data.chave;
+                }
+            });
+        }
+
+        function salvarPix() { 
+            db.ref('config/pix').set({ 
+                tipo: document.getElementById('pixTipo').value, 
+                chave: document.getElementById('pixChave').value 
+            }).then(() => alert("Salvo!")); 
+        }
+
         function renderMembros() {
             db.ref('membros').on('value', s => {
                 const membros = s.val() || {};
@@ -403,7 +420,8 @@
             });
         }
 
-        window.onload = () => { updateDash(); renderMembros(); renderRifas(); renderPagamentos(); };
+        // ADICIONADO carregarPix() NO LOAD
+        window.onload = () => { updateDash(); renderMembros(); renderRifas(); renderPagamentos(); carregarPix(); };
     </script>
 </body>
 </html>

@@ -96,6 +96,7 @@
         .mini-rank-item:first-child { color: var(--primary); font-weight: bold; }
 
         /* --- ESTILO DAS RIFAS DETALHADAS --- */
+        .rifa-group-title { color: #888; font-family: 'Orbitron'; margin: 40px 0 20px; border-bottom: 1px solid #333; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
         .rifa-detalhada { background: linear-gradient(145deg, #111, #0a0a0a); border: 1px solid #333; border-radius: 12px; padding: 25px; display: flex; gap: 25px; margin-bottom: 25px; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s; }
         .rifa-detalhada:hover { transform: translateY(-3px); border-color: #444; }
         .rd-img { width: 120px; height: 120px; object-fit: contain; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid #222; }
@@ -145,6 +146,7 @@
         .msg-a { align-self: flex-start; background: #333; color: #fff; padding: 10px 15px; border-radius: 8px; max-width: 75%; }
         .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; }
         .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 10px; }
+        .rank-item:hover { background: rgba(255,255,255,0.05); transform: translateX(5px); }
 
         /* --- PERFIL --- */
         .profile-container { display: flex; flex-direction: column; align-items: center; max-width: 600px; margin: 0 auto; }
@@ -168,15 +170,20 @@
         .avatar-option { width: 70px; height: 70px; border-radius: 50%; cursor: pointer; border: 2px solid #333; transition: 0.2s; object-fit: cover; }
         .avatar-option:hover { border-color: var(--primary); transform: scale(1.1); }
 
-        /* --- NOVO: ESTILOS PARA OS SUBMENUS --- */
+        /* --- SUBMENUS --- */
         .sub-menu-container { display: flex; gap: 15px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .sub-btn { background: transparent; border: none; color: #666; font-family: 'Orbitron'; font-size: 0.9rem; cursor: pointer; padding: 10px 15px; transition: 0.3s; white-space: nowrap; font-weight: bold; }
         .sub-btn:hover { color: #fff; }
         .sub-btn.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
         
-        /* Oculta o conteúdo por padrão */
         .sub-content { display: none; animation: fadeIn 0.4s ease; }
         .sub-content.active { display: block; }
+
+        /* --- MODAL DETALHES SORTEIO (NOVO) --- */
+        #modalDetails { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(15px); padding: 20px; }
+        .details-card { width: 100%; max-width: 450px; background: #0a0a0a; border: 1px solid var(--primary); padding: 30px; border-radius: 15px; position: relative; box-shadow: 0 0 60px rgba(255,204,0,0.15); }
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed #333; padding-bottom: 8px; font-size: 0.9rem; }
+        .winner-img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(255,204,0,0.2)); }
     </style>
 </head>
 <body>
@@ -215,7 +222,10 @@
             <div class="grid" id="gridLoja"></div>
             
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:40px; margin-top:60px;">
-                <div class="rank-card"><div style="font-family:Orbitron; margin-bottom:20px;">🏆 ÚLTIMOS SORTEIOS</div><div id="recentWinnersList"></div></div>
+                <div class="rank-card">
+                    <div style="font-family:Orbitron; margin-bottom:20px;">🏆 ÚLTIMOS SORTEIOS</div>
+                    <div id="recentWinnersList"></div>
+                </div>
                 <div class="rank-card"><div style="font-family:Orbitron; margin-bottom:20px;">💎 TOP COMPRADORES</div><div id="globalRankingList"></div></div>
             </div>
         </section>
@@ -340,6 +350,37 @@
         </div>
     </div>
 
+    <div id="modalDetails">
+        <div class="details-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="font-family:'Orbitron'; color:var(--primary); font-size: 1.2rem;">RESULTADO OFICIAL</h3>
+                <span style="cursor:pointer; color:#fff; font-size:1.5rem;" onclick="document.getElementById('modalDetails').style.display='none'">✕</span>
+            </div>
+            <div style="text-align:center;"><img src="" id="dtImg" class="winner-img"></div>
+            <div class="detail-row"><span>ITEM:</span><b id="dtItem" style="color:#fff">---</b></div>
+            <div class="detail-row"><span>DATA:</span><b id="dtData" style="color:#888">---</b></div>
+            <div class="detail-row"><span>NÚMERO SORTEADO:</span><b style="color:var(--primary); font-size:1.2rem;" id="dtNum">---</b></div>
+            <div class="detail-row"><span>GANHADOR:</span><b id="dtNome" style="color:#fff">---</b></div>
+            <div class="detail-row"><span>CPF:</span><span style="color:#666" id="dtCpf">---</span></div>
+            
+            <div id="dtBonusArea" style="background: rgba(255,204,0,0.05); border: 1px dashed var(--primary); padding: 12px; border-radius: 8px; margin-top: 15px; display: none;">
+                <span style="font-family:'Orbitron'; font-size:0.7rem; color:var(--primary); display:block; margin-bottom:8px;">🏆 TOP COMPRADOR (PRÊMIO EXTRA):</span>
+                
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <img src="" id="dtBonusImg" style="width:35px; height:35px; object-fit:contain; border:1px solid #333; border-radius:4px;">
+                        <b id="dtBonusItemName" style="font-size:0.8rem; color:#fff;">---</b>
+                    </div>
+                </div>
+
+                <div style="font-size:0.8rem; color:#ccc; border-top:1px solid #333; padding-top:8px;">
+                    Ganhador: <b id="dtBonusWinner" style="color:var(--primary)">---</b>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <div id="modalVictory" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px);">
         <div style="text-align: center; width: 100%; max-width: 500px; padding: 40px; border: 2px solid var(--primary); border-radius: 20px; background: #000; box-shadow: 0 0 100px var(--primary);">
             <h1 style="color:var(--primary); font-family:'Orbitron';">🏆 VITÓRIA!</h1>
@@ -457,92 +498,87 @@
         function abrirCheckoutPix() { if(!carrinho.length) return alert("Carrinho vazio!"); db.ref('config/pix/chave').once('value', s => { document.getElementById('txtChavePix').innerText = s.val() || "---"; document.getElementById('modalPix').style.display = 'flex'; toggleCart(); }); }
         function validarArquivo() { const file = document.getElementById('compInput').files[0]; if(file) { document.getElementById('fileName').innerText = "✔ " + file.name; const reader = new FileReader(); reader.onload = e => { comprovanteBase64 = e.target.result; document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); }; reader.readAsDataURL(file); } }
         function enviarPedidoFirebase() { if(!comprovanteBase64) return alert("Anexe o comprovante!"); carrinho.forEach(it => { db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64, data: new Date().toLocaleString() }); }); carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none'; alert("Enviado!"); tab('minhas'); }
+        function loadMinhas() { db.ref('rifas').once('value', sRifas => { const mapRifas = sRifas.val() || {}; db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => { const pags = Object.values(s.val() || {}).reverse(); let htmlGanhas = '', htmlAprovadas = '', htmlPendentes = '', hasWins = false; pags.forEach(p => { const rDetails = mapRifas[p.rifaId] || {}; const img = rDetails.img || 'https://via.placeholder.com/100?text=Rifa'; const unitVal = (parseFloat(p.valor) / parseInt(p.cotas)).toFixed(2); const isWinner = rDetails.ganhador && rDetails.ganhador.cpf === userAtivo.cpf; const numerosHtml = p.numeros ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>'; const cardHtml = `<div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}"><img src="${img}" class="rd-img"><div class="rd-info"><div class="rd-header"><div class="rd-title">${p.rifa}</div><div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div></div><div class="rd-stats-row"><span class="rd-stat">Cotas: <b>${p.cotas}</b></span><span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span><span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span></div><div><span class="rd-nums-label">SEUS NÚMEROS:</span><div class="rd-nums-container">${numerosHtml}</div></div></div></div>`; if (isWinner && p.status === 'aprovado') { htmlGanhas += cardHtml; hasWins = true; } if (p.status === 'aprovado') { htmlAprovadas += cardHtml; } else if (p.status === 'pendente' || p.status === 'recusado') { htmlPendentes += cardHtml; } }); document.getElementById('listaGanhas').innerHTML = htmlGanhas; document.getElementById('containerGanhas').style.display = hasWins ? 'block' : 'none'; document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>'; document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>'; }); }); }
         
-        // --- FUNÇÃO PARA ALTERNAR ABAS (SUBMENUS) ---
-        function openSubTab(tabName) {
-            // Remove active de todos os botões
-            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
-            // Esconde todo conteúdo
-            document.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
-            
-            // Ativa o botão clicado e o conteúdo correspondente
-            document.getElementById('btn-' + tabName).classList.add('active');
-            document.getElementById('view-' + tabName).classList.add('active');
+        function renderGlobalRanking() { db.ref('pagamentos').on('value', s => { const rank = {}; Object.values(s.val() || {}).filter(p => p.status === 'aprovado').forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); }); const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5); document.getElementById('globalRankingList').innerHTML = sorted.map((it, i) => `<div class="rank-item"><span>${i+1}. ${it[0]}</span><b>${it[1]} Cotas</b></div>`).join('') || 'Sem dados.'; }); }
+        
+        // --- ATUALIZADO: LISTA DE GANHADORES CLICÁVEIS ---
+        function renderGanhadoresRecentes() { 
+            db.ref('rifas').on('value', s => { 
+                const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5); 
+                document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `
+                    <div class="rank-item" style="cursor:pointer;" onclick="verDetalhesSorteio('${r.nome}')">
+                        <span>${r.ganhador.nome.split(' ')[0]}... <br> <small>${r.nome}</small></span>
+                        <b>#${r.ganhador.numero}</b>
+                    </div>`).join('') || 'Aguardando sorteios...'; 
+            }); 
         }
 
-        /* --- MINHAS RIFAS (ATUALIZADO PARA EXIBIR NUMEROS EM BADGES) --- */
-        function loadMinhas() {
+        // --- NOVA FUNÇÃO: DETALHES DO SORTEIO E CÁLCULO DO TOP COMPRADOR ---
+        function verDetalhesSorteio(nomeRifa) {
             db.ref('rifas').once('value', sRifas => {
-                const mapRifas = sRifas.val() || {};
-                
-                db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
-                    const pags = Object.values(s.val() || {}).reverse();
+                // Encontra a rifa pelo nome (idealmente seria pelo ID, mas o render antigo usa nome)
+                const rKey = Object.keys(sRifas.val()).find(key => sRifas.val()[key].nome === nomeRifa);
+                const r = sRifas.val()[rKey];
+
+                if(r && r.ganhador) {
+                    // Preenche dados básicos do ganhador
+                    document.getElementById('dtImg').src = r.img;
+                    document.getElementById('dtItem').innerText = r.nome;
+                    document.getElementById('dtNum').innerText = r.ganhador.numero;
+                    document.getElementById('dtNome').innerText = r.ganhador.nome;
                     
-                    let htmlGanhas = '';
-                    let htmlAprovadas = '';
-                    let htmlPendentes = '';
-                    let hasWins = false;
-
-                    pags.forEach(p => {
-                        const rDetails = mapRifas[p.rifaId] || {};
-                        const img = rDetails.img || 'https://via.placeholder.com/100?text=Rifa';
-                        const unitVal = (parseFloat(p.valor) / parseInt(p.cotas)).toFixed(2);
-                        const isWinner = rDetails.ganhador && rDetails.ganhador.cpf === userAtivo.cpf;
-                        
-                        const numerosHtml = p.numeros 
-                            ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') 
-                            : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>';
-                        
-                        const cardHtml = `
-                            <div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}">
-                                <img src="${img}" class="rd-img">
-                                <div class="rd-info">
-                                    <div class="rd-header">
-                                        <div class="rd-title">${p.rifa}</div>
-                                        <div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div>
-                                    </div>
-                                    <div class="rd-stats-row">
-                                        <span class="rd-stat">Cotas: <b>${p.cotas}</b></span>
-                                        <span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span>
-                                        <span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span>
-                                    </div>
-                                    <div>
-                                        <span class="rd-nums-label">SEUS NÚMEROS:</span>
-                                        <div class="rd-nums-container">
-                                            ${numerosHtml}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`;
-
-                        if (isWinner && p.status === 'aprovado') {
-                            htmlGanhas += cardHtml;
-                            hasWins = true;
-                        } 
-                        
-                        if (p.status === 'aprovado') {
-                            htmlAprovadas += cardHtml;
-                        } else if (p.status === 'pendente' || p.status === 'recusado') {
-                            htmlPendentes += cardHtml;
-                        }
-                    });
-
-                    document.getElementById('listaGanhas').innerHTML = htmlGanhas;
-                    if(hasWins) {
-                        document.getElementById('containerGanhas').style.display = 'block'; 
-                    } else {
-                        // Se não tiver ganhas, mostra mensagem vazia na aba de ganhas
-                         document.getElementById('msgSemGanhas').style.display = 'block';
+                    // Formata Data
+                    let dataTexto = 'Recentemente';
+                    if(r.ganhador.data) {
+                        const d = new Date(r.ganhador.data);
+                        dataTexto = d.toLocaleDateString() + ' às ' + d.toLocaleTimeString();
                     }
+                    document.getElementById('dtData').innerText = dataTexto;
                     
-                    document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>';
-                    document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>';
-                });
+                    // Mascara CPF
+                    let cpfSafe = r.ganhador.cpf ? '***.' + r.ganhador.cpf.substr(3,3) + '.***-**' : '***';
+                    document.getElementById('dtCpf').innerText = cpfSafe;
+
+                    // --- CÁLCULO DO TOP COMPRADOR (BÔNUS) ---
+                    const bonusArea = document.getElementById('dtBonusArea');
+                    
+                    if (r.bonus && r.bonus.nome) {
+                        bonusArea.style.display = 'block';
+                        document.getElementById('dtBonusImg').src = r.bonus.img;
+                        document.getElementById('dtBonusItemName').innerText = r.bonus.nome;
+                        document.getElementById('dtBonusWinner').innerText = "Calculando...";
+
+                        // Busca pagamentos desta rifa para achar o maior comprador
+                        db.ref('pagamentos').orderByChild('rifaId').equalTo(rKey).once('value', sPags => {
+                            const pags = sPags.val() || {};
+                            const buyers = {};
+
+                            Object.values(pags).forEach(p => {
+                                if (p.status === 'aprovado') {
+                                    buyers[p.usuario] = (buyers[p.usuario] || 0) + parseInt(p.cotas);
+                                }
+                            });
+
+                            // Ordena e pega o primeiro
+                            const sorted = Object.entries(buyers).sort((a,b) => b[1] - a[1]);
+                            
+                            if (sorted.length > 0) {
+                                const topUser = sorted[0]; // [Nome, Qtd]
+                                document.getElementById('dtBonusWinner').innerText = `${topUser[0]} (${topUser[1]} cotas)`;
+                            } else {
+                                document.getElementById('dtBonusWinner').innerText = "Nenhum comprador elegível.";
+                            }
+                        });
+                    } else {
+                        bonusArea.style.display = 'none';
+                    }
+
+                    document.getElementById('modalDetails').style.display = 'flex';
+                }
             });
         }
 
-        function renderGlobalRanking() { db.ref('pagamentos').on('value', s => { const rank = {}; Object.values(s.val() || {}).filter(p => p.status === 'aprovado').forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); }); const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5); document.getElementById('globalRankingList').innerHTML = sorted.map((it, i) => `<div class="rank-item"><span>${i+1}. ${it[0]}</span><b>${it[1]} Cotas</b></div>`).join('') || 'Sem dados.'; }); }
-        function renderGanhadoresRecentes() { db.ref('rifas').on('value', s => { const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5); document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `<div class="rank-item"><span>${r.ganhador.nome.split(' ')[0]}... <br> <small>${r.nome}</small></span><b>#${r.ganhador.numero}</b></div>`).join('') || 'Aguardando sorteios...'; }); }
         function checkVitorias() { db.ref('rifas').on('value', s => { const rifas = s.val() || {}; Object.keys(rifas).forEach(id => { const r = rifas[id]; if(r.ganhador && r.ganhador.cpfReal === userAtivo.cpf && !r.ganhador.vistoPeloUser) { document.getElementById('vicItemName').innerText = r.nome; document.getElementById('vicNumber').innerText = r.ganhador.numero; document.getElementById('modalVictory').style.display = 'flex'; db.ref(`rifas/${id}/ganhador`).update({vistoPeloUser: true}); } }); }); }
         function carregarChat() { db.ref('chatLog').orderByChild('userCpf').equalTo(userAtivo.cpf).on('value', s => { const logs = Object.values(s.val() || {}); document.getElementById('chatBox').innerHTML = logs.map(m => `<div class="${m.from==='user'?'msg-u':'msg-a'}">${m.text}</div>`).join(''); document.getElementById('chatBox').scrollTop = 9999; }); }
         function enviarMsg() { const t = document.getElementById('chatInput').value; if(t) db.ref('chatLog').push({ userCpf: userAtivo.cpf, from: 'user', text: t, time: new Date().toLocaleTimeString() }); document.getElementById('chatInput').value = ''; }

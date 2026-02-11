@@ -132,8 +132,21 @@
                 <div class="header-title">VISÃO GERAL</div>
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-val" id="countMembros">0</div><div style="font-size:0.7rem; font-family:Orbitron;">MEMBROS</div></div>
-                    <div class="stat-card"><div class="stat-val" id="countRifas">0</div><div style="font-size:0.7rem; font-family:Orbitron;">RIFAS</div></div>
-                    <div class="stat-card"><div class="stat-val" id="totalVendas">R$ 0,00</div><div style="font-size:0.7rem; font-family:Orbitron;">VENDAS</div></div>
+                    <div class="stat-card"><div class="stat-val" id="countRifas">0</div><div style="font-size:0.7rem; font-family:Orbitron;">TOTAL RIFAS</div></div>
+                    <div class="stat-card"><div class="stat-val" id="totalVendas">R$ 0,00</div><div style="font-size:0.7rem; font-family:Orbitron;">RECEITA TOTAL</div></div>
+                    
+                    <div class="stat-card" style="border-color: var(--blue);">
+                        <div class="stat-val" id="countAtivas" style="color: var(--blue);">0</div>
+                        <div style="font-size:0.7rem; font-family:Orbitron;">RIFAS ATIVAS</div>
+                    </div>
+                    <div class="stat-card" style="border-color: var(--green);">
+                        <div class="stat-val" id="countCotas" style="color: var(--green);">0</div>
+                        <div style="font-size:0.7rem; font-family:Orbitron;">COTAS VENDIDAS</div>
+                    </div>
+                    <div class="stat-card" style="border-color: var(--red);">
+                        <div class="stat-val" id="countPendentes" style="color: var(--red);">0</div>
+                        <div style="font-size:0.7rem; font-family:Orbitron;">PAGAMENTOS PENDENTES</div>
+                    </div>
                 </div>
             </section>
 
@@ -278,17 +291,51 @@
             if(id === 'chat') renderChat();
         }
 
+        /* --- DASHBOARD (ATUALIZADO) --- */
         function updateDash() {
             db.ref('/').on('value', s => {
                 const data = s.val() || {};
+                
+                // Dados Originais
                 document.getElementById('countMembros').innerText = data.membros ? Object.keys(data.membros).length : 0;
                 document.getElementById('countRifas').innerText = data.rifas ? Object.keys(data.rifas).length : 0;
-                let total = 0;
-                if(data.pagamentos) Object.values(data.pagamentos).forEach(p => { if(p.status === 'aprovado') total += parseFloat(p.valor); });
-                document.getElementById('totalVendas').innerText = `R$ ${total.toFixed(2)}`;
+                
+                // Novos Cálculos
+                let totalVendas = 0;
+                let pendentesCount = 0;
+                let rifasAtivas = 0;
+                let cotasVendidasTotal = 0;
+
+                if(data.pagamentos) {
+                    Object.values(data.pagamentos).forEach(p => { 
+                        if(p.status === 'aprovado') {
+                            totalVendas += parseFloat(p.valor); 
+                        }
+                        if(p.status === 'pendente') {
+                            pendentesCount++;
+                        }
+                    });
+                }
+
+                if(data.rifas) {
+                    Object.values(data.rifas).forEach(r => {
+                        cotasVendidasTotal += (r.vendidas || 0);
+                        if(!r.ganhador) {
+                            rifasAtivas++;
+                        }
+                    });
+                }
+
+                document.getElementById('totalVendas').innerText = `R$ ${totalVendas.toFixed(2)}`;
+                
+                // Preenchendo novos cards
+                document.getElementById('countAtivas').innerText = rifasAtivas;
+                document.getElementById('countCotas').innerText = cotasVendidasTotal;
+                document.getElementById('countPendentes').innerText = pendentesCount;
             });
         }
 
+        /* --- RIFAS COM BÔNUS --- */
         function addRifa() {
             const n=document.getElementById('rifaNome').value, i=document.getElementById('rifaImg').value, p=document.getElementById('rifaPreco').value, t=document.getElementById('rifaTotal').value;
             const bn=document.getElementById('bNome').value, bi=document.getElementById('bImg').value;
@@ -314,18 +361,16 @@
             });
         }
 
-        /* --- PAGAMENTOS (COM HISTÓRICO AGORA) --- */
+        /* --- PAGAMENTOS --- */
         function renderPagamentos() {
             db.ref('pagamentos').on('value', s => {
                 const pags = s.val() || {};
                 const pendentesHTML = [];
-                listaHistoricoPagamentosCache = {}; // Limpa cache para reconstruir
+                listaHistoricoPagamentosCache = {}; 
 
                 Object.keys(pags).forEach(id => {
                     const p = pags[id];
-                    
                     if (p.status === 'pendente') {
-                        // Lista principal (Pendentes)
                         pendentesHTML.push(`<tr>
                             <td><b>${p.usuario}</b></td>
                             <td>${p.cpf}</td> <td>${p.rifa}</td>
@@ -336,49 +381,39 @@
                                 <button class="btn-action btn-red" onclick="reprovarPagamento('${id}')">X</button> </td>
                         </tr>`);
                     } else if (p.status === 'aprovado') {
-                        // Salva no cache do histórico
                         listaHistoricoPagamentosCache[id] = p;
                     }
                 });
 
                 document.getElementById('listaPagamentos').innerHTML = pendentesHTML.join('') || '<tr><td colspan="6" align="center">Vazio.</td></tr>';
-                
-                // Atualiza a tabela do histórico com os novos dados
                 filtrarHistoricoPagamentos();
             });
         }
 
-        // Função para alternar visibilidade do histórico
         function toggleHistorico() {
             const el = document.getElementById('areaHistorico');
             el.style.display = (el.style.display === 'none') ? 'block' : 'none';
         }
 
-        // Função para filtrar e renderizar o histórico
         function filtrarHistoricoPagamentos() {
             const nome = document.getElementById('buscaHistNome').value.toLowerCase();
             const cpf = document.getElementById('buscaHistCPF').value;
             
-            // Ordenar por data (opcional, mas legal para ver os mais recentes primeiro)
             const html = Object.keys(listaHistoricoPagamentosCache).reverse().map(id => {
                 const p = listaHistoricoPagamentosCache[id];
-                
                 const matchNome = (p.usuario || "").toLowerCase().includes(nome);
                 const matchCPF = (p.cpf || "").includes(cpf);
 
                 if (matchNome && matchCPF) {
-                    // Formata Data
                     let dataFormatada = "--/--/--";
                     if(p.dataAprovacao) {
                         const d = new Date(p.dataAprovacao);
                         dataFormatada = d.toLocaleDateString() + ' ' + d.toLocaleTimeString().slice(0,5);
                     }
-
                     return `<tr>
                         <td style="color:var(--green)">${dataFormatada}</td>
                         <td><b>${p.usuario}</b></td>
-                        <td>${p.cpf}</td> 
-                        <td>${p.rifa}</td>
+                        <td>${p.cpf}</td> <td>${p.rifa}</td>
                         <td>R$ ${p.valor}</td>
                     </tr>`;
                 }
@@ -399,8 +434,6 @@
                     if(!existentes.includes(f) && !novos.includes(f)) novos.push(f);
                 }
                 db.ref(`rifas/${rifaId}`).update({ vendidas: (r.vendidas||0)+qtd, numerosVendidos: [...existentes, ...novos] });
-                
-                // ATUALIZADO: Salva a data de aprovação agora
                 db.ref(`pagamentos/${pagId}`).update({ status: 'aprovado', numeros: novos, dataAprovacao: new Date().toISOString() });
                 alert("Aprovado!");
             });

@@ -78,11 +78,8 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 25px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
         .price-tag { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 20px; font-size: 1rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
-        
-        /* NOVO: Botão de Compartilhar */
         .share-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: #fff; border: 1px solid #333; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; z-index: 5; }
         .share-btn:hover { background: var(--green); color: #000; border-color: var(--green); }
-
         .skin-img { width: 100%; height: 150px; object-fit: contain; margin: 20px 0; align-self: center; }
         .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 15px; }
         .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; transition: 0.5s; }
@@ -118,7 +115,7 @@
 
         /* --- POPUPS --- */
         #modalCotas { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
-        .modal-card-cota { background: #e9ecef; width: 95%; max-width: 650px; border-radius: 12px; overflow: hidden; }
+        .modal-card-cota { background: #e9ecef; width: 95%; max-width: 650px; border-radius: 12px; overflow: hidden; position: relative; }
         .modal-header-text { background: #fff; color: #555; text-align: center; padding: 12px; font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid #ddd; }
         .modal-body { padding: 20px; background: #e9ecef; }
         .cotas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
@@ -134,6 +131,10 @@
         .btn-step { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #333; background: transparent; font-size: 1.2rem; cursor: pointer; font-weight: bold; color: #000; display: flex; align-items: center; justify-content: center; }
         .btn-final { background: var(--btn-orange); border: none; border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; }
         .btn-final b { font-size: 1.1rem; display: block; color: #000; }
+        
+        /* NOVO: Botão Fechar Modal */
+        .close-x { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; color: #555; cursor: pointer; font-weight: bold; z-index: 10; }
+        .close-x:hover { color: var(--red); }
 
         #modalPix { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px); }
         .modal-card-pix { background: #111; border: 2px solid var(--primary); padding: 40px; border-radius: 12px; text-align: center; max-width: 450px; width: 90%; }
@@ -277,12 +278,14 @@
 
     <div id="modalCotas">
         <div class="modal-card-cota">
+            <div class="close-x" onclick="document.getElementById('modalCotas').style.display='none'">×</div>
+            
             <div class="modal-header-text">Quanto mais títulos, mais chances de ganhar!</div>
             <div class="modal-body"><div class="cotas-grid" id="cotasGridContent"></div></div>
             <div class="controls-row">
                 <div class="qtd-sel">
                     <button type="button" class="btn-step" onclick="adjust(-1)">−</button>
-                    <input type="number" id="inQtd" value="10" readonly style="border:none; text-align:center; width:50px; font-weight:bold; font-size:1.1rem; outline:none; background:transparent; color:#000;">
+                    <input type="number" id="inQtd" value="1" readonly style="border:none; text-align:center; width:50px; font-weight:bold; font-size:1.1rem; outline:none; background:transparent; color:#000;">
                     <button type="button" class="btn-step" onclick="adjust(1)">+</button>
                 </div>
                 <button class="btn-final" onclick="addCarrinho()">
@@ -327,7 +330,7 @@
         let userAtivo = null, userFirebaseId = null, carrinho = [];
         let rifaSelId = null, precoUnico = 0, estoqueSel = 0, comprovanteBase64 = null;
         let tempAvatar = null;
-        let hasAutoOpened = false; // Controle para evitar loop de abertura
+        let hasAutoOpened = false;
 
         function carregarPagina() {
             const sessao = JSON.parse(localStorage.getItem('sessaoAtiva'));
@@ -378,7 +381,6 @@
                             <div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div>${bonusHtml}<button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
                     }).join('');
 
-                    // --- Lógica de Auto-Open via URL ---
                     const params = new URLSearchParams(window.location.search);
                     const shareId = params.get('rifa');
                     if(shareId && !hasAutoOpened && rifas[shareId]) {
@@ -388,7 +390,6 @@
                         if (!r.ganhador) {
                             openModal(shareId, r.preco, estoque);
                             hasAutoOpened = true; 
-                            // Limpa URL para não reabrir se atualizar (opcional)
                             window.history.pushState({}, document.title, window.location.pathname);
                         }
                     }
@@ -396,7 +397,6 @@
             });
         }
 
-        // --- FUNÇÃO DE COMPARTILHAMENTO ---
         function shareRifa(id, nome) {
             const url = window.location.origin + window.location.pathname + '?rifa=' + id;
             const text = encodeURIComponent(`🔥 Olha essa rifa top no COBRIFAS: *${nome}*\n\n👉 Clica aqui pra participar: ${url}`);
@@ -408,7 +408,21 @@
         function selectPredefined(src) { tempAvatar = src; document.getElementById('profileAvatarPreview').src = src; document.getElementById('modalAvatar').style.display = 'none'; }
         function uploadAvatar() { const file = document.getElementById('uploadAvatarInput').files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { tempAvatar = e.target.result; document.getElementById('profileAvatarPreview').src = tempAvatar; document.getElementById('modalAvatar').style.display = 'none'; }; reader.readAsDataURL(file); } }
         function saveP() { const nome = document.getElementById('pNome').value; const tel = document.getElementById('pTel').value; const nick = document.getElementById('pNick').value; const pass = document.getElementById('pNewPass').value; const conf = document.getElementById('pConfPass').value; let updates = { nome: nome, tel: tel, nick: nick }; if (tempAvatar) { updates.avatar = tempAvatar; } if (pass) { if (pass !== conf) { alert("As senhas não coincidem!"); return; } updates.senha = pass; } db.ref('membros/'+userFirebaseId).update(updates).then(() => { alert("Dados salvos com sucesso!"); document.getElementById('pNewPass').value = ""; document.getElementById('pConfPass').value = ""; }); }
-        function openModal(id, preco, estoque) { rifaSelId = id; precoUnico = Number(preco); estoqueSel = Number(estoque); const grid = document.getElementById('cotasGridContent'); const opts = [10, 50, 100, 500, 1000, 2500]; grid.innerHTML = opts.map(q => `<div class="cota-item ${q===50?'active':''}" onclick="setQtd(${q}, this)">${q===50?'<div class="tag-pop">Mais popular</div>':''}<span class="cq">+${q}</span><span class="cp">R$ ${(q*precoUnico).toFixed(2)}</span><span class="cl">SELECIONAR</span></div>`).join(''); document.getElementById('inQtd').value = 10; refreshTotal(); document.getElementById('modalCotas').style.display = 'flex'; }
+        
+        function openModal(id, preco, estoque) { 
+            rifaSelId = id; 
+            precoUnico = Number(preco); 
+            estoqueSel = Number(estoque); 
+            const grid = document.getElementById('cotasGridContent'); 
+            const opts = [10, 50, 100, 500, 1000, 2500]; 
+            grid.innerHTML = opts.map(q => `<div class="cota-item ${q===50?'active':''}" onclick="setQtd(${q}, this)">${q===50?'<div class="tag-pop">Mais popular</div>':''}<span class="cq">+${q}</span><span class="cp">R$ ${(q*precoUnico).toFixed(2)}</span><span class="cl">SELECIONAR</span></div>`).join(''); 
+            
+            // ALTERADO PARA 1 (valor inicial)
+            document.getElementById('inQtd').value = 1; 
+            refreshTotal(); 
+            document.getElementById('modalCotas').style.display = 'flex'; 
+        }
+
         function setQtd(n, el) { if(n > estoqueSel) return alert("Estoque insuficiente!"); document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active')); if(el) el.classList.add('active'); document.getElementById('inQtd').value = n; refreshTotal(); }
         function adjust(d) { const input = document.getElementById('inQtd'); let v = parseInt(input.value) + d; if(v > 0 && v <= estoqueSel) { input.value = v; refreshTotal(); } }
         function refreshTotal() { document.getElementById('totalModal').innerText = 'R$ ' + (parseInt(document.getElementById('inQtd').value) * precoUnico).toFixed(2); }

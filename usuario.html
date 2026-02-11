@@ -50,6 +50,12 @@
         #cartSidebar.open { right: 0; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
+        /* --- TICKER --- */
+        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid #333; height: 40px; display: flex; align-items: center; }
+        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 2rem; font-size: 0.8rem; color: #ccc; font-family: 'Orbitron'; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
         /* --- LAYOUT --- */
         .container { padding: 40px 8%; }
         .tab-content { display: none; }
@@ -68,7 +74,7 @@
         .btn-action { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; }
         .btn-action:hover { background: var(--primary); color: #000; }
 
-        /* --- POPUP COTAS --- */
+        /* --- MODAL COTAS (ESTILO TÁTICO) --- */
         #modalCotas { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
         .modal-card-cota { background: #e9ecef; width: 95%; max-width: 650px; border-radius: 12px; overflow: hidden; }
         .modal-header-text { background: #fff; color: #555; text-align: center; padding: 12px; font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid #ddd; }
@@ -83,22 +89,25 @@
         .tag-pop { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--btn-orange); color: #fff; font-size: 0.5rem; padding: 3px 10px; border-radius: 20px; font-weight: bold; font-family: Orbitron; }
         .controls-row { display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; padding: 0 20px 20px; }
         .qtd-sel { display: flex; align-items: center; background: #fff; border-radius: 8px; padding: 5px; justify-content: space-between; border: 1px solid #ccc; }
-        .btn-step { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #333; background: transparent; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
+        .btn-step { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #333; background: transparent; font-size: 1.2rem; cursor: pointer; font-weight: bold; color: #000; display: flex; align-items: center; justify-content: center; }
         .btn-final { background: var(--btn-orange); border: none; border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; }
-        .btn-final b { font-size: 1.2rem; display: block; color: #000; }
+        .btn-final b { font-size: 1.1rem; display: block; color: #000; }
 
-        /* --- POPUP PIX --- */
+        /* --- MODAL PIX COM ANEXO --- */
         #modalPix { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px); }
         .modal-card-pix { background: #111; border: 2px solid var(--primary); padding: 40px; border-radius: 12px; text-align: center; max-width: 450px; width: 90%; }
         .pix-box { background: #222; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #333; text-align: left; }
         .upload-label { display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px dashed #666; padding: 15px; border-radius: 6px; cursor: pointer; transition: 0.3s; font-family: 'Orbitron'; font-size: 0.7rem; color: #aaa; margin-top: 20px; }
-        .upload-label:hover { border-color: var(--primary); color: var(--primary); }
         .btn-disabled { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
 
-        /* --- OUTROS --- */
-        #chatBox { height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; }
-        .msg-u { align-self: flex-end; background: var(--primary); color: #000; padding: 10px 15px; border-radius: 8px; max-width: 75%; font-weight: 600; }
-        .msg-a { align-self: flex-start; background: #333; color: #fff; padding: 10px 15px; border-radius: 8px; max-width: 75%; }
+        /* --- PERFIL --- */
+        .glass-panel { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 40px; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { color: var(--primary); font-family: 'Orbitron'; font-size: 0.65rem; text-transform: uppercase; }
+        input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Rajdhani'; }
+
+        /* --- MINHAS RIFAS --- */
         .ticket-box { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #444; }
         .n-badge { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 3px; font-family: Orbitron; font-size: 0.7rem; margin: 3px; display: inline-block; font-weight: bold; }
     </style>
@@ -120,6 +129,8 @@
             <div style="color:red; font-size:0.6rem; cursor:pointer; font-family:Orbitron; margin-left:10px;" onclick="logout()">SAIR</div>
         </nav>
     </header>
+
+    <div class="ticker-wrap"><div class="ticker" id="tickerContainer"></div></div>
 
     <div id="cartSidebar">
         <h3 style="font-family:Orbitron; margin-bottom:25px; color:var(--primary);">CARRINHO TÁTICO</h3>
@@ -145,8 +156,8 @@
         <section id="suporte" class="tab-content">
             <h2 class="section-title">CENTRAL DE SUPORTE</h2>
             <div class="glass-panel">
-                <div id="chatBox"></div>
-                <div style="display:flex; gap:10px; margin-top:20px;">
+                <div id="chatBox" style="height:350px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; margin-bottom:20px;"></div>
+                <div style="display:flex; gap:10px;">
                     <input type="text" id="chatInput" placeholder="Mensagem para o comando central..." style="flex:1; padding:12px; background:#000; border:1px solid #333; color:#fff;">
                     <button class="btn-action" style="width:auto; padding:0 30px;" onclick="enviarMsg()">ENVIAR</button>
                 </div>
@@ -156,11 +167,12 @@
         <section id="perfil" class="tab-content">
             <h2 class="section-title">DADOS DO OPERADOR</h2>
             <div class="glass-panel">
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
-                    <div style="display:flex; flex-direction:column; gap:8px;"><label style="color:var(--primary); font-family:Orbitron; font-size:0.65rem;">NOME COMPLETO</label><input type="text" id="pNome" style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff;"></div>
-                    <div style="display:flex; flex-direction:column; gap:8px;"><label style="color:var(--primary); font-family:Orbitron; font-size:0.65rem;">NICKNAME</label><input type="text" id="pNick" style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff;"></div>
-                    <div style="display:flex; flex-direction:column; gap:8px;"><label style="color:var(--primary); font-family:Orbitron; font-size:0.65rem;">WHATSAPP</label><input type="text" id="pTel" style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff;"></div>
-                    <div style="display:flex; flex-direction:column; gap:8px;"><label style="color:var(--primary); font-family:Orbitron; font-size:0.65rem;">CPF (TRAVADO)</label><input type="text" id="pCpf" disabled style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff; opacity:0.4;"></div>
+                <div class="form-grid">
+                    <div class="input-group"><label>NOME COMPLETO</label><input type="text" id="pNome"></div>
+                    <div class="input-group"><label>NICKNAME</label><input type="text" id="pNick"></div>
+                    <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
+                    <div class="input-group"><label>CPF (TRAVADO)</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
+                    <div class="input-group"><label>ATUALIZAR SENHA</label><input type="password" id="pPass" placeholder="••••••••"></div>
                 </div>
                 <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
             </div>
@@ -168,45 +180,44 @@
     </div>
 
     <div id="modalCotas">
-    <div class="modal-card-cota">
-        <div class="modal-header-text">Quanto mais títulos, mais chances de ganhar!</div>
-        <div class="modal-body">
-            <div class="cotas-grid" id="cotasGridContent">
-                </div>
-        </div>
-        <div class="controls-row">
-            <div class="qtd-sel">
-                <button type="button" class="btn-step" onclick="adjust(-1)">−</button>
-                <input type="number" id="inQtd" value="10" readonly style="border:none; text-align:center; width:50px; font-weight:bold; font-size:1.1rem; outline:none; background:transparent; color:#000;">
-                <button type="button" class="btn-step" onclick="adjust(1)">+</button>
+        <div class="modal-card-cota">
+            <div class="modal-header-text">Quanto mais títulos, mais chances de ganhar!</div>
+            <div class="modal-body">
+                <div class="cotas-grid" id="cotasGridContent"></div>
             </div>
-            
-            <button class="btn-final" onclick="addCarrinho()">
-                <div style="border:1px solid #000; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">✔</div>
-                <span>Quero participar<br><b id="totalModal">R$ 0,00</b></span>
-            </button>
+            <div class="controls-row">
+                <div class="qtd-sel">
+                    <button type="button" class="btn-step" onclick="adjust(-1)">−</button>
+                    <input type="number" id="inQtd" value="10" readonly style="border:none; text-align:center; width:50px; font-weight:bold; font-size:1.1rem; outline:none; background:transparent; color:#000;">
+                    <button type="button" class="btn-step" onclick="adjust(1)">+</button>
+                </div>
+                <button class="btn-final" onclick="addCarrinho()">
+                    <div style="border:1px solid #000; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">✔</div>
+                    <span>Quero participar<br><b id="totalModal">R$ 0,00</b></span>
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
     <div id="modalPix">
-    <div class="modal-card-pix">
-        <h2 style="font-family:Orbitron; color:var(--primary); margin-bottom:20px;">PAGAMENTO PIX</h2>
-        <div class="pix-box">
-            <label style="color:var(--primary); font-size:0.7rem;">CHAVE PIX</label>
-            <div id="txtChavePix" style="color:#fff; font-size:1.1rem; font-weight:bold; word-break:break-all;">---</div>
+        <div class="modal-card-pix">
+            <h2 style="font-family:Orbitron; color:var(--primary); margin-bottom:20px;">PAGAMENTO PIX</h2>
+            <div class="pix-box">
+                <label style="color:var(--primary); font-size:0.7rem;">CHAVE PIX</label>
+                <div id="txtChavePix" style="color:#fff; font-size:1.1rem; font-weight:bold; word-break:break-all;">...</div>
+            </div>
+            <div class="upload-area">
+                <label for="compInput" class="upload-label">📎 ANEXAR COMPROVANTE</label>
+                <input type="file" id="compInput" accept="image/*, application/pdf" style="display:none;" onchange="validarArquivo()">
+                <small id="fileName" style="color:var(--green); display:block; margin-top:10px; font-weight:bold;"></small>
+            </div>
+            <button id="btnFinalizarPix" class="btn-action btn-disabled" style="background:var(--primary); color:#000; border:none; width:100%; margin-top:20px;" onclick="enviarPedidoFirebase()">JÁ REALIZEI O PAGAMENTO</button>
+            <button class="btn-action" style="background:transparent; color:#888; border:none; margin-top:10px;" onclick="document.getElementById('modalPix').style.display='none'">CANCELAR</button>
         </div>
-        <div class="upload-area">
-            <label for="compInput" class="upload-label">📎 ANEXAR COMPROVANTE</label>
-            <input type="file" id="compInput" accept="image/*, application/pdf" style="display:none;" onchange="validarArquivo()">
-            <small id="fileName" style="color:var(--green); display:block; margin-top:10px; font-weight:bold;"></small>
-        </div>
-        <button id="btnFinalizarPix" class="btn-action btn-disabled" style="background:var(--primary); color:#000; border:none; width:100%; margin-top:20px;" onclick="enviarPedidoFirebase()">JÁ REALIZEI O PAGAMENTO</button>
-        <button class="btn-action" style="background:transparent; color:#888; border:none; margin-top:10px;" onclick="document.getElementById('modalPix').style.display='none'">CANCELAR</button>
     </div>
-</div>
 
     <script>
+        // --- CONFIGURAÇÃO FIREBASE ---
         const firebaseConfig = { apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg", authDomain: "cobrifas.firebaseapp.com", projectId: "cobrifas", storageBucket: "cobrifas.firebasestorage.app", messagingSenderId: "1098617388770", appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -227,90 +238,59 @@
                     loadMinhas();
                 }
             });
-            loadLoja(); loadChat();
+            loadLoja(); loadChat(); renderConfig();
         }
 
+        /* --- COTAS RESTANTES --- */
         function loadLoja() {
             db.ref('rifas').on('value', s => {
                 const rifas = s.val() || {};
                 const grid = document.getElementById('gridLoja');
-                grid.innerHTML = Object.keys(rifas).filter(id => !rifas[id].ganhador).map(id => {
+                const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
+                grid.innerHTML = ativas.map(id => {
                     const r = rifas[id]; const res = r.total - (r.vendidas || 0); const p = ((r.vendidas || 0) / r.total) * 100;
                     return `<div class="card"><div class="price-tag">R$ ${r.preco}</div><img src="${r.img}" class="skin-img"><h3>${r.nome}</h3><div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div><div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div><button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
                 }).join('');
             });
         }
 
-        // Variáveis de controle globais
-let rifaSelId = null;
-let precoUnico = 0;
-let estoqueSel = 0;
+        /* --- LÓGICA DO SELETOR (+/-) --- */
+        function openModal(id, preco, estoque) {
+            rifaSelId = id; precoUnico = Number(preco); estoqueSel = Number(estoque);
+            const grid = document.getElementById('cotasGridContent');
+            const opts = [10, 50, 100, 500, 1000, 2500];
+            grid.innerHTML = opts.map(q => `<div class="cota-item ${q===50?'active':''}" onclick="setQtd(${q}, this)">${q===50?'<div class="tag-pop">Mais popular</div>':''}<span class="cq">+${q}</span><span class="cp">R$ ${(q*precoUnico).toFixed(2)}</span><span class="cl">SELECIONAR</span></div>`).join('');
+            document.getElementById('inQtd').value = 10; refreshTotal(); document.getElementById('modalCotas').style.display = 'flex';
+        }
 
-function openModal(id, preco, estoque) {
-    rifaSelId = id;
-    precoUnico = Number(preco); // Garante que seja número
-    estoqueSel = Number(estoque); // Garante que seja número
+        function setQtd(n, el) { 
+            if(n > estoqueSel) return alert("Estoque insuficiente!");
+            document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active'));
+            if(el) el.classList.add('active');
+            document.getElementById('inQtd').value = n; refreshTotal(); 
+        }
 
-    const grid = document.getElementById('cotasGridContent');
-    const opts = [10, 50, 100, 500, 1000, 2500];
-    
-    // Gera os botões pretos de seleção rápida
-    grid.innerHTML = opts.map(q => {
-        const ativo = q === 50 ? 'active' : '';
-        const tag = q === 50 ? '<div class="tag-pop">Mais popular</div>' : '';
-        const valorCota = (q * precoUnico).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-        
-        return `
-            <div class="cota-item ${ativo}" onclick="setQtd(${q}, this)">
-                ${tag}
-                <span class="cq">+${q}</span>
-                <span class="cp">${valorCota}</span>
-                <span class="cl">SELECIONAR</span>
-            </div>`;
-    }).join('');
+        function adjust(d) { 
+            const input = document.getElementById('inQtd');
+            let v = parseInt(input.value) + d; 
+            if(v > 0 && v <= estoqueSel) { input.value = v; refreshTotal(); }
+        }
 
-    document.getElementById('inQtd').value = 10;
-    refreshTotal();
-    document.getElementById('modalCotas').style.display = 'flex';
-}
+        function refreshTotal() { 
+            const qtd = parseInt(document.getElementById('inQtd').value);
+            const total = qtd * precoUnico;
+            document.getElementById('totalModal').innerText = 'R$ ' + total.toFixed(2); 
+        }
 
-// Função que controla os botões de + e -
-function adjust(d) {
-    const input = document.getElementById('inQtd');
-    let atual = parseInt(input.value);
-    let novoValor = atual + d;
+        function addCarrinho() {
+            db.ref('rifas/'+rifaSelId).once('value', s => {
+                carrinho.push({ id: rifaSelId, nome: s.val().nome, preco: precoUnico, qtd: parseInt(document.getElementById('inQtd').value) });
+                updateUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart();
+            });
+        }
 
-    // Trava o seletor entre 1 e o máximo disponível no estoque
-    if (novoValor > 0 && novoValor <= estoqueSel) {
-        input.value = novoValor;
-        refreshTotal();
-    } else if (novoValor > estoqueSel) {
-        alert("Desculpe, restam apenas " + estoqueSel + " cotas!");
-    }
-}
-
-// Atualiza o valor do botão laranja
-function refreshTotal() {
-    const qtd = parseInt(document.getElementById('inQtd').value);
-    const total = qtd * precoUnico;
-    document.getElementById('totalModal').innerText = total.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-}
-
-// Seleção rápida (ao clicar nos quadrados pretos)
-function setQtd(n, el) {
-    if (n > estoqueSel) {
-        alert("Estoque insuficiente!");
-        return;
-    }
-    document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active'));
-    if (el) el.classList.add('active');
-    
-    document.getElementById('inQtd').value = n;
-    refreshTotal();
-}
-
+        /* --- CARRINHO & PIX --- */
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
-
         function updateUI() {
             let t = 0, c = 0;
             document.getElementById('cartList').innerHTML = carrinho.map((it, i) => {
@@ -320,58 +300,41 @@ function setQtd(n, el) {
             document.getElementById('cartCount').innerText = c; document.getElementById('cartTotal').innerText = `R$ ${t.toFixed(2)}`;
         }
 
-      // 1. Abre o modal e busca a chave PIX no banco
-function abrirCheckoutPix() {
-    if(!carrinho.length) return alert("Seu carrinho está vazio!");
-    db.ref('config/pix/chave').once('value', s => {
-        document.getElementById('txtChavePix').innerText = s.val() || "Chave não configurada";
-        document.getElementById('modalPix').style.display = 'flex';
-        toggleCart(); // Fecha o carrinho lateral
-    });
-}
+        function abrirCheckoutPix() {
+            if(!carrinho.length) return alert("Carrinho vazio!");
+            db.ref('config/pix/chave').once('value', s => {
+                document.getElementById('txtChavePix').innerText = s.val() || "---";
+                document.getElementById('modalPix').style.display = 'flex'; toggleCart();
+            });
+        }
 
-// 2. Lê o arquivo e LIBERA o botão de pagamento
-function validarArquivo() {
-    const file = document.getElementById('compInput').files[0];
-    const btn = document.getElementById('btnFinalizarPix');
-    if(file) {
-        document.getElementById('fileName').innerText = "✔ " + file.name;
-        const reader = new FileReader();
-        reader.onload = e => { 
-            comprovanteBase64 = e.target.result; // Salva a imagem para enviar
-            btn.classList.remove('btn-disabled'); // Ativa o botão visualmente
-            btn.style.opacity = "1";
-            btn.style.pointerEvents = "auto";
-        };
-        reader.readAsDataURL(file);
-    }
-}
+        function validarArquivo() {
+            const file = document.getElementById('compInput').files[0];
+            if(file) {
+                document.getElementById('fileName').innerText = "✔ " + file.name;
+                const reader = new FileReader();
+                reader.onload = e => { 
+                    comprovanteBase64 = e.target.result; 
+                    document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); 
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
-// 3. Envia os dados para o Firebase
-function enviarPedidoFirebase() {
-    if(!comprovanteBase64) return alert("Você precisa anexar o comprovante!");
-    
-    carrinho.forEach(it => {
-        db.ref('pagamentos').push({
-            usuario: userAtivo.nome,
-            cpf: userAtivo.cpf,
-            rifa: it.nome,
-            rifaId: it.id,
-            valor: (it.preco * it.qtd).toFixed(2),
-            cotas: it.qtd,
-            status: 'pendente',
-            comprovante: comprovanteBase64,
-            data: new Date().toLocaleString()
-        });
-    });
+        function enviarPedidoFirebase() {
+            if(!comprovanteBase64) return alert("O comprovante é obrigatório!");
+            carrinho.forEach(it => {
+                db.ref('pagamentos').push({
+                    usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, 
+                    valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', 
+                    comprovante: comprovanteBase64, data: new Date().toLocaleString()
+                });
+            });
+            carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none';
+            alert("Enviado para análise!"); tab('minhas');
+        }
 
-    carrinho = []; // Limpa o carrinho
-    updateUI(); // Atualiza a interface
-    document.getElementById('modalPix').style.display = 'none';
-    alert("Sucesso! Seu pedido foi enviado para análise do Admin.");
-    tab('minhas'); // Direciona para a aba de participações
-}
-
+        /* --- OUTROS --- */
         function loadMinhas() {
             db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
                 const pags = Object.values(s.val() || {}).reverse();
@@ -401,11 +364,10 @@ function enviarPedidoFirebase() {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
+        function renderConfig() { db.ref('configSite').on('value', s => { if(s.val() && s.val().ticker) document.getElementById('tickerContainer').innerHTML = s.val().ticker.split('\n').map(m => `<div class="ticker-item">${m}</div>`).join(''); }); }
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
         function saveP() { db.ref('membros/'+userFirebaseId).update({ nome: document.getElementById('pNome').value, tel: document.getElementById('pTel').value }).then(() => alert("Salvo!")); }
         window.onload = carregarPagina;
     </script>
 </body>
 </html>
-
-

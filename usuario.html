@@ -78,6 +78,11 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 25px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
         .price-tag { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 20px; font-size: 1rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
+        
+        /* NOVO: Botão de Compartilhar */
+        .share-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: #fff; border: 1px solid #333; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; z-index: 5; }
+        .share-btn:hover { background: var(--green); color: #000; border-color: var(--green); }
+
         .skin-img { width: 100%; height: 150px; object-fit: contain; margin: 20px 0; align-self: center; }
         .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 15px; }
         .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; transition: 0.5s; }
@@ -143,14 +148,13 @@
         .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; }
         .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 10px; }
 
-        /* --- NOVO: ESTILOS PARA PERFIL (AVATAR E SENHA) --- */
+        /* --- PERFIL --- */
         .profile-container { display: flex; flex-direction: column; align-items: center; max-width: 600px; margin: 0 auto; }
         .avatar-edit-wrapper { position: relative; cursor: pointer; width: 120px; height: 120px; margin-bottom: 30px; }
         .avatar-main { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; box-shadow: 0 0 20px rgba(255,204,0,0.3); transition: 0.3s; }
         .avatar-edit-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; color: #fff; font-size: 2rem; }
         .avatar-edit-wrapper:hover .avatar-edit-overlay { opacity: 1; }
         .avatar-edit-wrapper:hover .avatar-main { filter: blur(2px); }
-        
         .section-separator { width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 30px 0; }
         .section-subtitle { font-family: 'Orbitron'; color: var(--primary); margin-bottom: 15px; font-size: 1rem; }
 
@@ -159,7 +163,6 @@
         .avatar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
         .avatar-option { width: 70px; height: 70px; border-radius: 50%; cursor: pointer; border: 2px solid #333; transition: 0.2s; object-fit: cover; }
         .avatar-option:hover { border-color: var(--primary); transform: scale(1.1); }
-        .avatar-option.selected { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
     </style>
 </head>
 <body>
@@ -229,12 +232,10 @@
         <section id="perfil" class="tab-content">
             <h2 class="section-title">MEU PERFIL</h2>
             <div class="glass-panel profile-container">
-                
                 <div class="avatar-edit-wrapper" onclick="openAvatarModal()">
                     <img src="" id="profileAvatarPreview" class="avatar-main">
                     <div class="avatar-edit-overlay">📷</div>
                 </div>
-
                 <div style="width: 100%;">
                     <div class="section-subtitle">DADOS PESSOAIS</div>
                     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
@@ -243,16 +244,13 @@
                         <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
                         <div class="input-group"><label>CPF</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
                     </div>
-
                     <div class="section-separator"></div>
-
                     <div class="section-subtitle">SEGURANÇA (ALTERAR SENHA)</div>
                     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
                         <div class="input-group"><label>NOVA SENHA</label><input type="password" id="pNewPass" placeholder="Deixe vazio para manter"></div>
                         <div class="input-group"><label>CONFIRMAR SENHA</label><input type="password" id="pConfPass" placeholder="Repita a nova senha"></div>
                     </div>
                 </div>
-
                 <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none; width:100%; padding:15px; font-weight:900;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
             </div>
         </section>
@@ -261,7 +259,6 @@
     <div id="modalAvatar">
         <div class="modal-card-cota" style="max-width: 400px; text-align: center; padding: 20px;">
             <h3 style="font-family:'Orbitron'; margin-bottom: 20px;">ESCOLHA SEU AVATAR</h3>
-            
             <div style="margin-bottom: 10px; color: #888; font-size: 0.8rem;">AVATARES PREDEFINIDOS:</div>
             <div class="avatar-grid">
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="avatar-option" onclick="selectPredefined(this.src)">
@@ -271,12 +268,9 @@
                 <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Robot" class="avatar-option" onclick="selectPredefined(this.src)">
                 <img src="https://api.dicebear.com/7.x/identicon/svg?seed=Gamer" class="avatar-option" onclick="selectPredefined(this.src)">
             </div>
-
             <div style="margin: 20px 0; color: #fff;">OU</div>
-
             <label for="uploadAvatarInput" class="btn-action" style="cursor: pointer; display: block; border: 1px dashed #666; color: #aaa;">📤 FAZER UPLOAD DE FOTO</label>
             <input type="file" id="uploadAvatarInput" accept="image/*" style="display: none;" onchange="uploadAvatar()">
-
             <button class="btn-action" style="margin-top: 20px; border: none; color: #555;" onclick="document.getElementById('modalAvatar').style.display='none'">FECHAR</button>
         </div>
     </div>
@@ -326,14 +320,14 @@
     </div>
 
     <script>
-        // --- 1. CONFIGURAÇÃO FIREBASE ---
         const firebaseConfig = { apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg", authDomain: "cobrifas.firebaseapp.com", projectId: "cobrifas", storageBucket: "cobrifas.firebasestorage.app", messagingSenderId: "1098617388770", appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let userAtivo = null, userFirebaseId = null, carrinho = [];
         let rifaSelId = null, precoUnico = 0, estoqueSel = 0, comprovanteBase64 = null;
-        let tempAvatar = null; // Armazena avatar temporariamente antes de salvar
+        let tempAvatar = null;
+        let hasAutoOpened = false; // Controle para evitar loop de abertura
 
         function carregarPagina() {
             const sessao = JSON.parse(localStorage.getItem('sessaoAtiva'));
@@ -344,13 +338,11 @@
                     userFirebaseId = Object.keys(data)[0]; userAtivo = data[userFirebaseId];
                     document.getElementById('headName').innerText = userAtivo.nick || userAtivo.nome.split(' ')[0];
                     document.getElementById('headAvatar').src = userAtivo.avatar;
-                    document.getElementById('profileAvatarPreview').src = userAtivo.avatar; // Preview no perfil
-                    
+                    document.getElementById('profileAvatarPreview').src = userAtivo.avatar;
                     document.getElementById('pNome').value = userAtivo.nome; 
                     document.getElementById('pTel').value = userAtivo.tel; 
                     document.getElementById('pCpf').value = userAtivo.cpf;
                     document.getElementById('pNick').value = userAtivo.nick || "";
-                    
                     loadMinhas(); carregarChat(); checkVitorias();
                 }
             });
@@ -365,6 +357,7 @@
                 db.ref('pagamentos').once('value', sPags => {
                     const pags = sPags.val() || {};
                     const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
+                    
                     grid.innerHTML = ativas.map(id => {
                         const r = rifas[id]; const vendidas = r.vendidas || 0; const res = r.total - vendidas; const p = (vendidas / r.total) * 100;
                         let bonusHtml = '';
@@ -375,63 +368,46 @@
                             const rankRows = sorted.map((u, i) => `<div class="mini-rank-item"><span>${i+1}. ${u[0].split(' ')[0]}</span><span>${u[1]} cotas</span></div>`).join('');
                             bonusHtml = `<div class="bonus-box"><div class="bonus-title">🏆 PRÊMIO TOP COMPRADOR</div><div class="bonus-content"><img src="${r.bonus.img}" class="bonus-img-mini"><span>${r.bonus.nome}</span></div></div><div class="mini-rank"><div class="mini-rank-title">TOP 4 COMPRADORES</div>${rankRows || '<div style="font-size:0.6rem; color:#555; text-align:center;">Seja o primeiro!</div>'}</div>`;
                         }
-                        return `<div class="card"><div class="price-tag">R$ ${r.preco}</div><img src="${r.img}" class="skin-img"><h3>${r.nome}</h3><div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div><div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div>${bonusHtml}<button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
+                        return `
+                        <div class="card" style="position:relative;">
+                            <div class="share-btn" onclick="shareRifa('${id}', '${r.nome}')">🔗</div>
+                            <div class="price-tag">R$ ${r.preco}</div>
+                            <img src="${r.img}" class="skin-img">
+                            <h3>${r.nome}</h3>
+                            <div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div>
+                            <div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div>${bonusHtml}<button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
                     }).join('');
+
+                    // --- Lógica de Auto-Open via URL ---
+                    const params = new URLSearchParams(window.location.search);
+                    const shareId = params.get('rifa');
+                    if(shareId && !hasAutoOpened && rifas[shareId]) {
+                        const r = rifas[shareId];
+                        const v = r.vendidas || 0;
+                        const estoque = r.total - v;
+                        if (!r.ganhador) {
+                            openModal(shareId, r.preco, estoque);
+                            hasAutoOpened = true; 
+                            // Limpa URL para não reabrir se atualizar (opcional)
+                            window.history.pushState({}, document.title, window.location.pathname);
+                        }
+                    }
                 });
             });
         }
 
-        /* --- AVATAR E PERFIL --- */
+        // --- FUNÇÃO DE COMPARTILHAMENTO ---
+        function shareRifa(id, nome) {
+            const url = window.location.origin + window.location.pathname + '?rifa=' + id;
+            const text = encodeURIComponent(`🔥 Olha essa rifa top no COBRIFAS: *${nome}*\n\n👉 Clica aqui pra participar: ${url}`);
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        }
+
+        /* --- RESTANTE DAS FUNÇÕES --- */
         function openAvatarModal() { document.getElementById('modalAvatar').style.display = 'flex'; }
-        
-        function selectPredefined(src) {
-            tempAvatar = src;
-            document.getElementById('profileAvatarPreview').src = src;
-            document.getElementById('modalAvatar').style.display = 'none';
-        }
-
-        function uploadAvatar() {
-            const file = document.getElementById('uploadAvatarInput').files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    tempAvatar = e.target.result;
-                    document.getElementById('profileAvatarPreview').src = tempAvatar;
-                    document.getElementById('modalAvatar').style.display = 'none';
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function saveP() {
-            const nome = document.getElementById('pNome').value;
-            const tel = document.getElementById('pTel').value;
-            const nick = document.getElementById('pNick').value;
-            const pass = document.getElementById('pNewPass').value;
-            const conf = document.getElementById('pConfPass').value;
-
-            let updates = { nome: nome, tel: tel, nick: nick };
-
-            if (tempAvatar) {
-                updates.avatar = tempAvatar;
-            }
-
-            if (pass) {
-                if (pass !== conf) {
-                    alert("As senhas não coincidem!");
-                    return;
-                }
-                updates.senha = pass;
-            }
-
-            db.ref('membros/'+userFirebaseId).update(updates).then(() => {
-                alert("Dados salvos com sucesso!");
-                document.getElementById('pNewPass').value = "";
-                document.getElementById('pConfPass').value = "";
-            });
-        }
-
-        /* --- CARRINHO E PIX --- */
+        function selectPredefined(src) { tempAvatar = src; document.getElementById('profileAvatarPreview').src = src; document.getElementById('modalAvatar').style.display = 'none'; }
+        function uploadAvatar() { const file = document.getElementById('uploadAvatarInput').files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { tempAvatar = e.target.result; document.getElementById('profileAvatarPreview').src = tempAvatar; document.getElementById('modalAvatar').style.display = 'none'; }; reader.readAsDataURL(file); } }
+        function saveP() { const nome = document.getElementById('pNome').value; const tel = document.getElementById('pTel').value; const nick = document.getElementById('pNick').value; const pass = document.getElementById('pNewPass').value; const conf = document.getElementById('pConfPass').value; let updates = { nome: nome, tel: tel, nick: nick }; if (tempAvatar) { updates.avatar = tempAvatar; } if (pass) { if (pass !== conf) { alert("As senhas não coincidem!"); return; } updates.senha = pass; } db.ref('membros/'+userFirebaseId).update(updates).then(() => { alert("Dados salvos com sucesso!"); document.getElementById('pNewPass').value = ""; document.getElementById('pConfPass').value = ""; }); }
         function openModal(id, preco, estoque) { rifaSelId = id; precoUnico = Number(preco); estoqueSel = Number(estoque); const grid = document.getElementById('cotasGridContent'); const opts = [10, 50, 100, 500, 1000, 2500]; grid.innerHTML = opts.map(q => `<div class="cota-item ${q===50?'active':''}" onclick="setQtd(${q}, this)">${q===50?'<div class="tag-pop">Mais popular</div>':''}<span class="cq">+${q}</span><span class="cp">R$ ${(q*precoUnico).toFixed(2)}</span><span class="cl">SELECIONAR</span></div>`).join(''); document.getElementById('inQtd').value = 10; refreshTotal(); document.getElementById('modalCotas').style.display = 'flex'; }
         function setQtd(n, el) { if(n > estoqueSel) return alert("Estoque insuficiente!"); document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active')); if(el) el.classList.add('active'); document.getElementById('inQtd').value = n; refreshTotal(); }
         function adjust(d) { const input = document.getElementById('inQtd'); let v = parseInt(input.value) + d; if(v > 0 && v <= estoqueSel) { input.value = v; refreshTotal(); } }
@@ -442,29 +418,7 @@
         function abrirCheckoutPix() { if(!carrinho.length) return alert("Carrinho vazio!"); db.ref('config/pix/chave').once('value', s => { document.getElementById('txtChavePix').innerText = s.val() || "---"; document.getElementById('modalPix').style.display = 'flex'; toggleCart(); }); }
         function validarArquivo() { const file = document.getElementById('compInput').files[0]; if(file) { document.getElementById('fileName').innerText = "✔ " + file.name; const reader = new FileReader(); reader.onload = e => { comprovanteBase64 = e.target.result; document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); }; reader.readAsDataURL(file); } }
         function enviarPedidoFirebase() { if(!comprovanteBase64) return alert("Anexe o comprovante!"); carrinho.forEach(it => { db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64, data: new Date().toLocaleString() }); }); carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none'; alert("Enviado!"); tab('minhas'); }
-
-        /* --- MINHAS RIFAS --- */
-        function loadMinhas() {
-            db.ref('rifas').once('value', sRifas => {
-                const mapRifas = sRifas.val() || {};
-                db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
-                    const pags = Object.values(s.val() || {}).reverse();
-                    let htmlGanhas = '', htmlAprovadas = '', htmlPendentes = '', hasWins = false;
-                    pags.forEach(p => {
-                        const rDetails = mapRifas[p.rifaId] || {};
-                        const img = rDetails.img || 'https://via.placeholder.com/100?text=Rifa';
-                        const unitVal = (parseFloat(p.valor) / parseInt(p.cotas)).toFixed(2);
-                        const isWinner = rDetails.ganhador && rDetails.ganhador.cpf === userAtivo.cpf;
-                        const numerosHtml = p.numeros ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>';
-                        const cardHtml = `<div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}"><img src="${img}" class="rd-img"><div class="rd-info"><div class="rd-header"><div class="rd-title">${p.rifa}</div><div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div></div><div class="rd-stats-row"><span class="rd-stat">Cotas: <b>${p.cotas}</b></span><span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span><span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span></div><div><span class="rd-nums-label">SEUS NÚMEROS:</span><div class="rd-nums-container">${numerosHtml}</div></div></div></div>`;
-                        if (isWinner && p.status === 'aprovado') { htmlGanhas += cardHtml; hasWins = true; } 
-                        if (p.status === 'aprovado') { htmlAprovadas += cardHtml; } else if (p.status === 'pendente' || p.status === 'recusado') { htmlPendentes += cardHtml; }
-                    });
-                    document.getElementById('listaGanhas').innerHTML = htmlGanhas; document.getElementById('containerGanhas').style.display = hasWins ? 'block' : 'none'; document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>'; document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>';
-                });
-            });
-        }
-
+        function loadMinhas() { db.ref('rifas').once('value', sRifas => { const mapRifas = sRifas.val() || {}; db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => { const pags = Object.values(s.val() || {}).reverse(); let htmlGanhas = '', htmlAprovadas = '', htmlPendentes = '', hasWins = false; pags.forEach(p => { const rDetails = mapRifas[p.rifaId] || {}; const img = rDetails.img || 'https://via.placeholder.com/100?text=Rifa'; const unitVal = (parseFloat(p.valor) / parseInt(p.cotas)).toFixed(2); const isWinner = rDetails.ganhador && rDetails.ganhador.cpf === userAtivo.cpf; const numerosHtml = p.numeros ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>'; const cardHtml = `<div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}"><img src="${img}" class="rd-img"><div class="rd-info"><div class="rd-header"><div class="rd-title">${p.rifa}</div><div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div></div><div class="rd-stats-row"><span class="rd-stat">Cotas: <b>${p.cotas}</b></span><span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span><span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span></div><div><span class="rd-nums-label">SEUS NÚMEROS:</span><div class="rd-nums-container">${numerosHtml}</div></div></div></div>`; if (isWinner && p.status === 'aprovado') { htmlGanhas += cardHtml; hasWins = true; } if (p.status === 'aprovado') { htmlAprovadas += cardHtml; } else if (p.status === 'pendente' || p.status === 'recusado') { htmlPendentes += cardHtml; } }); document.getElementById('listaGanhas').innerHTML = htmlGanhas; document.getElementById('containerGanhas').style.display = hasWins ? 'block' : 'none'; document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>'; document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>'; }); }); }
         function renderGlobalRanking() { db.ref('pagamentos').on('value', s => { const rank = {}; Object.values(s.val() || {}).filter(p => p.status === 'aprovado').forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); }); const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5); document.getElementById('globalRankingList').innerHTML = sorted.map((it, i) => `<div class="rank-item"><span>${i+1}. ${it[0]}</span><b>${it[1]} Cotas</b></div>`).join('') || 'Sem dados.'; }); }
         function renderGanhadoresRecentes() { db.ref('rifas').on('value', s => { const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5); document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `<div class="rank-item"><span>${r.ganhador.nome.split(' ')[0]}... <br> <small>${r.nome}</small></span><b>#${r.ganhador.numero}</b></div>`).join('') || 'Aguardando sorteios...'; }); }
         function checkVitorias() { db.ref('rifas').on('value', s => { const rifas = s.val() || {}; Object.keys(rifas).forEach(id => { const r = rifas[id]; if(r.ganhador && r.ganhador.cpfReal === userAtivo.cpf && !r.ganhador.vistoPeloUser) { document.getElementById('vicItemName').innerText = r.nome; document.getElementById('vicNumber').innerText = r.ganhador.numero; document.getElementById('modalVictory').style.display = 'flex'; db.ref(`rifas/${id}/ganhador`).update({vistoPeloUser: true}); } }); }); }

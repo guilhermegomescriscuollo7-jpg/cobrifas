@@ -3,45 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COBRIFAS | Skins de Elite</title>
+    <title>COBRIFAS | Skins de Elite CS2</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
     <style>
-        :root { --primary: #ffcc00; --bg-dark: #050505; --card-bg: #0f0f0f; --red: #ff4444; --green: #00ff66; }
+        :root {
+            --primary: #ffcc00;
+            --primary-glow: rgba(255, 204, 0, 0.5);
+            --bg-dark: #050505;
+            --card-bg: #0f0f0f;
+            --glass: rgba(20, 20, 20, 0.95);
+            --red: #ff4444;
+            --green: #00ff66;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg-dark); color: #fff; font-family: 'Rajdhani', sans-serif; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-family: 'Orbitron'; font-size: 2rem; font-weight: 900; color: #fff; text-decoration: none; }
-        .logo span { color: var(--primary); }
-        .btn-register { background: var(--primary); color: #000; padding: 12px 25px; border-radius: 4px; font-family: 'Orbitron'; font-weight: 900; text-decoration: none; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; padding: 40px 8%; }
-        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 4px; position: relative; }
-        .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; padding: 8px 25px; font-family: 'Orbitron'; }
-        .btn-participar { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; cursor: pointer; }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 10%, rgba(255, 204, 0, 0.05) 0%, transparent 50%),
+                url('https://images8.alphacoders.com/132/1328325.png');
+            background-attachment: fixed; background-size: cover;
+            color: #fff; font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; background: rgba(0, 0, 0, 0.95);
+            border-bottom: 2px solid var(--primary);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-family: 'Orbitron'; font-size: 2rem; font-weight: 900; color: #fff; text-decoration: none; letter-spacing: 1px; }
+        .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+        .auth-nav { display: flex; align-items: center; gap: 30px; }
+        .btn-register { background: var(--primary); color: #000; padding: 12px 25px; border-radius: 4px; font-family: 'Orbitron'; font-weight: 900; text-decoration: none; transition: 0.3s; }
+        .btn-register:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
+
+        /* --- TICKER --- */
+        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid #333; height: 40px; display: flex; align-items: center; }
+        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 2rem; font-size: 0.9rem; color: #ccc; font-family: 'Orbitron'; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        /* --- HERO --- */
+        .hero { padding: 100px 5% 60px; text-align: center; }
+        .hero h1 { font-family: 'Orbitron'; font-size: clamp(2.5rem, 6vw, 4.5rem); font-style: italic; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
+        .hero h1 span { color: var(--primary); display: block; }
+        .hero p { color: #888; font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+
+        /* --- CONTEÚDO --- */
+        .container { padding: 40px 8%; }
+        .section-title { font-family: 'Orbitron'; font-size: 1.5rem; margin-bottom: 40px; display: flex; align-items: center; gap: 15px; text-transform: uppercase; }
+        .section-title::before { content: '⚡'; color: var(--primary); }
+
+        /* --- CARDS RIFAS --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 25px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-8px); border-color: rgba(255,204,0,0.3); }
+        .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 25px; font-size: 1rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
+        .skin-img { width: 100%; height: 180px; object-fit: contain; margin: 20px 0; align-self: center; }
+        .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
+        .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; transition: 0.5s; }
+        .btn-participar { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; }
+        .btn-participar:hover { background: var(--primary); color: #000; }
+
+        /* --- RANKINGS --- */
+        .rankings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-top: 80px; }
+        .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; }
+        .rank-title { font-family: 'Orbitron'; font-size: 1rem; color: #fff; text-transform: uppercase; margin-bottom: 25px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+        .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .rank-item:hover { background: rgba(255,255,255,0.05); }
+
+        /* --- MODAL DETALHES SORTEIO --- */
+        #modalDetails { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:4500; align-items:center; justify-content:center; backdrop-filter: blur(10px); }
+        .details-card { width: 90%; max-width: 450px; background: #111; border: 2px solid var(--primary); padding: 30px; border-radius: 12px; position: relative; box-shadow: 0 0 50px rgba(255,204,0,0.2); }
+        .winner-img-box { text-align: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 20px; }
+        .winner-img { width: 100%; height: 180px; object-fit: contain; }
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed #333; padding-bottom: 8px; font-size: 0.9rem; }
+        .bonus-result { background: rgba(255,204,0,0.1); border: 1px dashed var(--primary); padding: 15px; border-radius: 8px; margin-top: 20px; display: none; }
+
+        footer { text-align: center; padding: 60px; color: #444; font-family: 'Orbitron'; font-size: 0.7rem; border-top: 1px solid #111; margin-top: 40px; }
     </style>
 </head>
 <body>
+
     <header>
         <a href="index.html" class="logo">COB<span>RIFAS</span></a>
-        <div>
-            <a href="login.html" style="color:#888; text-decoration:none; font-family:Orbitron; margin-right:20px;">LOGIN</a>
+        <div class="auth-nav">
+            <a href="login.html" style="color:#888; text-decoration:none; font-family:Orbitron;">LOGIN</a>
             <a href="cadastro.html" class="btn-register">CRIAR CONTA</a>
         </div>
     </header>
-    <div id="gridLoja" class="grid"></div>
+
+    <div class="ticker-wrap"><div class="ticker" id="tickerContainer"></div></div>
+
+    <section class="hero">
+        <h1 id="heroTitle">SUA PRÓXIMA <span>SKIN DE ELITE</span></h1>
+        <p id="heroDesc">Participe de sorteios rápidos e seguros com as melhores skins de Counter-Strike 2.</p>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">VITRINE DE RIFAS</h2>
+        <div class="grid" id="gridLoja"></div>
+
+        <div class="rankings-grid">
+            <div class="rank-card">
+                <div class="rank-title">🏆 ÚLTIMOS GANHADORES</div>
+                <div id="recentWinnersList"></div>
+            </div>
+            <div class="rank-card">
+                <div class="rank-title">💎 TOP MEMBROS (COTAS)</div>
+                <div id="globalRankingList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalDetails">
+        <div class="details-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="font-family:'Orbitron'; color:var(--primary);">RESULTADO OFICIAL</h3>
+                <span style="cursor:pointer; color:#666; font-size:1.5rem;" onclick="document.getElementById('modalDetails').style.display='none'">✕</span>
+            </div>
+            <div class="winner-img-box"><img src="" id="dtImg" class="winner-img"></div>
+            <div class="detail-row"><span>ITEM:</span><b id="dtItem">---</b></div>
+            <div class="detail-row"><span>DATA:</span><b id="dtData">---</b></div>
+            <div class="detail-row"><span>NÚMERO SORTEADO:</span><b style="color:var(--primary); font-size:1.2rem;" id="dtNum">---</b></div>
+            <div class="detail-row"><span>GANHADOR:</span><b id="dtNome">---</b></div>
+            <div class="detail-row"><span>CPF:</span><span style="color:#888" id="dtCpf">---</span></div>
+            
+            <div id="dtBonusArea" class="bonus-result">
+                <span style="font-family:'Orbitron'; font-size:0.7rem; color:var(--primary); display:block; margin-bottom:5px;">🏆 PRÊMIO EXTRA (TOP COMPRADOR):</span>
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <img src="" id="dtBonusImg" style="width:50px; height:40px; object-fit:contain;">
+                    <b id="dtBonusName" style="font-size:0.9rem;">---</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>COBRIFAS © 2026 - TODOS OS DIREITOS RESERVADOS.</footer>
+
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg", authDomain: "cobrifas.firebaseapp.com", projectId: "cobrifas", storageBucket: "cobrifas.firebasestorage.app", messagingSenderId: "1098617388770", appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb" };
+        // --- 1. CONFIGURAÇÃO FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg",
+            authDomain: "cobrifas.firebaseapp.com",
+            projectId: "cobrifas",
+            storageBucket: "cobrifas.firebasestorage.app",
+            messagingSenderId: "1098617388770",
+            appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb"
+        };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        db.ref('rifas').on('value', s => {
-            const rifas = s.val() || {};
-            const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
-            document.getElementById('gridLoja').innerHTML = ativas.map(id => {
-                const r = rifas[id];
-                return `<div class="card"><div class="price-badge">R$ ${r.preco}</div><img src="${r.img}" style="width:100%; height:160px; object-fit:contain; margin:20px 0;"><h3 style="text-align:center; font-family:Orbitron;">${r.nome}</h3><button class="btn-participar" style="margin-top:20px;" onclick="location.href='login.html'">PARTICIPAR</button></div>`;
-            }).join('') || '<p style="text-align:center; grid-column: 1/-1;">Nenhuma rifa ativa.</p>';
-        });
+
+        function init() {
+            renderConfig();
+            renderLoja();
+            renderGlobalRanking();
+            renderGanhadoresRecentes();
+        }
+
+        function renderConfig() {
+            db.ref('configSite').once('value', s => {
+                const c = s.val() || {};
+                if(c.titulo) document.getElementById('heroTitle').innerHTML = c.titulo;
+                if(c.ticker) document.getElementById('tickerContainer').innerHTML = c.ticker.split('\n').map(m => `<div class="ticker-item">${m}</div>`).join('');
+            });
+        }
+
+        function renderLoja() {
+            db.ref('rifas').on('value', s => {
+                const rifas = s.val() || {};
+                const grid = document.getElementById('gridLoja');
+                const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
+
+                grid.innerHTML = ativas.map(id => {
+                    const r = rifas[id];
+                    const pct = ((r.vendidas || 0) / r.total) * 100;
+                    const bonusHtml = r.bonus ? `<div style="border:1px dashed var(--primary); padding:10px; margin-bottom:15px; font-size:0.7rem; color:var(--primary); font-family:Orbitron; display:flex; align-items:center; gap:10px;"><img src="${r.bonus.img}" style="width:30px;"> TOP COMPRADOR: ${r.bonus.nome}</div>` : '';
+                    
+                    return `
+                    <div class="card">
+                        <div class="price-badge">R$ ${r.preco}</div>
+                        <img src="${r.img}" class="skin-img">
+                        <h3 style="text-align:center; font-family:Orbitron; font-size:1.1rem; height:50px;">${r.nome}</h3>
+                        <div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div>
+                        <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:#888; margin-bottom:15px;">
+                            <span>RESTANTES: ${r.total - (r.vendidas || 0)}</span>
+                            <span>${pct.toFixed(0)}%</span>
+                        </div>
+                        ${bonusHtml}
+                        <button class="btn-participar" onclick="location.href='login.html'">PARTICIPAR</button>
+                    </div>`;
+                }).join('') || '<p style="grid-column:1/-1; text-align:center; padding:50px; color:#555;">Nenhuma rifa ativa no momento.</p>';
+            });
+        }
+
+        function renderGlobalRanking() {
+            db.ref('pagamentos').on('value', s => {
+                const pags = Object.values(s.val() || {}).filter(p => p.status === 'aprovado');
+                const rank = {};
+                pags.forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); });
+                const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5);
+                document.getElementById('globalRankingList').innerHTML = sorted.map((u, i) => `
+                    <div class="rank-item" style="border-left-color: var(--primary)">
+                        <span>${i+1}. ${u[0]}</span>
+                        <b style="color:var(--primary)">${u[1]} Cotas</b>
+                    </div>`).join('');
+            });
+        }
+
+        function renderGanhadoresRecentes() {
+            db.ref('rifas').on('value', s => {
+                const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5);
+                document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `
+                    <div class="rank-item" style="border-left-color: var(--green)" onclick="verDetalhesSorteio('${r.nome}')">
+                        <span>${r.ganhador.nome.split(' ')[0]}... <br> <small style="color:#888">${r.nome}</small></span>
+                        <b style="color:var(--primary)">#${r.ganhador.numero}</b>
+                    </div>`).join('') || '<p style="text-align:center; padding:20px; color:#555;">Aguardando sorteios...</p>';
+            });
+        }
+
+        function verDetalhesSorteio(nomeRifa) {
+            db.ref('rifas').once('value', s => {
+                const r = Object.values(s.val()).find(x => x.nome === nomeRifa);
+                if(r && r.ganhador) {
+                    document.getElementById('dtImg').src = r.img;
+                    document.getElementById('dtItem').innerText = r.nome;
+                    document.getElementById('dtData').innerText = r.ganhador.dataSorteio || 'Recentemente';
+                    document.getElementById('dtNum').innerText = r.ganhador.numero;
+                    document.getElementById('dtNome').innerText = r.ganhador.nome;
+                    document.getElementById('dtCpf').innerText = r.ganhador.cpf || '***.***.***-**';
+                    
+                    const bonusArea = document.getElementById('dtBonusArea');
+                    if(r.bonus) {
+                        bonusArea.style.display = 'block';
+                        document.getElementById('dtBonusImg').src = r.bonus.img;
+                        document.getElementById('dtBonusName').innerText = r.bonus.nome;
+                    } else { bonusArea.style.display = 'none'; }
+                    
+                    document.getElementById('modalDetails').style.display = 'flex';
+                }
+            });
+        }
+
+        window.onload = init;
     </script>
 </body>
 </html>

@@ -168,24 +168,26 @@
     </div>
 
     <div id="modalCotas">
-        <div class="modal-card-cota">
-            <div class="modal-header-text">Quanto mais títulos, mais chances de ganhar!</div>
-            <div class="modal-body">
-                <div class="cotas-grid" id="cotasGridContent"></div>
-            </div>
-            <div class="controls-row">
-                <div class="qtd-sel">
-                    <button class="btn-step" onclick="adjust(-1)">−</button>
-                    <input type="number" id="inQtd" value="10" readonly style="border:none; text-align:center; width:50px; font-weight:bold; font-size:1.1rem; outline:none;">
-                    <button class="btn-step" onclick="adjust(1)">+</button>
+    <div class="modal-card-cota">
+        <div class="modal-header-text">Quanto mais títulos, mais chances de ganhar!</div>
+        <div class="modal-body">
+            <div class="cotas-grid" id="cotasGridContent">
                 </div>
-                <button class="btn-final" onclick="addCarrinho()">
-                    <div style="border:1px solid #000; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">✔</div>
-                    <span>Quero participar<br><b id="totalModal">R$ 0,00</b></span>
-                </button>
+        </div>
+        <div class="controls-row">
+            <div class="qtd-sel">
+                <button type="button" class="btn-step" onclick="adjust(-1)">−</button>
+                <input type="number" id="inQtd" value="10" readonly style="border:none; text-align:center; width:50px; font-weight:bold; font-size:1.1rem; outline:none; background:transparent; color:#000;">
+                <button type="button" class="btn-step" onclick="adjust(1)">+</button>
             </div>
+            
+            <button class="btn-final" onclick="addCarrinho()">
+                <div style="border:1px solid #000; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">✔</div>
+                <span>Quero participar<br><b id="totalModal">R$ 0,00</b></span>
+            </button>
         </div>
     </div>
+</div>
 
     <div id="modalPix">
     <div class="modal-card-pix">
@@ -239,38 +241,73 @@
             });
         }
 
-        function openModal(id, preco, estoque) {
-            rifaSelId = id; precoUnico = preco; estoqueSel = estoque;
-            const grid = document.getElementById('cotasGridContent');
-            const opts = [10, 50, 100, 500, 1000, 2500];
-            grid.innerHTML = opts.map(q => {
-                const active = q === 50 ? 'active' : '';
-                const tag = q === 50 ? '<div class="tag-pop">Mais popular</div>' : '';
-                return `<div class="cota-item ${active}" onclick="setQtd(${q}, this)">${tag}<span class="cq">+${q}</span><span class="cp">R$ ${(q*preco).toFixed(2)}</span><span class="cl">SELECIONAR</span></div>`;
-            }).join('');
-            document.getElementById('inQtd').value = 10; refreshTotal(); document.getElementById('modalCotas').style.display = 'flex';
-        }
+        // Variáveis de controle globais
+let rifaSelId = null;
+let precoUnico = 0;
+let estoqueSel = 0;
 
-        function setQtd(n, el) { 
-            if(n > estoqueSel) return alert("Estoque insuficiente!");
-            document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active'));
-            if(el) el.classList.add('active');
-            document.getElementById('inQtd').value = n; refreshTotal(); 
-        }
+function openModal(id, preco, estoque) {
+    rifaSelId = id;
+    precoUnico = Number(preco); // Garante que seja número
+    estoqueSel = Number(estoque); // Garante que seja número
 
-        function adjust(d) { 
-            let v = parseInt(document.getElementById('inQtd').value) + d; 
-            if(v > 0 && v <= estoqueSel) { document.getElementById('inQtd').value = v; refreshTotal(); }
-        }
+    const grid = document.getElementById('cotasGridContent');
+    const opts = [10, 50, 100, 500, 1000, 2500];
+    
+    // Gera os botões pretos de seleção rápida
+    grid.innerHTML = opts.map(q => {
+        const ativo = q === 50 ? 'active' : '';
+        const tag = q === 50 ? '<div class="tag-pop">Mais popular</div>' : '';
+        const valorCota = (q * precoUnico).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+        
+        return `
+            <div class="cota-item ${ativo}" onclick="setQtd(${q}, this)">
+                ${tag}
+                <span class="cq">+${q}</span>
+                <span class="cp">${valorCota}</span>
+                <span class="cl">SELECIONAR</span>
+            </div>`;
+    }).join('');
 
-        function refreshTotal() { document.getElementById('totalModal').innerText = 'R$ ' + (parseInt(document.getElementById('inQtd').value) * precoUnico).toFixed(2); }
+    document.getElementById('inQtd').value = 10;
+    refreshTotal();
+    document.getElementById('modalCotas').style.display = 'flex';
+}
 
-        function addCarrinho() {
-            db.ref('rifas/'+rifaSelId).once('value', s => {
-                carrinho.push({ id: rifaSelId, nome: s.val().nome, preco: precoUnico, qtd: parseInt(document.getElementById('inQtd').value) });
-                updateUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart();
-            });
-        }
+// Função que controla os botões de + e -
+function adjust(d) {
+    const input = document.getElementById('inQtd');
+    let atual = parseInt(input.value);
+    let novoValor = atual + d;
+
+    // Trava o seletor entre 1 e o máximo disponível no estoque
+    if (novoValor > 0 && novoValor <= estoqueSel) {
+        input.value = novoValor;
+        refreshTotal();
+    } else if (novoValor > estoqueSel) {
+        alert("Desculpe, restam apenas " + estoqueSel + " cotas!");
+    }
+}
+
+// Atualiza o valor do botão laranja
+function refreshTotal() {
+    const qtd = parseInt(document.getElementById('inQtd').value);
+    const total = qtd * precoUnico;
+    document.getElementById('totalModal').innerText = total.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+}
+
+// Seleção rápida (ao clicar nos quadrados pretos)
+function setQtd(n, el) {
+    if (n > estoqueSel) {
+        alert("Estoque insuficiente!");
+        return;
+    }
+    document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active'));
+    if (el) el.classList.add('active');
+    
+    document.getElementById('inQtd').value = n;
+    refreshTotal();
+}
 
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
 
@@ -370,4 +407,5 @@ function enviarPedidoFirebase() {
     </script>
 </body>
 </html>
+
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COBRIFAS | Skins de Elite CS2</title>
+    <title>COBRIFAS | A Sorte está no seu Loadout</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -12,10 +12,10 @@
     <style>
         :root {
             --primary: #ffcc00;
-            --primary-glow: rgba(255, 204, 0, 0.5);
+            --primary-dark: #cca300;
             --bg-dark: #050505;
-            --card-bg: #0f0f0f;
-            --glass: rgba(20, 20, 20, 0.95);
+            --card-bg: rgba(20, 20, 20, 0.7);
+            --glass: rgba(255, 255, 255, 0.05);
             --red: #ff4444;
             --green: #00ff66;
         }
@@ -24,92 +24,131 @@
 
         body {
             background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 10%, rgba(255, 204, 0, 0.05) 0%, transparent 50%),
-                url('https://images8.alphacoders.com/132/1328325.png');
-            background-attachment: fixed; background-size: cover;
+            background-image: radial-gradient(circle at 50% 0%, rgba(255, 204, 0, 0.15) 0%, #050505 60%);
             color: #fff; font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
         }
 
-        /* --- HEADER RESPONSIVO --- */
+        /* --- ANIMAÇÕES --- */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(255, 204, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); } }
+
+        /* --- HEADER --- */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%; background: rgba(0, 0, 0, 0.95);
-            border-bottom: 2px solid var(--primary);
+            padding: 20px 5%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: sticky; top: 0; z-index: 1000;
         }
-        .logo { font-family: 'Orbitron'; font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 900; color: #fff; text-decoration: none; letter-spacing: 1px; }
-        .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+        .logo { font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900; color: #fff; text-decoration: none; letter-spacing: 2px; }
+        .logo span { color: var(--primary); text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); }
         
-        .auth-nav { display: flex; align-items: center; }
-        
-        /* BOTÃO LOGIN AMARELO ATUALIZADO */
         .btn-login { 
-            background: var(--primary); 
-            color: #000; 
-            padding: 10px 30px; 
-            border: none; 
-            border-radius: 4px; 
-            font-family: 'Orbitron'; 
-            font-weight: 900; 
-            text-decoration: none; 
-            transition: 0.3s; 
-            font-size: 0.85rem; 
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            background: transparent; border: 2px solid var(--primary); color: var(--primary);
+            padding: 8px 25px; border-radius: 4px; font-family: 'Orbitron'; font-weight: bold;
+            text-decoration: none; transition: 0.3s; font-size: 0.9rem;
         }
-        .btn-login:hover { 
-            transform: scale(1.05);
-            box-shadow: 0 0 25px var(--primary-glow); 
-            filter: brightness(1.1);
+        .btn-login:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary); }
+
+        /* --- HERO SECTION (DESTAQUE) --- */
+        .hero {
+            position: relative;
+            height: 80vh; min-height: 500px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px;
+            background: url('https://cdn.akamai.steamstatic.com/apps/csgo/images/csgo_react/social/cs2_header.jpg') no-repeat center center/cover;
+        }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(5,5,5,0.3), #050505); }
+        .hero-content { position: relative; z-index: 2; animation: fadeInUp 0.8s ease-out; }
+        
+        .hero h1 { 
+            font-family: 'Orbitron'; font-size: clamp(2.5rem, 6vw, 5rem); 
+            font-weight: 900; text-transform: uppercase; line-height: 1.1; margin-bottom: 15px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .hero h1 span { color: var(--primary); display: block; }
+        .hero p { font-size: clamp(1rem, 2vw, 1.3rem); color: #ddd; max-width: 700px; margin: 0 auto 30px; text-shadow: 0 2px 4px #000; }
+        
+        .btn-cta {
+            background: linear-gradient(45deg, var(--primary), #e6b800);
+            color: #000; padding: 18px 50px; font-size: 1.2rem; font-family: 'Orbitron';
+            font-weight: 900; border: none; border-radius: 4px; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px;
+            animation: pulse 2s infinite; text-decoration: none; display: inline-block;
         }
 
         /* --- TICKER --- */
-        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid #333; height: 40px; display: flex; align-items: center; }
-        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 2rem; font-size: 0.9rem; color: #ccc; font-family: 'Orbitron'; }
+        .ticker-wrap { width: 100%; background: var(--primary); color: #000; height: 35px; display: flex; align-items: center; overflow: hidden; font-weight: bold; border-top: 2px solid #000; border-bottom: 2px solid #000; }
+        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 30s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 2rem; font-family: 'Orbitron'; font-size: 0.9rem; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* --- HERO --- */
-        .hero { padding: 60px 5% 40px; text-align: center; }
-        .hero h1 { font-family: 'Orbitron'; font-size: clamp(1.8rem, 8vw, 4.5rem); font-style: italic; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; line-height: 1.1; }
-        .hero h1 span { color: var(--primary); display: block; }
-        .hero p { color: #888; font-size: clamp(0.9rem, 3vw, 1.2rem); max-width: 600px; margin: 0 auto; }
+        /* --- COMO FUNCIONA (ICONES) --- */
+        .steps-section { padding: 60px 5%; background: #0a0a0a; text-align: center; }
+        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
+        .step-card { padding: 30px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .step-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .step-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+        .step-title { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 10px; color: #fff; }
+        .step-desc { color: #888; font-size: 0.9rem; }
 
-        /* --- CONTEÚDO --- */
-        .container { padding: 20px 5%; }
-        .section-title { font-family: 'Orbitron'; font-size: clamp(1.1rem, 4vw, 1.5rem); margin-bottom: 30px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
-        .section-title::before { content: '⚡'; color: var(--primary); }
-
-        /* --- CARDS --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 20px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
-        .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 6px 15px; font-size: 0.9rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
-        .skin-img { width: 100%; height: 150px; object-fit: contain; margin: 15px 0; align-self: center; }
-        .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 15px; }
-        .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; transition: 0.5s; }
-        .btn-participar { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; font-size: 0.85rem; }
-
-        /* --- RANKINGS --- */
-        .rankings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 50px; }
-        .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px; }
-        .rank-title { font-family: 'Orbitron'; font-size: 0.9rem; color: #fff; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-        .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 8px; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
-
-        /* --- MODAL --- */
-        #modalDetails { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:4500; align-items:center; justify-content:center; backdrop-filter: blur(10px); padding: 20px; }
-        .details-card { width: 100%; max-width: 450px; background: #111; border: 2px solid var(--primary); padding: 25px; border-radius: 12px; position: relative; max-height: 90vh; overflow-y: auto; }
-        .winner-img-box { text-align: center; margin-bottom: 15px; }
-        .winner-img { width: 100%; height: 150px; object-fit: contain; }
-        .detail-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #333; padding-bottom: 6px; font-size: 0.85rem; }
-
-        footer { text-align: center; padding: 40px 20px; color: #444; font-family: 'Orbitron'; font-size: 0.65rem; border-top: 1px solid #111; margin-top: 40px; }
-
-        @media (max-width: 480px) {
-            header { padding: 15px 5%; }
-            .hero { padding: 40px 5% 30px; }
-            .grid { grid-template-columns: 1fr; }
+        /* --- RIFAS GRID --- */
+        .container { padding: 60px 5%; max-width: 1400px; margin: 0 auto; }
+        .section-title { 
+            font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 40px; 
+            text-align: center; text-transform: uppercase; color: #fff;
+            position: relative; display: inline-block; left: 50%; transform: translateX(-50%);
         }
+        .section-title::after { content:''; display: block; width: 60px; height: 4px; background: var(--primary); margin: 10px auto 0; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        
+        .card { 
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); 
+            border-bottom: 4px solid var(--primary); padding: 20px; border-radius: 8px; 
+            position: relative; transition: 0.3s; display: flex; flex-direction: column; 
+            overflow: hidden; backdrop-filter: blur(10px);
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-color: var(--primary); }
+        
+        .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 15px; font-size: 1rem; clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%); }
+        .share-btn { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.1); color: #fff; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; z-index: 5; border: 1px solid rgba(255,255,255,0.2); }
+        .share-btn:hover { background: var(--green); color: #000; border-color: var(--green); transform: rotate(15deg); }
+
+        .skin-img { width: 100%; height: 180px; object-fit: contain; margin: 20px 0; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); transition: 0.3s; }
+        .card:hover .skin-img { transform: scale(1.05); }
+
+        .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; text-align: center; margin-bottom: 15px; height: 50px; display: flex; align-items: center; justify-content: center; }
+        
+        .progress-container { margin-bottom: 15px; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: #888; margin-bottom: 5px; font-weight: bold; font-family: 'Orbitron'; }
+        .progress-bg { background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #ff8c00, var(--primary)); height: 100%; box-shadow: 0 0 10px var(--primary); }
+
+        .btn-participar { 
+            width: 100%; padding: 15px; background: transparent; 
+            border: 1px solid var(--primary); color: var(--primary); 
+            font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; 
+            cursor: pointer; transition: 0.3s; margin-top: auto; 
+            font-size: 0.9rem; letter-spacing: 1px;
+        }
+        .btn-participar:hover { background: var(--primary); color: #000; }
+
+        /* --- RANKING E GANHADORES --- */
+        .rankings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 80px; }
+        .rank-card { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 25px; }
+        .rank-header { font-family: 'Orbitron'; font-size: 1.2rem; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(255,255,255,0.03); border-radius: 6px; margin-bottom: 10px; transition: 0.2s; border-left: 3px solid transparent; }
+        .rank-item:hover { background: rgba(255,255,255,0.08); transform: translateX(5px); }
+
+        /* --- MODAL DETALHES --- */
+        #modalDetails { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px); padding: 20px; }
+        .details-card { width: 100%; max-width: 450px; background: #111; border: 2px solid var(--primary); padding: 30px; border-radius: 12px; position: relative; box-shadow: 0 0 50px rgba(255,204,0,0.2); }
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid #222; padding-bottom: 8px; font-size: 0.9rem; }
+        .winner-img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
+
+        footer { text-align: center; padding: 50px 20px; color: #666; font-family: 'Orbitron'; font-size: 0.8rem; background: #000; margin-top: 80px; border-top: 1px solid #111; }
+        footer span { color: var(--primary); }
     </style>
 </head>
 <body>
@@ -117,28 +156,55 @@
     <header>
         <a href="index.html" class="logo">COB<span>RIFAS</span></a>
         <div class="auth-nav">
-            <a href="login.html" class="btn-login">LOGIN</a>
+            <a href="login.html" class="btn-login">ACESSAR CONTA</a>
         </div>
     </header>
 
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 id="heroTitle">SKINS DE ELITE <br><span>PREÇO DE PISTOL</span></h1>
+            <p id="heroDesc">A plataforma mais segura e rápida para você montar seu loadout dos sonhos. Participe agora!</p>
+            <a href="login.html" class="btn-cta">COMEÇAR AGORA</a>
+        </div>
+    </section>
+
     <div class="ticker-wrap"><div class="ticker" id="tickerContainer"></div></div>
 
-    <section class="hero">
-        <h1 id="heroTitle">SUA PRÓXIMA <span>SKIN DE ELITE</span></h1>
-        <p id="heroDesc">Participe de sorteios rápidos e seguros com as melhores skins de Counter-Strike 2.</p>
+    <section class="steps-section">
+        <h2 class="section-title">COMO FUNCIONA?</h2>
+        <div class="steps-grid">
+            <div class="step-card">
+                <span class="step-icon">🎯</span>
+                <h3 class="step-title">1. ESCOLHA</h3>
+                <p class="step-desc">Selecione a skin que você deseja ganhar entre as diversas opções disponíveis.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-icon">🎟️</span>
+                <h3 class="step-title">2. PARTICIPE</h3>
+                <p class="step-desc">Compre quantas cotas quiser. Quanto mais cotas, maiores suas chances!</p>
+            </div>
+            <div class="step-card">
+                <span class="step-icon">🏆</span>
+                <h3 class="step-title">3. GANHE</h3>
+                <p class="step-desc">Aguarde o sorteio. Se seu número for sorteado, a skin é enviada para sua Steam!</p>
+            </div>
+        </div>
     </section>
 
     <div class="container">
-        <h2 class="section-title">VITRINE DE RIFAS</h2>
-        <div class="grid" id="gridLoja"></div>
+        <h2 class="section-title">RIFAS EM DESTAQUE</h2>
+        <div class="grid" id="gridLoja">
+            <div style="grid-column: 1/-1; text-align: center; color: #888;">Carregando rifas...</div>
+        </div>
 
         <div class="rankings-grid">
             <div class="rank-card">
-                <div class="rank-title">🏆 ÚLTIMOS GANHADORES</div>
+                <div class="rank-header"><span>🏆</span> ÚLTIMOS GANHADORES</div>
                 <div id="recentWinnersList"></div>
             </div>
             <div class="rank-card">
-                <div class="rank-title">💎 TOP COMPRADORES</div>
+                <div class="rank-header"><span>💎</span> TOP COMPRADORES</div>
                 <div id="globalRankingList"></div>
             </div>
         </div>
@@ -146,28 +212,32 @@
 
     <div id="modalDetails">
         <div class="details-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <h3 style="font-family:'Orbitron'; color:var(--primary); font-size: 1rem;">RESULTADO OFICIAL</h3>
-                <span style="cursor:pointer; color:#666; font-size:1.8rem;" onclick="document.getElementById('modalDetails').style.display='none'">✕</span>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="font-family:'Orbitron'; color:var(--primary); font-size: 1.2rem;">RESULTADO</h3>
+                <span style="cursor:pointer; color:#fff; font-size:1.5rem;" onclick="document.getElementById('modalDetails').style.display='none'">✕</span>
             </div>
-            <div class="winner-img-box"><img src="" id="dtImg" class="winner-img"></div>
-            <div class="detail-row"><span>ITEM:</span><b id="dtItem">---</b></div>
-            <div class="detail-row"><span>DATA:</span><b id="dtData">---</b></div>
-            <div class="detail-row"><span>NÚMERO SORTEADO:</span><b style="color:var(--primary); font-size:1.1rem;" id="dtNum">---</b></div>
-            <div class="detail-row"><span>GANHADOR:</span><b id="dtNome">---</b></div>
-            <div class="detail-row"><span>CPF:</span><span style="color:#888" id="dtCpf">---</span></div>
+            <div style="text-align:center;"><img src="" id="dtImg" class="winner-img"></div>
+            <div class="detail-row"><span>ITEM:</span><b id="dtItem" style="color:#fff">---</b></div>
+            <div class="detail-row"><span>DATA:</span><b id="dtData" style="color:#ccc">---</b></div>
+            <div class="detail-row"><span>NÚMERO:</span><b style="color:var(--primary); font-size:1.2rem;" id="dtNum">---</b></div>
+            <div class="detail-row"><span>GANHADOR:</span><b id="dtNome" style="color:#fff">---</b></div>
+            <div class="detail-row"><span>CPF:</span><span style="color:#666" id="dtCpf">---</span></div>
             
-            <div id="dtBonusArea" class="bonus-result" style="background: rgba(255,204,0,0.1); border: 1px dashed var(--primary); padding: 12px; border-radius: 8px; margin-top: 15px; display: none;">
-                <span style="font-family:'Orbitron'; font-size:0.6rem; color:var(--primary); display:block; margin-bottom:5px;">🏆 PRÊMIO EXTRA:</span>
+            <div id="dtBonusArea" style="background: rgba(255,204,0,0.1); border: 1px dashed var(--primary); padding: 12px; border-radius: 8px; margin-top: 15px; display: none;">
+                <span style="font-family:'Orbitron'; font-size:0.7rem; color:var(--primary); display:block; margin-bottom:5px;">PRÊMIO BÔNUS:</span>
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <img src="" id="dtBonusImg" style="width:40px; height:30px; object-fit:contain;">
-                    <b id="dtBonusName" style="font-size:0.8rem;">---</b>
+                    <img src="" id="dtBonusImg" style="width:40px; height:40px; object-fit:contain;">
+                    <b id="dtBonusName" style="font-size:0.9rem; color:#fff;">---</b>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer>COBRIFAS © 2026 - TODOS OS DIREITOS RESERVADOS.</footer>
+    <footer>
+        <div style="margin-bottom: 10px; font-size: 1.5rem;">COB<span>RIFAS</span></div>
+        Plataforma de sorteios de skins CS2.<br>
+        © 2026 Todos os direitos reservados.
+    </footer>
 
     <script>
         // CONFIGURAÇÃO FIREBASE
@@ -206,23 +276,35 @@
                 grid.innerHTML = ativas.map(id => {
                     const r = rifas[id];
                     const pct = ((r.vendidas || 0) / r.total) * 100;
-                    const bonusHtml = r.bonus ? `<div style="border:1px dashed var(--primary); padding:8px; margin-bottom:12px; font-size:0.6rem; color:var(--primary); font-family:Orbitron; display:flex; align-items:center; gap:8px;"><img src="${r.bonus.img}" style="width:25px;"> TOP: ${r.bonus.nome}</div>` : '';
+                    const bonusHtml = r.bonus ? `<div style="background: rgba(255,204,0,0.1); border:1px dashed var(--primary); padding:8px; border-radius:4px; margin-bottom:15px; font-size:0.7rem; color:#fff; font-family:Orbitron; display:flex; align-items:center; gap:8px;"><img src="${r.bonus.img}" style="width:25px; height:25px; object-fit:cover; border-radius:50%;"> <span style="color:var(--primary)">TOP:</span> ${r.bonus.nome}</div>` : '';
                     
                     return `
                     <div class="card">
+                        <div class="share-btn" onclick="shareRifa('${id}', '${r.nome}')">🔗</div>
                         <div class="price-badge">R$ ${r.preco}</div>
                         <img src="${r.img}" class="skin-img">
-                        <h3 style="text-align:center; font-family:Orbitron; font-size:1rem; height:45px;">${r.nome}</h3>
-                        <div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div>
-                        <div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; margin-bottom:12px;">
-                            <span>RESTANTES: ${r.total - (r.vendidas || 0)}</span>
-                            <span>${pct.toFixed(0)}%</span>
+                        <h3>${r.nome}</h3>
+                        
+                        <div class="progress-container">
+                            <div class="progress-labels">
+                                <span>VENDIDOS: ${r.vendidas || 0}/${r.total}</span>
+                                <span style="color:var(--primary)">${pct.toFixed(0)}%</span>
+                            </div>
+                            <div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div>
                         </div>
+
                         ${bonusHtml}
-                        <button class="btn-participar" onclick="location.href='login.html'">PARTICIPAR</button>
+
+                        <button class="btn-participar" onclick="location.href='login.html'">PARTICIPAR AGORA</button>
                     </div>`;
-                }).join('') || '<p style="grid-column:1/-1; text-align:center; padding:50px; color:#555;">Aguardando novas rifas...</p>';
+                }).join('') || '<p style="grid-column:1/-1; text-align:center; padding:50px; color:#555;">Nenhuma rifa ativa no momento.</p>';
             });
+        }
+
+        function shareRifa(id, nome) {
+            const url = window.location.origin + '/login.html?rifa=' + id; // Direciona pro login/app
+            const text = encodeURIComponent(`🔥 Olha essa skin insana no COBRIFAS: *${nome}*\n\n👉 Corre pra garantir: ${url}`);
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
         }
 
         function renderGlobalRanking() {
@@ -233,9 +315,9 @@
                 const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5);
                 document.getElementById('globalRankingList').innerHTML = sorted.map((u, i) => `
                     <div class="rank-item" style="border-left-color: var(--primary)">
-                        <span>${i+1}. ${u[0]}</span>
+                        <span style="font-weight:bold; color:#fff;">${i+1}. ${u[0]}</span>
                         <b style="color:var(--primary)">${u[1]} Cotas</b>
-                    </div>`).join('') || '<p style="text-align:center; color:#555;">Sem dados.</p>';
+                    </div>`).join('') || '<p style="text-align:center; color:#555; font-size:0.8rem;">Sem dados.</p>';
             });
         }
 
@@ -243,10 +325,13 @@
             db.ref('rifas').on('value', s => {
                 const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5);
                 document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `
-                    <div class="rank-item" style="border-left-color: var(--green)" onclick="verDetalhesSorteio('${r.nome}')">
-                        <span>${r.ganhador.nome.split(' ')[0]}... <br> <small style="color:#888">${r.nome}</small></span>
-                        <b style="color:var(--primary)">#${r.ganhador.numero}</b>
-                    </div>`).join('') || '<p style="text-align:center; padding:20px; color:#555;">Aguardando sorteios...</p>';
+                    <div class="rank-item" style="border-left-color: var(--green); cursor:pointer;" onclick="verDetalhesSorteio('${r.nome}')">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <img src="${r.img}" style="width:30px; height:30px; object-fit:cover; border-radius:4px;">
+                            <span style="color:#fff;">${r.ganhador.nome.split(' ')[0]}...</span>
+                        </div>
+                        <b style="color:var(--green)">#${r.ganhador.numero}</b>
+                    </div>`).join('') || '<p style="text-align:center; color:#555; font-size:0.8rem;">Aguardando sorteios...</p>';
             });
         }
 

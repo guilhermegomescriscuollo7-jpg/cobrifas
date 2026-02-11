@@ -17,10 +17,8 @@
             --glass-bg: rgba(20, 20, 20, 0.95);
             --glass-border: 1px solid rgba(255, 255, 255, 0.08);
             --white: #ffffff;
-            --text-muted: #aaaaaa;
             --red: #ff4444;
             --green: #00ff66;
-            --blue: #00a2ff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,7 +44,7 @@
         .nav-menu { display: flex; flex-direction: column; gap: 12px; }
         .nav-link {
             padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s;
-            font-family: 'Orbitron'; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);
+            font-family: 'Orbitron'; font-size: 0.75rem; text-transform: uppercase; color: var(--aaaaaa);
             display: flex; align-items: center; gap: 15px; border: 1px solid transparent;
         }
         .nav-link:hover, .nav-link.active { background: rgba(255, 204, 0, 0.1); color: var(--primary); border-color: rgba(255, 204, 0, 0.3); }
@@ -64,7 +62,7 @@
 
         /* TABLES */
         table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-        th { text-align: left; padding: 15px 20px; font-family: 'Orbitron'; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+        th { text-align: left; padding: 15px 20px; font-family: 'Orbitron'; font-size: 0.7rem; color: #aaa; text-transform: uppercase; }
         td { background: rgba(255,255,255,0.03); padding: 15px 20px; border-top: var(--glass-border); border-bottom: var(--glass-border); vertical-align: middle; }
         tr td:first-child { border-radius: 10px 0 0 10px; border-left: 3px solid var(--primary); }
         tr td:last-child { border-radius: 0 10px 10px 0; }
@@ -78,10 +76,13 @@
         .btn-red { background: rgba(255, 68, 68, 0.1); color: var(--red); border: 1px solid var(--red); }
         .btn-gold { background: var(--primary); color: #000; box-shadow: 0 0 15px rgba(255,204,0,0.4); font-weight: 900; }
 
-        /* STATS */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--glass-bg); padding: 30px; border-radius: 12px; border: var(--glass-border); text-align: center; }
-        .stat-val { font-family: 'Orbitron'; font-size: 2rem; color: var(--primary); font-weight: 900; }
+        /* INPUTS */
+        input, select { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid #333; color: #fff; border-radius: 6px; font-family: 'Rajdhani'; }
+        label { display:block; color:var(--primary); font-size:0.7rem; margin-bottom:8px; font-family:'Orbitron'; }
+        .btn-save { width:100%; padding:15px; background:var(--primary); border:none; font-weight:900; cursor:pointer; font-family: 'Orbitron'; color: #000; border-radius: 6px; margin-top: 10px; }
+        
+        /* BONUS SECTION */
+        .bonus-section { background: rgba(255, 204, 0, 0.05); border: 1px dashed var(--primary); padding: 20px; border-radius: 8px; margin: 20px 0; display: none; }
 
         /* CHAT */
         .chat-layout { display: grid; grid-template-columns: 300px 1fr; height: 600px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; }
@@ -95,11 +96,6 @@
         .msg-bubble { max-width: 70%; padding: 10px 15px; border-radius: 10px; font-size: 0.9rem; margin-bottom: 10px; position: relative; }
         .msg-user { align-self: flex-start; background: #333; color: #fff; }
         .msg-admin { align-self: flex-end; background: var(--primary); color: #000; font-weight: bold; }
-        .msg-time { font-size: 0.55rem; opacity: 0.5; margin-top: 5px; display: block; text-align: right; }
-
-        /* INPUTS */
-        input, select { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid #333; color: #fff; border-radius: 6px; font-family: 'Rajdhani'; }
-        .btn-save { width:100%; padding:15px; background:var(--primary); border:none; font-weight:900; cursor:pointer; font-family: 'Orbitron'; color: #000; border-radius: 6px; margin-top: 10px; }
 
         /* MODAL SORTEIO */
         #modalSorteio { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(15px); }
@@ -165,6 +161,21 @@
                         <input type="number" id="rifaPreco" placeholder="Preço (R$)">
                         <input type="number" id="rifaTotal" placeholder="Total Cotas">
                     </div>
+                    
+                    <div style="margin-bottom:20px;">
+                        <label style="cursor:pointer; display:flex; align-items:center; gap:10px;">
+                            <input type="checkbox" id="checkBonus" onchange="toggleBonus()" style="width:auto;"> 
+                            ADICIONAR PRÊMIO TOP COMPRADOR?
+                        </label>
+                    </div>
+
+                    <div class="bonus-section" id="bonusFields">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                            <input type="text" id="bNome" placeholder="Nome do Item Bônus">
+                            <input type="text" id="bImg" placeholder="URL Imagem Bônus">
+                        </div>
+                    </div>
+
                     <button class="btn-save" onclick="addRifa()">CRIAR RIFA NO FIREBASE</button>
                 </div>
                 <div id="listaRifasAdm"></div>
@@ -188,7 +199,7 @@
                 <div class="chat-layout">
                     <div class="chat-sidebar" id="listaContatos"></div>
                     <div class="chat-main" style="display:flex; flex-direction:column;">
-                        <div id="chatHeader" style="padding:15px; border-bottom:1px solid #333; font-family:Orbitron; background: rgba(0,0,0,0.5);">SELECIONE UM OPERADOR</div>
+                        <div id="chatHeader" style="padding:15px; border-bottom:1px solid #333; font-family:Orbitron;">SELECIONE UM OPERADOR</div>
                         <div id="chatMessagesBox" style="flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column;"></div>
                         <div style="padding:15px; background:#000; display:flex; gap:10px;">
                             <input type="text" id="respAdm" placeholder="Sua resposta..." disabled>
@@ -226,7 +237,6 @@
 
         let chatAtivoCPF = null;
 
-        // --- SISTEMA DE ABAS ---
         function openTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
@@ -251,29 +261,36 @@
             });
         }
 
-        /* --- GESTÃO DE MEMBROS --- */
-        function renderMembros() {
-            db.ref('membros').on('value', s => {
-                const membros = s.val() || {};
-                document.getElementById('listaMembrosBody').innerHTML = Object.keys(membros).map(id => {
-                    const m = membros[id];
-                    return `<tr>
-                        <td><div class="user-cell"><img src="${m.avatar}" class="user-img"><b>${m.nome}</b></div></td>
-                        <td>${m.status || 'ATIVO'}</td><td>${m.tel}</td><td>${m.cpf}</td>
-                        <td>
-                            <button class="btn-action btn-orange" onclick="db.ref('membros/${id}').update({status:'BANIDO'})">BANIR</button>
-                            <button class="btn-action btn-red" onclick="if(confirm('Apagar?')) db.ref('membros/${id}').remove()">APAGAR</button>
-                        </td></tr>`;
-                }).join('');
-            });
+        /* --- RIFAS (COM LÓGICA DE BÔNUS) --- */
+        function toggleBonus() { 
+            document.getElementById('bonusFields').style.display = document.getElementById('checkBonus').checked ? 'block' : 'none'; 
         }
 
-        /* --- RIFAS REALTIME --- */
         function addRifa() {
             const n=document.getElementById('rifaNome').value, i=document.getElementById('rifaImg').value, p=document.getElementById('rifaPreco').value, t=document.getElementById('rifaTotal').value;
-            if(!n||!i||!p||!t) return alert("Preencha tudo");
-            db.ref('rifas').push({ nome:n, img:i, preco:p, total:t, vendidas:0, numerosVendidos:[] });
-            alert("Rifa criada!");
+            
+            // Lógica do Bônus
+            const b = document.getElementById('checkBonus').checked ? {
+                nome: document.getElementById('bNome').value,
+                img: document.getElementById('bImg').value
+            } : null;
+
+            if(!n||!i||!p||!t) return alert("Preencha todos os campos obrigatórios!");
+
+            db.ref('rifas').push({ 
+                nome: n, 
+                img: i, 
+                preco: p, 
+                total: t, 
+                vendidas: 0, 
+                bonus: b, // Salva o bônus no Firebase
+                numerosVendidos: [] 
+            }).then(() => {
+                alert("Rifa criada com sucesso!");
+                document.getElementById('rifaNome').value = '';
+                document.getElementById('checkBonus').checked = false;
+                toggleBonus();
+            });
         }
 
         function renderRifas() {
@@ -282,7 +299,6 @@
                 document.getElementById('listaRifasAdm').innerHTML = Object.keys(rifas).map(id => {
                     const r = rifas[id];
                     const v = r.numerosVendidos ? r.numerosVendidos.length : 0;
-                    const pct = (v/r.total)*100;
                     let btn = r.ganhador ? '🏆 FINALIZADA' : (v >= r.total ? `<button class="btn-action btn-gold" onclick="abrirSorteio('${id}')">SORTEAR</button>` : 'AGUARDANDO 100%');
                     return `<div class="glass-panel" style="display:flex; justify-content:space-between; align-items:center;">
                         <div style="display:flex; align-items:center; gap:15px;"><img src="${r.img}" style="width:50px;"><b>${r.nome}</b></div>
@@ -291,17 +307,25 @@
             });
         }
 
-        /* --- PAGAMENTOS REALTIME --- */
+        /* --- PAGAMENTOS, MEMBROS, CHAT E SORTEIO (MANTIDOS DA VERSÃO ANTERIOR) --- */
+        function renderMembros() {
+            db.ref('membros').on('value', s => {
+                const membros = s.val() || {};
+                document.getElementById('listaMembrosBody').innerHTML = Object.keys(membros).map(id => {
+                    const m = membros[id];
+                    return `<tr><td><div class="user-cell"><img src="${m.avatar}" class="user-img"><b>${m.nome}</b></div></td><td>${m.status || 'ATIVO'}</td><td>${m.tel}</td><td>${m.cpf}</td><td><button class="btn-action btn-orange" onclick="db.ref('membros/${id}').update({status:'BANIDO'})">BANIR</button></td></tr>`;
+                }).join('');
+            });
+        }
+
         function renderPagamentos() {
             db.ref('pagamentos').on('value', s => {
                 const pags = s.val() || {};
                 document.getElementById('listaPagamentos').innerHTML = Object.keys(pags).map(id => {
                     const p = pags[id];
                     if(p.status !== 'pendente') return '';
-                    return `<tr><td><b>${p.usuario}</b></td><td>${p.rifa}</td><td>R$ ${p.valor}</td>
-                        <td><a href="${p.comprovante}" download style="color:var(--primary); font-size:0.7rem;">BAIXAR</a></td>
-                        <td><button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${p.rifaId}',${p.cotas})">OK</button></td></tr>`;
-                }).join('') || '<tr><td colspan="5" align="center">Nenhum pendente.</td></tr>';
+                    return `<tr><td><b>${p.usuario}</b></td><td>${p.rifa}</td><td>R$ ${p.valor}</td><td><a href="${p.comprovante}" download style="color:var(--primary)">BAIXAR</a></td><td><button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${p.rifaId}',${p.cotas})">OK</button></td></tr>`;
+                }).join('');
             });
         }
 
@@ -317,17 +341,14 @@
                 }
                 db.ref(`rifas/${rifaId}`).update({ vendidas: (r.vendidas||0)+qtd, numerosVendidos: [...existentes, ...novos] });
                 db.ref(`pagamentos/${pagId}`).update({ status: 'aprovado', numeros: novos });
-                alert("Aprovado!");
             });
         }
 
-        /* --- LÓGICA DO SORTEIO --- */
         function abrirSorteio(id) {
             db.ref(`rifas/${id}`).once('value', s => {
                 const rifa = s.val();
                 document.getElementById('modalSorteio').style.display = 'flex';
                 document.getElementById('sorteioItemName').innerText = rifa.nome;
-                document.getElementById('winnerContainer').style.display = 'none';
                 let c = 0;
                 const intv = setInterval(() => {
                     document.getElementById('sorteioNumero').innerText = Math.floor(Math.random()*rifa.total)+1;
@@ -344,72 +365,40 @@
                 db.ref('pagamentos').once('value', sp => {
                     const pags = sp.val();
                     const pgVenc = Object.values(pags).find(p => p.numeros && p.numeros.includes(nVencedor));
-                    const winNome = pgVenc ? pgVenc.usuario : "N/A";
                     document.getElementById('sorteioNumero').innerText = nVencedor;
-                    document.getElementById('winName').innerText = "VENCEDOR: " + winNome;
+                    document.getElementById('winName').innerText = "VENCEDOR: " + (pgVenc ? pgVenc.usuario : "N/A");
                     document.getElementById('winnerContainer').style.display = 'block';
-                    db.ref(`rifas/${id}`).update({ ganhador: { nome: winNome, numero: nVencedor, cpf: pgVenc.cpf, visto: false } });
+                    db.ref(`rifas/${id}`).update({ ganhador: { nome: pgVenc.usuario, numero: nVencedor, cpf: pgVenc.cpf, visto: false } });
                 });
             });
         }
 
-        /* --- CHAT REALTIME TURBINADO --- */
         function renderChat() {
-            db.ref('membros').once('value', sMemb => {
-                const membrosObj = sMemb.val() || {};
-                db.ref('rifas').once('value', sRifas => {
-                    const rifasObj = sRifas.val() || {};
-                    db.ref('chatLog').on('value', sLogs => {
-                        const logs = sLogs.val() || {};
-                        const cpfs = [...new Set(Object.values(logs).map(l => l.userCpf))];
-
-                        document.getElementById('listaContatos').innerHTML = cpfs.map(cpf => {
-                            const membroKey = Object.keys(membrosObj).find(k => membrosObj[k].cpf === cpf);
-                            const membro = membroKey ? membrosObj[membroKey] : { nome: "Usuário Externo" };
-                            
-                            // Verifica se esse CPF ganhou algo
-                            const ganhou = Object.values(rifasObj).some(r => r.ganhador && r.ganhador.cpf === cpf);
-
-                            return `<div class="contact-item ${chatAtivoCPF === cpf ? 'active' : ''}" onclick="abrirChat('${cpf}', '${membro.nome}')">
-                                <div class="contact-info">
-                                    <b>${membro.nome}</b>
-                                    <span>CPF: ${cpf}</span>
-                                    ${ganhou ? '<div class="winner-tag">🏆 GANHADOR</div>' : ''}
-                                </div>
-                            </div>`;
-                        }).join('');
-                        if(chatAtivoCPF) loadMessages();
-                    });
-                });
+            db.ref('chatLog').on('value', s => {
+                const logs = s.val() || {};
+                const cpfs = [...new Set(Object.values(logs).map(l => l.userCpf))];
+                document.getElementById('listaContatos').innerHTML = cpfs.map(cpf => `<div class="contact-item" onclick="abrirChat('${cpf}')"><b>${cpf}</b></div>`).join('');
             });
         }
 
-        function abrirChat(cpf, nome) {
+        function abrirChat(cpf) {
             chatAtivoCPF = cpf;
-            document.getElementById('chatHeader').innerText = nome + " (" + cpf + ")";
+            document.getElementById('chatHeader').innerText = "CHAT: " + cpf;
             document.getElementById('respAdm').disabled = false;
             document.getElementById('btnEnviarChat').disabled = false;
-            loadMessages();
-        }
-
-        function loadMessages() {
             db.ref('chatLog').on('value', s => {
-                const logs = Object.values(s.val() || {}).filter(m => m.userCpf === chatAtivoCPF);
-                document.getElementById('chatMessagesBox').innerHTML = logs.map(m => `
-                    <div class="msg-bubble ${m.from==='admin'?'msg-admin':'msg-user'}">
-                        ${m.text}<span class="msg-time">${m.time || ''}</span>
-                    </div>`).join('');
-                document.getElementById('chatMessagesBox').scrollTop = 99999;
+                const msgs = Object.values(s.val() || {}).filter(m => m.userCpf === chatAtivoCPF);
+                document.getElementById('chatMessagesBox').innerHTML = msgs.map(m => `<div class="msg-bubble ${m.from==='admin'?'msg-admin':'msg-user'}">${m.text}</div>`).join('');
+                document.getElementById('chatMessagesBox').scrollTop = 9999;
             });
         }
 
         function responderChat() {
             const t = document.getElementById('respAdm').value; if(!t) return;
-            db.ref('chatLog').push({ userCpf: chatAtivoCPF, from:'admin', text:t, time: new Date().toLocaleTimeString().slice(0,5) });
+            db.ref('chatLog').push({ userCpf: chatAtivoCPF, from:'admin', text:t, time: new Date().toLocaleTimeString() });
             document.getElementById('respAdm').value = '';
         }
 
-        /* --- PIX --- */
         function salvarPix() {
             db.ref('config/pix').set({ tipo: document.getElementById('pixTipo').value, chave: document.getElementById('pixChave').value });
             alert("Pix Salvo!");

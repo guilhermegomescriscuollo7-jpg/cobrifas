@@ -44,7 +44,6 @@
         .cart-badge { position: absolute; top: -8px; right: -8px; background: var(--red); color: #fff; font-size: 0.6rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
-        /* --- MEDIA QUERY (CELULAR) --- */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; padding: 15px; }
             .nav-user { width: 100%; overflow-x: auto; padding-bottom: 5px; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
@@ -84,18 +83,17 @@
         .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; transition: 0.5s; }
         .btn-action { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; }
 
-        /* --- NOVO: ESTILOS DO RANKING NO CARD --- */
+        /* --- ESTILOS DO RANKING NO CARD --- */
         .bonus-box { background: rgba(255, 204, 0, 0.05); border: 1px dashed var(--primary); border-radius: 8px; padding: 10px; margin-bottom: 15px; text-align: center; }
         .bonus-title { font-family: 'Orbitron'; font-size: 0.7rem; color: var(--primary); margin-bottom: 5px; }
         .bonus-content { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.8rem; font-weight: bold; }
         .bonus-img-mini { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1px solid var(--primary); }
-        
         .mini-rank { margin-bottom: 15px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px; }
         .mini-rank-title { font-size: 0.6rem; color: #888; font-family: 'Orbitron'; margin-bottom: 5px; text-align: center; }
         .mini-rank-item { display: flex; justify-content: space-between; font-size: 0.7rem; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .mini-rank-item:first-child { color: var(--primary); font-weight: bold; }
 
-        /* --- ESTILO DAS RIFAS DETALHADAS (REDESIGN) --- */
+        /* --- ESTILO DAS RIFAS DETALHADAS --- */
         .rifa-group-title { color: #888; font-family: 'Orbitron'; margin: 40px 0 20px; border-bottom: 1px solid #333; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
         .rifa-detalhada { background: linear-gradient(145deg, #111, #0a0a0a); border: 1px solid #333; border-radius: 12px; padding: 25px; display: flex; gap: 25px; margin-bottom: 25px; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s; }
         .rifa-detalhada:hover { transform: translateY(-3px); border-color: #444; }
@@ -113,7 +111,7 @@
         .status-aprovado { border-left: 5px solid var(--green); }
         .status-ganho { border: 2px solid var(--primary); background: radial-gradient(circle at center, rgba(255,204,0,0.1), #000); }
 
-        /* --- POPUP E OUTROS --- */
+        /* --- POPUPS --- */
         #modalCotas { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
         .modal-card-cota { background: #e9ecef; width: 95%; max-width: 650px; border-radius: 12px; overflow: hidden; }
         .modal-header-text { background: #fff; color: #555; text-align: center; padding: 12px; font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid #ddd; }
@@ -144,6 +142,24 @@
         .msg-a { align-self: flex-start; background: #333; color: #fff; padding: 10px 15px; border-radius: 8px; max-width: 75%; }
         .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; }
         .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 10px; }
+
+        /* --- NOVO: ESTILOS PARA PERFIL (AVATAR E SENHA) --- */
+        .profile-container { display: flex; flex-direction: column; align-items: center; max-width: 600px; margin: 0 auto; }
+        .avatar-edit-wrapper { position: relative; cursor: pointer; width: 120px; height: 120px; margin-bottom: 30px; }
+        .avatar-main { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; box-shadow: 0 0 20px rgba(255,204,0,0.3); transition: 0.3s; }
+        .avatar-edit-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; color: #fff; font-size: 2rem; }
+        .avatar-edit-wrapper:hover .avatar-edit-overlay { opacity: 1; }
+        .avatar-edit-wrapper:hover .avatar-main { filter: blur(2px); }
+        
+        .section-separator { width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 30px 0; }
+        .section-subtitle { font-family: 'Orbitron'; color: var(--primary); margin-bottom: 15px; font-size: 1rem; }
+
+        /* MODAL AVATAR */
+        #modalAvatar { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:6000; align-items:center; justify-content:center; backdrop-filter: blur(10px); }
+        .avatar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .avatar-option { width: 70px; height: 70px; border-radius: 50%; cursor: pointer; border: 2px solid #333; transition: 0.2s; object-fit: cover; }
+        .avatar-option:hover { border-color: var(--primary); transform: scale(1.1); }
+        .avatar-option.selected { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
     </style>
 </head>
 <body>
@@ -189,15 +205,12 @@
 
         <section id="minhas" class="tab-content">
             <h2 class="section-title">MINHAS PARTICIPAÇÕES</h2>
-            
             <div id="containerGanhas" style="display:none;">
                 <div class="rifa-group-title"><span style="color:var(--primary)">🏆</span> RIFAS GANHAS</div>
                 <div id="listaGanhas"></div>
             </div>
-
             <div class="rifa-group-title"><span style="color:var(--green)">✅</span> RIFAS COMPRADAS</div>
             <div id="listaAprovadas"></div>
-
             <div class="rifa-group-title"><span style="color:var(--red)">⏳</span> RIFAS PENDENTES</div>
             <div id="listaPendentes"></div>
         </section>
@@ -215,16 +228,57 @@
 
         <section id="perfil" class="tab-content">
             <h2 class="section-title">MEU PERFIL</h2>
-            <div class="glass-panel">
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
-                    <div class="input-group"><label>NOME COMPLETO</label><input type="text" id="pNome"></div>
-                    <div class="input-group"><label>NICKNAME</label><input type="text" id="pNick"></div>
-                    <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
-                    <div class="input-group"><label>CPF</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
+            <div class="glass-panel profile-container">
+                
+                <div class="avatar-edit-wrapper" onclick="openAvatarModal()">
+                    <img src="" id="profileAvatarPreview" class="avatar-main">
+                    <div class="avatar-edit-overlay">📷</div>
                 </div>
+
+                <div style="width: 100%;">
+                    <div class="section-subtitle">DADOS PESSOAIS</div>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div class="input-group"><label>NOME COMPLETO</label><input type="text" id="pNome"></div>
+                        <div class="input-group"><label>NICKNAME</label><input type="text" id="pNick"></div>
+                        <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
+                        <div class="input-group"><label>CPF</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
+                    </div>
+
+                    <div class="section-separator"></div>
+
+                    <div class="section-subtitle">SEGURANÇA (ALTERAR SENHA)</div>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div class="input-group"><label>NOVA SENHA</label><input type="password" id="pNewPass" placeholder="Deixe vazio para manter"></div>
+                        <div class="input-group"><label>CONFIRMAR SENHA</label><input type="password" id="pConfPass" placeholder="Repita a nova senha"></div>
+                    </div>
+                </div>
+
                 <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none; width:100%; padding:15px; font-weight:900;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
             </div>
         </section>
+    </div>
+
+    <div id="modalAvatar">
+        <div class="modal-card-cota" style="max-width: 400px; text-align: center; padding: 20px;">
+            <h3 style="font-family:'Orbitron'; margin-bottom: 20px;">ESCOLHA SEU AVATAR</h3>
+            
+            <div style="margin-bottom: 10px; color: #888; font-size: 0.8rem;">AVATARES PREDEFINIDOS:</div>
+            <div class="avatar-grid">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="avatar-option" onclick="selectPredefined(this.src)">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" class="avatar-option" onclick="selectPredefined(this.src)">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bob" class="avatar-option" onclick="selectPredefined(this.src)">
+                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cyborg" class="avatar-option" onclick="selectPredefined(this.src)">
+                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Robot" class="avatar-option" onclick="selectPredefined(this.src)">
+                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=Gamer" class="avatar-option" onclick="selectPredefined(this.src)">
+            </div>
+
+            <div style="margin: 20px 0; color: #fff;">OU</div>
+
+            <label for="uploadAvatarInput" class="btn-action" style="cursor: pointer; display: block; border: 1px dashed #666; color: #aaa;">📤 FAZER UPLOAD DE FOTO</label>
+            <input type="file" id="uploadAvatarInput" accept="image/*" style="display: none;" onchange="uploadAvatar()">
+
+            <button class="btn-action" style="margin-top: 20px; border: none; color: #555;" onclick="document.getElementById('modalAvatar').style.display='none'">FECHAR</button>
+        </div>
     </div>
 
     <div id="modalCotas">
@@ -279,6 +333,7 @@
 
         let userAtivo = null, userFirebaseId = null, carrinho = [];
         let rifaSelId = null, precoUnico = 0, estoqueSel = 0, comprovanteBase64 = null;
+        let tempAvatar = null; // Armazena avatar temporariamente antes de salvar
 
         function carregarPagina() {
             const sessao = JSON.parse(localStorage.getItem('sessaoAtiva'));
@@ -289,201 +344,135 @@
                     userFirebaseId = Object.keys(data)[0]; userAtivo = data[userFirebaseId];
                     document.getElementById('headName').innerText = userAtivo.nick || userAtivo.nome.split(' ')[0];
                     document.getElementById('headAvatar').src = userAtivo.avatar;
-                    document.getElementById('pNome').value = userAtivo.nome; document.getElementById('pTel').value = userAtivo.tel; document.getElementById('pCpf').value = userAtivo.cpf;
+                    document.getElementById('profileAvatarPreview').src = userAtivo.avatar; // Preview no perfil
+                    
+                    document.getElementById('pNome').value = userAtivo.nome; 
+                    document.getElementById('pTel').value = userAtivo.tel; 
+                    document.getElementById('pCpf').value = userAtivo.cpf;
+                    document.getElementById('pNick').value = userAtivo.nick || "";
+                    
                     loadMinhas(); carregarChat(); checkVitorias();
                 }
             });
             loadLoja(); renderConfig(); renderGlobalRanking(); renderGanhadoresRecentes();
         }
 
-        /* --- LOJA COM RIFAS REAIS E RANKING TOP 4 --- */
+        /* --- LOJA --- */
         function loadLoja() {
             db.ref('rifas').on('value', sRifas => {
                 const rifas = sRifas.val() || {};
                 const grid = document.getElementById('gridLoja');
-                
-                // Busca pagamentos para calcular ranking individual de cada rifa
                 db.ref('pagamentos').once('value', sPags => {
                     const pags = sPags.val() || {};
-                    
                     const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
-                    
                     grid.innerHTML = ativas.map(id => {
-                        const r = rifas[id]; 
-                        const vendidas = r.vendidas || 0; 
-                        const res = r.total - vendidas; 
-                        const p = (vendidas / r.total) * 100;
-
-                        // Lógica Bônus + Ranking Top 4
+                        const r = rifas[id]; const vendidas = r.vendidas || 0; const res = r.total - vendidas; const p = (vendidas / r.total) * 100;
                         let bonusHtml = '';
                         if (r.bonus && r.bonus.nome) {
-                            // Calcula ranking desta rifa
                             const buyers = {};
-                            Object.values(pags).forEach(pg => {
-                                if(pg.rifaId === id && pg.status === 'aprovado') {
-                                    buyers[pg.usuario] = (buyers[pg.usuario] || 0) + parseInt(pg.cotas);
-                                }
-                            });
-                            // Ordena e pega top 4
+                            Object.values(pags).forEach(pg => { if(pg.rifaId === id && pg.status === 'aprovado') { buyers[pg.usuario] = (buyers[pg.usuario] || 0) + parseInt(pg.cotas); } });
                             const sorted = Object.entries(buyers).sort((a,b) => b[1] - a[1]).slice(0, 4);
-                            
-                            const rankRows = sorted.map((u, i) => 
-                                `<div class="mini-rank-item">
-                                    <span>${i+1}. ${u[0].split(' ')[0]}</span>
-                                    <span>${u[1]} cotas</span>
-                                 </div>`
-                            ).join('');
-
-                            bonusHtml = `
-                                <div class="bonus-box">
-                                    <div class="bonus-title">🏆 PRÊMIO TOP COMPRADOR</div>
-                                    <div class="bonus-content">
-                                        <img src="${r.bonus.img}" class="bonus-img-mini">
-                                        <span>${r.bonus.nome}</span>
-                                    </div>
-                                </div>
-                                <div class="mini-rank">
-                                    <div class="mini-rank-title">TOP 4 COMPRADORES</div>
-                                    ${rankRows || '<div style="font-size:0.6rem; color:#555; text-align:center;">Seja o primeiro!</div>'}
-                                </div>
-                            `;
+                            const rankRows = sorted.map((u, i) => `<div class="mini-rank-item"><span>${i+1}. ${u[0].split(' ')[0]}</span><span>${u[1]} cotas</span></div>`).join('');
+                            bonusHtml = `<div class="bonus-box"><div class="bonus-title">🏆 PRÊMIO TOP COMPRADOR</div><div class="bonus-content"><img src="${r.bonus.img}" class="bonus-img-mini"><span>${r.bonus.nome}</span></div></div><div class="mini-rank"><div class="mini-rank-title">TOP 4 COMPRADORES</div>${rankRows || '<div style="font-size:0.6rem; color:#555; text-align:center;">Seja o primeiro!</div>'}</div>`;
                         }
-
-                        return `
-                        <div class="card">
-                            <div class="price-tag">R$ ${r.preco}</div>
-                            <img src="${r.img}" class="skin-img">
-                            <h3>${r.nome}</h3>
-                            <div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div>
-                            <div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;">
-                                <span>RESTANTES: <b style="color:var(--primary)">${res}</b></span>
-                                <span>${p.toFixed(0)}%</span>
-                            </div>
-                            
-                            ${bonusHtml}
-
-                            <button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button>
-                        </div>`;
+                        return `<div class="card"><div class="price-tag">R$ ${r.preco}</div><img src="${r.img}" class="skin-img"><h3>${r.nome}</h3><div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div><div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div>${bonusHtml}<button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
                     }).join('');
                 });
             });
         }
 
-        /* --- LÓGICA DO MODAL TÁTICO (+/-) --- */
-        function openModal(id, preco, estoque) {
-            rifaSelId = id; precoUnico = Number(preco); estoqueSel = Number(estoque);
-            const grid = document.getElementById('cotasGridContent');
-            const opts = [10, 50, 100, 500, 1000, 2500];
-            grid.innerHTML = opts.map(q => `<div class="cota-item ${q===50?'active':''}" onclick="setQtd(${q}, this)">${q===50?'<div class="tag-pop">Mais popular</div>':''}<span class="cq">+${q}</span><span class="cp">R$ ${(q*precoUnico).toFixed(2)}</span><span class="cl">SELECIONAR</span></div>`).join('');
-            document.getElementById('inQtd').value = 10; refreshTotal(); document.getElementById('modalCotas').style.display = 'flex';
+        /* --- AVATAR E PERFIL --- */
+        function openAvatarModal() { document.getElementById('modalAvatar').style.display = 'flex'; }
+        
+        function selectPredefined(src) {
+            tempAvatar = src;
+            document.getElementById('profileAvatarPreview').src = src;
+            document.getElementById('modalAvatar').style.display = 'none';
         }
-        function setQtd(n, el) { if(n > estoqueSel) return alert("Estoque insuficiente!"); document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active')); if(el) el.classList.add('active'); document.getElementById('inQtd').value = n; refreshTotal(); }
-        function adjust(d) { const input = document.getElementById('inQtd'); let v = parseInt(input.value) + d; if(v > 0 && v <= estoqueSel) { input.value = v; refreshTotal(); } }
-        function refreshTotal() { document.getElementById('totalModal').innerText = 'R$ ' + (parseInt(document.getElementById('inQtd').value) * precoUnico).toFixed(2); }
 
-        function addCarrinho() {
-            db.ref('rifas/'+rifaSelId).once('value', s => {
-                carrinho.push({ id: rifaSelId, nome: s.val().nome, preco: precoUnico, qtd: parseInt(document.getElementById('inQtd').value) });
-                updateUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart();
+        function uploadAvatar() {
+            const file = document.getElementById('uploadAvatarInput').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    tempAvatar = e.target.result;
+                    document.getElementById('profileAvatarPreview').src = tempAvatar;
+                    document.getElementById('modalAvatar').style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveP() {
+            const nome = document.getElementById('pNome').value;
+            const tel = document.getElementById('pTel').value;
+            const nick = document.getElementById('pNick').value;
+            const pass = document.getElementById('pNewPass').value;
+            const conf = document.getElementById('pConfPass').value;
+
+            let updates = { nome: nome, tel: tel, nick: nick };
+
+            if (tempAvatar) {
+                updates.avatar = tempAvatar;
+            }
+
+            if (pass) {
+                if (pass !== conf) {
+                    alert("As senhas não coincidem!");
+                    return;
+                }
+                updates.senha = pass;
+            }
+
+            db.ref('membros/'+userFirebaseId).update(updates).then(() => {
+                alert("Dados salvos com sucesso!");
+                document.getElementById('pNewPass').value = "";
+                document.getElementById('pConfPass').value = "";
             });
         }
 
-        /* --- CHECKOUT COM COMPROVANTE --- */
+        /* --- CARRINHO E PIX --- */
+        function openModal(id, preco, estoque) { rifaSelId = id; precoUnico = Number(preco); estoqueSel = Number(estoque); const grid = document.getElementById('cotasGridContent'); const opts = [10, 50, 100, 500, 1000, 2500]; grid.innerHTML = opts.map(q => `<div class="cota-item ${q===50?'active':''}" onclick="setQtd(${q}, this)">${q===50?'<div class="tag-pop">Mais popular</div>':''}<span class="cq">+${q}</span><span class="cp">R$ ${(q*precoUnico).toFixed(2)}</span><span class="cl">SELECIONAR</span></div>`).join(''); document.getElementById('inQtd').value = 10; refreshTotal(); document.getElementById('modalCotas').style.display = 'flex'; }
+        function setQtd(n, el) { if(n > estoqueSel) return alert("Estoque insuficiente!"); document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active')); if(el) el.classList.add('active'); document.getElementById('inQtd').value = n; refreshTotal(); }
+        function adjust(d) { const input = document.getElementById('inQtd'); let v = parseInt(input.value) + d; if(v > 0 && v <= estoqueSel) { input.value = v; refreshTotal(); } }
+        function refreshTotal() { document.getElementById('totalModal').innerText = 'R$ ' + (parseInt(document.getElementById('inQtd').value) * precoUnico).toFixed(2); }
+        function addCarrinho() { db.ref('rifas/'+rifaSelId).once('value', s => { carrinho.push({ id: rifaSelId, nome: s.val().nome, preco: precoUnico, qtd: parseInt(document.getElementById('inQtd').value) }); updateUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart(); }); }
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
-        function updateUI() {
-            let t = 0, c = 0;
-            document.getElementById('cartList').innerHTML = carrinho.map((it, i) => { t += it.preco * it.qtd; c += it.qtd; return `<div class="cart-item"><div><b>${it.qtd}x ${it.nome}</b><br><small>R$ ${(it.preco*it.qtd).toFixed(2)}</small></div><span onclick="carrinho.splice(${i},1);updateUI()" style="color:red; cursor:pointer;">✕</span></div>`; }).join('');
-            document.getElementById('cartCount').innerText = c; document.getElementById('cartTotal').innerText = `R$ ${t.toFixed(2)}`;
-        }
+        function updateUI() { let t = 0, c = 0; document.getElementById('cartList').innerHTML = carrinho.map((it, i) => { t += it.preco * it.qtd; c += it.qtd; return `<div class="cart-item"><div><b>${it.qtd}x ${it.nome}</b><br><small>R$ ${(it.preco*it.qtd).toFixed(2)}</small></div><span onclick="carrinho.splice(${i},1);updateUI()" style="color:red; cursor:pointer;">✕</span></div>`; }).join(''); document.getElementById('cartCount').innerText = c; document.getElementById('cartTotal').innerText = `R$ ${t.toFixed(2)}`; }
         function abrirCheckoutPix() { if(!carrinho.length) return alert("Carrinho vazio!"); db.ref('config/pix/chave').once('value', s => { document.getElementById('txtChavePix').innerText = s.val() || "---"; document.getElementById('modalPix').style.display = 'flex'; toggleCart(); }); }
         function validarArquivo() { const file = document.getElementById('compInput').files[0]; if(file) { document.getElementById('fileName').innerText = "✔ " + file.name; const reader = new FileReader(); reader.onload = e => { comprovanteBase64 = e.target.result; document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); }; reader.readAsDataURL(file); } }
+        function enviarPedidoFirebase() { if(!comprovanteBase64) return alert("Anexe o comprovante!"); carrinho.forEach(it => { db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64, data: new Date().toLocaleString() }); }); carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none'; alert("Enviado!"); tab('minhas'); }
 
-        function enviarPedidoFirebase() {
-            if(!comprovanteBase64) return alert("Anexe o comprovante!");
-            carrinho.forEach(it => { db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64, data: new Date().toLocaleString() }); });
-            carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none'; alert("Enviado!"); tab('minhas');
-        }
-
-        /* --- MINHAS RIFAS (ATUALIZADO PARA EXIBIR NUMEROS EM BADGES) --- */
+        /* --- MINHAS RIFAS --- */
         function loadMinhas() {
-            // Busca rifas para pegar imagens e ganhadores
             db.ref('rifas').once('value', sRifas => {
                 const mapRifas = sRifas.val() || {};
-                
                 db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
                     const pags = Object.values(s.val() || {}).reverse();
-                    
-                    let htmlGanhas = '';
-                    let htmlAprovadas = '';
-                    let htmlPendentes = '';
-                    let hasWins = false;
-
+                    let htmlGanhas = '', htmlAprovadas = '', htmlPendentes = '', hasWins = false;
                     pags.forEach(p => {
                         const rDetails = mapRifas[p.rifaId] || {};
                         const img = rDetails.img || 'https://via.placeholder.com/100?text=Rifa';
                         const unitVal = (parseFloat(p.valor) / parseInt(p.cotas)).toFixed(2);
-                        
-                        // Checa vitória
                         const isWinner = rDetails.ganhador && rDetails.ganhador.cpf === userAtivo.cpf;
-                        
-                        // LÓGICA NOVA: Transforma os números em badges/tags visuais
-                        const numerosHtml = p.numeros 
-                            ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') 
-                            : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>';
-                        
-                        // HTML Base do Card
-                        const cardHtml = `
-                            <div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}">
-                                <img src="${img}" class="rd-img">
-                                <div class="rd-info">
-                                    <div class="rd-header">
-                                        <div class="rd-title">${p.rifa}</div>
-                                        <div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div>
-                                    </div>
-                                    <div class="rd-stats-row">
-                                        <span class="rd-stat">Cotas: <b>${p.cotas}</b></span>
-                                        <span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span>
-                                        <span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span>
-                                    </div>
-                                    <div>
-                                        <span class="rd-nums-label">SEUS NÚMEROS:</span>
-                                        <div class="rd-nums-container">
-                                            ${numerosHtml}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`;
-
-                        if (isWinner && p.status === 'aprovado') {
-                            htmlGanhas += cardHtml;
-                            hasWins = true;
-                        } 
-                        
-                        if (p.status === 'aprovado') {
-                            htmlAprovadas += cardHtml;
-                        } else if (p.status === 'pendente' || p.status === 'recusado') {
-                            htmlPendentes += cardHtml;
-                        }
+                        const numerosHtml = p.numeros ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>';
+                        const cardHtml = `<div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}"><img src="${img}" class="rd-img"><div class="rd-info"><div class="rd-header"><div class="rd-title">${p.rifa}</div><div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div></div><div class="rd-stats-row"><span class="rd-stat">Cotas: <b>${p.cotas}</b></span><span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span><span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span></div><div><span class="rd-nums-label">SEUS NÚMEROS:</span><div class="rd-nums-container">${numerosHtml}</div></div></div></div>`;
+                        if (isWinner && p.status === 'aprovado') { htmlGanhas += cardHtml; hasWins = true; } 
+                        if (p.status === 'aprovado') { htmlAprovadas += cardHtml; } else if (p.status === 'pendente' || p.status === 'recusado') { htmlPendentes += cardHtml; }
                     });
-
-                    document.getElementById('listaGanhas').innerHTML = htmlGanhas;
-                    document.getElementById('containerGanhas').style.display = hasWins ? 'block' : 'none';
-                    document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>';
-                    document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>';
+                    document.getElementById('listaGanhas').innerHTML = htmlGanhas; document.getElementById('containerGanhas').style.display = hasWins ? 'block' : 'none'; document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>'; document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>';
                 });
             });
         }
 
         function renderGlobalRanking() { db.ref('pagamentos').on('value', s => { const rank = {}; Object.values(s.val() || {}).filter(p => p.status === 'aprovado').forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); }); const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5); document.getElementById('globalRankingList').innerHTML = sorted.map((it, i) => `<div class="rank-item"><span>${i+1}. ${it[0]}</span><b>${it[1]} Cotas</b></div>`).join('') || 'Sem dados.'; }); }
         function renderGanhadoresRecentes() { db.ref('rifas').on('value', s => { const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5); document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `<div class="rank-item"><span>${r.ganhador.nome.split(' ')[0]}... <br> <small>${r.nome}</small></span><b>#${r.ganhador.numero}</b></div>`).join('') || 'Aguardando sorteios...'; }); }
-
         function checkVitorias() { db.ref('rifas').on('value', s => { const rifas = s.val() || {}; Object.keys(rifas).forEach(id => { const r = rifas[id]; if(r.ganhador && r.ganhador.cpfReal === userAtivo.cpf && !r.ganhador.vistoPeloUser) { document.getElementById('vicItemName').innerText = r.nome; document.getElementById('vicNumber').innerText = r.ganhador.numero; document.getElementById('modalVictory').style.display = 'flex'; db.ref(`rifas/${id}/ganhador`).update({vistoPeloUser: true}); } }); }); }
         function carregarChat() { db.ref('chatLog').orderByChild('userCpf').equalTo(userAtivo.cpf).on('value', s => { const logs = Object.values(s.val() || {}); document.getElementById('chatBox').innerHTML = logs.map(m => `<div class="${m.from==='user'?'msg-u':'msg-a'}">${m.text}</div>`).join(''); document.getElementById('chatBox').scrollTop = 9999; }); }
         function enviarMsg() { const t = document.getElementById('chatInput').value; if(t) db.ref('chatLog').push({ userCpf: userAtivo.cpf, from: 'user', text: t, time: new Date().toLocaleTimeString() }); document.getElementById('chatInput').value = ''; }
         function tab(id) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById(id).classList.add('active'); }
         function renderConfig() { db.ref('configSite/ticker').on('value', s => { if(s.val()) document.getElementById('tickerContainer').innerHTML = s.val().split('\n').map(m => `<div class="ticker-item">${m}</div>`).join(''); }); }
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-        function saveP() { db.ref('membros/'+userFirebaseId).update({ nome: document.getElementById('pNome').value, tel: document.getElementById('pTel').value, nick: document.getElementById('pNick').value }).then(() => alert("Salvo!")); }
         window.onload = carregarPagina;
     </script>
 </body>

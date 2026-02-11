@@ -18,6 +18,7 @@
             --glass: rgba(20, 20, 20, 0.95);
             --red: #ff4444;
             --green: #00ff66;
+            --btn-orange: #f1b44c;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,13 +37,13 @@
         .logo { font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900; color: #fff; text-decoration: none; }
         .logo span { color: var(--primary); }
         .nav-user { display: flex; gap: 5px; align-items: center; }
-        .nav-item { text-decoration: none; font-family: 'Orbitron'; font-weight: bold; font-size: 0.65rem; padding: 10px 15px; border-radius: 2px; transition: 0.4s; text-transform: uppercase; color: #888; cursor: pointer; border: 1px solid transparent; }
+        .nav-item { text-decoration: none; font-family: 'Orbitron'; font-weight: bold; font-size: 0.65rem; padding: 10px 15px; border-radius: 2px; transition: 0.3s; color: #888; cursor: pointer; border: 1px solid transparent; text-transform: uppercase; }
         .nav-item:hover, .nav-item.active { color: var(--primary); border-color: rgba(255,204,0,0.3); background: rgba(255, 204, 0, 0.05); }
         
         .cart-btn { position: relative; cursor: pointer; margin: 0 15px; color: var(--primary); font-size: 1.2rem; }
         .cart-badge { position: absolute; top: -8px; right: -8px; background: var(--red); color: #fff; font-size: 0.6rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         
-        .user-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; margin-left: 10px; }
+        .user-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
         /* --- SIDEBAR CARRINHO --- */
@@ -58,7 +59,7 @@
         .section-title { font-family: 'Orbitron'; font-size: 1.5rem; margin-bottom: 40px; display: flex; align-items: center; gap: 15px; text-transform: uppercase; }
         .section-title::before { content: '⚡'; color: var(--primary); }
 
-        /* --- CARDS --- */
+        /* --- CARDS LOJA --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 25px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
         .price-tag { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 20px; font-size: 1rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
@@ -68,26 +69,36 @@
         .btn-action { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; }
         .btn-action:hover { background: var(--primary); color: #000; }
 
+        /* --- POPUP COTAS (ESTILO WHATSAPP) --- */
+        #modalCotas { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
+        .modal-card-cota { background: #e9ecef; width: 95%; max-width: 650px; border-radius: 12px; overflow: hidden; }
+        .modal-header-text { background: #fff; color: #555; text-align: center; padding: 12px; font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid #ddd; }
+        .modal-body { padding: 20px; background: #e9ecef; }
+        .cotas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .cota-item { background: #000; border: 2px solid transparent; border-radius: 10px; padding: 15px 5px; text-align: center; cursor: pointer; position: relative; transition: 0.2s; }
+        .cota-item.active { border-color: var(--primary); background: #fffbeb; }
+        .cota-item.active .cq, .cota-item.active .cp { color: #000; }
+        .cq { font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900; color: #fff; display: block; }
+        .cp { color: #888; font-size: 0.8rem; font-weight: bold; margin: 5px 0; display: block; }
+        .cl { color: #666; font-size: 0.6rem; text-transform: uppercase; font-weight: 900; }
+        .tag-pop { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--btn-orange); color: #fff; font-size: 0.5rem; padding: 3px 10px; border-radius: 20px; font-weight: bold; font-family: Orbitron; }
+        .controls-row { display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; padding: 0 20px 20px; }
+        .qtd-sel { display: flex; align-items: center; background: #fff; border-radius: 8px; padding: 5px; justify-content: space-between; border: 1px solid #ccc; }
+        .btn-step { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #333; background: transparent; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
+        .btn-final { background: var(--btn-orange); border: none; border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; }
+        .btn-final span { text-align: left; line-height: 1; }
+        .btn-final b { font-size: 1.2rem; display: block; }
+
         /* --- PERFIL --- */
-        .glass-panel { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 40px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .glass-panel { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 40px; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         label { color: var(--primary); font-family: 'Orbitron'; font-size: 0.65rem; text-transform: uppercase; }
         input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Rajdhani'; }
 
-        /* --- CHAT --- */
-        #chatBox { height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; }
-        .msg { padding: 10px 15px; border-radius: 8px; max-width: 75%; font-size: 0.9rem; }
-        .msg-u { align-self: flex-end; background: var(--primary); color: #000; font-weight: 600; }
-        .msg-a { align-self: flex-start; background: #333; color: #fff; }
-
         /* --- MINHAS RIFAS --- */
-        .ticket-card { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 20px; border-radius: 8px; margin-bottom: 15px; }
+        .ticket-box { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #444; }
         .n-badge { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 3px; font-family: Orbitron; font-size: 0.7rem; margin: 3px; display: inline-block; font-weight: bold; }
-
-        /* --- MODAL COTAS --- */
-        #modalCotas { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
-        .modal-card { background: #151515; border: 1px solid #333; width: 90%; max-width: 500px; border-radius: 12px; padding: 30px; position: relative; }
     </style>
 </head>
 <body>
@@ -95,10 +106,10 @@
     <header>
         <a href="index.html" class="logo">COB<span>RIFAS</span></a>
         <nav class="nav-user">
-            <div class="nav-item active" onclick="tab('loja')">LOJA</div>
-            <div class="nav-item" onclick="tab('minhas')">MINHAS RIFAS</div>
-            <div class="nav-item" onclick="tab('suporte')">CHAT</div>
-            <div class="nav-item" onclick="tab('perfil')">PERFIL</div>
+            <div class="nav-item active" onclick="tab('loja')">Loja</div>
+            <div class="nav-item" onclick="tab('minhas')">Minhas Rifas</div>
+            <div class="nav-item" onclick="tab('suporte')">Suporte</div>
+            <div class="nav-item" onclick="tab('perfil')">Perfil</div>
             <div class="cart-btn" onclick="toggleCart()">🛒 <div class="cart-badge" id="cartCount">0</div></div>
             <div class="user-profile" onclick="tab('perfil')">
                 <img src="" id="headAvatar" class="avatar">
@@ -109,18 +120,18 @@
     </header>
 
     <div id="cartSidebar">
-        <h3 style="font-family:Orbitron; margin-bottom:25px; color:var(--primary);">MEU CARRINHO</h3>
+        <h3 style="font-family:Orbitron; margin-bottom:25px; color:var(--primary);">CARRINHO TÁTICO</h3>
         <div id="cartList" style="flex:1; overflow-y:auto;"></div>
         <div style="border-top:1px solid #333; padding-top:20px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-family:Orbitron;"><span>TOTAL:</span><span id="cartTotal" style="color:var(--primary)">R$ 0,00</span></div>
-            <button class="btn-action" style="background:var(--primary); color:#000; border:none;" onclick="finalizarPix()">FINALIZAR PEDIDO</button>
+            <button class="btn-action" style="background:var(--primary); color:#000; border:none;" onclick="checkout()">FINALIZAR PIX</button>
             <button class="btn-action" style="border:none; color:#555; margin-top:10px;" onclick="toggleCart()">FECHAR</button>
         </div>
     </div>
 
     <div class="container">
         <section id="loja" class="tab-content active">
-            <h2 class="section-title">RIFAS ATIVAS</h2>
+            <h2 class="section-title">SKINS DISPONÍVEIS</h2>
             <div class="grid" id="gridLoja"></div>
         </section>
 
@@ -130,25 +141,25 @@
         </section>
 
         <section id="suporte" class="tab-content">
-            <h2 class="section-title">CHAT DE SUPORTE</h2>
+            <h2 class="section-title">CENTRAL DE SUPORTE</h2>
             <div class="glass-panel">
-                <div id="chatBox"></div>
-                <div style="display:flex; gap:10px; margin-top:20px;">
-                    <input type="text" id="chatIn" placeholder="Sua dúvida...">
-                    <button class="btn-action" style="width:auto; padding:0 30px;" onclick="sendMsg()">ENVIAR</button>
+                <div id="chatBox" style="height:350px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; margin-bottom:20px;"></div>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="chatInput" placeholder="Mensagem para o comando central...">
+                    <button class="btn-action" style="width:auto; padding:0 30px;" onclick="enviarMsg()">ENVIAR</button>
                 </div>
             </div>
         </section>
 
         <section id="perfil" class="tab-content">
-            <h2 class="section-title">MEU PERFIL</h2>
+            <h2 class="section-title">DADOS DO OPERADOR</h2>
             <div class="glass-panel">
                 <div class="form-grid">
                     <div class="input-group"><label>NOME COMPLETO</label><input type="text" id="pNome"></div>
                     <div class="input-group"><label>NICKNAME</label><input type="text" id="pNick"></div>
                     <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
                     <div class="input-group"><label>CPF (TRAVADO)</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
-                    <div class="input-group"><label>NOVA SENHA</label><input type="password" id="pPass" placeholder="••••••••"></div>
+                    <div class="input-group"><label>ATUALIZAR SENHA</label><input type="password" id="pPass" placeholder="••••••••"></div>
                 </div>
                 <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
             </div>
@@ -156,32 +167,40 @@
     </div>
 
     <div id="modalCotas">
-        <div class="modal-card">
-            <span style="position:absolute; top:15px; right:20px; cursor:pointer;" onclick="document.getElementById('modalCotas').style.display='none'">✕</span>
-            <h3 style="font-family:Orbitron; text-align:center; margin-bottom:20px;">QUANTAS COTAS DESEJA?</h3>
-            <div id="cotasGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;"></div>
-            <div style="display:flex; gap:10px;">
-                <input type="number" id="inputManual" value="10" style="text-align:center; width:80px;">
-                <button class="btn-action" onclick="addManual()">ADICIONAR</button>
+        <div class="modal-card-cota">
+            <div class="modal-header-text">Quanto mais títulos, mais chances de ganhar!</div>
+            <div class="modal-body">
+                <div class="cotas-grid">
+                    <div class="cota-item" onclick="setQtd(10)"><span class="cq">+10</span><span class="cp" id="p10">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
+                    <div class="cota-item active" id="c50" onclick="setQtd(50)"><div class="tag-pop">Mais popular</div><span class="cq">+50</span><span class="cp" id="p50">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
+                    <div class="cota-item" onclick="setQtd(100)"><span class="cq">+100</span><span class="cp" id="p100">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
+                    <div class="cota-item" onclick="setQtd(500)"><span class="cq">+500</span><span class="cp" id="p500">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
+                    <div class="cota-item" onclick="setQtd(1000)"><span class="cq">+1000</span><span class="cp" id="p1000">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
+                    <div class="cota-item" onclick="setQtd(2500)"><span class="cq">+2500</span><span class="cp" id="p2500">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
+                </div>
+            </div>
+            <div class="controls-row">
+                <div class="qtd-sel">
+                    <button class="btn-step" onclick="adjust(-1)">−</button>
+                    <input type="number" id="inQtd" value="10" style="border:none; text-align:center; width:50px; font-weight:bold; font-size:1.1rem; outline:none;">
+                    <button class="btn-step" onclick="adjust(1)">+</button>
+                </div>
+                <button class="btn-final" onclick="addCarrinho()">
+                    <div style="border:1px solid #000; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">✔</div>
+                    <span>Quero participar<br><b id="totalModal">R$ 0,00</b></span>
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 1. CONFIGURAÇÃO FIREBASE ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg",
-            authDomain: "cobrifas.firebaseapp.com",
-            projectId: "cobrifas",
-            storageBucket: "cobrifas.firebasestorage.app",
-            messagingSenderId: "1098617388770",
-            appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb"
-        };
+        // --- FIREBASE CONFIG ---
+        const firebaseConfig = { apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg", authDomain: "cobrifas.firebaseapp.com", projectId: "cobrifas", storageBucket: "cobrifas.firebasestorage.app", messagingSenderId: "1098617388770", appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let userAtivo = null, userFirebaseId = null, carrinho = [];
-        let rifaIdSel = null, precoSel = 0;
+        let rifaSelId = null, precoUnico = 0, estoqueSel = 0;
 
         function init() {
             const sessao = JSON.parse(localStorage.getItem('sessaoAtiva'));
@@ -200,7 +219,6 @@
                     loadMinhas();
                 }
             });
-
             loadLoja(); loadChat();
         }
 
@@ -215,46 +233,45 @@
         function loadLoja() {
             db.ref('rifas').on('value', s => {
                 const rifas = s.val() || {};
+                const grid = document.getElementById('gridLoja');
                 const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
-                document.getElementById('gridLoja').innerHTML = ativas.map(id => {
+                
+                grid.innerHTML = ativas.map(id => {
                     const r = rifas[id];
-                    const restantes = r.total - (r.vendidas || 0);
-                    const pct = ((r.vendidas || 0) / r.total) * 100;
-                    return `
-                    <div class="card">
-                        <div class="price-tag">R$ ${r.preco}</div>
-                        <img src="${r.img}" class="skin-img">
-                        <h3 style="text-align:center; font-family:Orbitron; height:45px;">${r.nome}</h3>
-                        <div class="progress-bg"><div class="progress-fill" style="width:${pct}%"></div></div>
-                        <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:#888; font-family:Orbitron; margin-bottom:15px;">
-                            <span>RESTANTES: <b style="color:var(--primary)">${restantes}</b></span>
-                            <span>${pct.toFixed(0)}%</span>
-                        </div>
-                        <button class="btn-action" onclick="abrirCotas('${id}', ${r.preco}, ${restantes})">ESCOLHER COTAS</button>
-                    </div>`;
+                    const v = r.vendidas || 0;
+                    const res = r.total - v;
+                    const p = (v / r.total) * 100;
+                    return `<div class="card"><div class="price-tag">R$ ${r.preco}</div><img src="${r.img}" class="skin-img"><h3>${r.nome}</h3><div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div><div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div><button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
                 }).join('');
+            });
+        }
+
+        /* --- MODAL COTAS TÁTICO --- */
+        function openModal(id, preco, estoque) {
+            rifaSelId = id; precoUnico = preco; estoqueSel = estoque;
+            [10, 50, 100, 500, 1000, 2500].forEach(q => {
+                const el = document.getElementById('p' + q);
+                if(el) el.innerText = 'R$ ' + (q * preco).toFixed(2);
+            });
+            document.getElementById('inQtd').value = 10;
+            refreshTotal();
+            document.getElementById('modalCotas').style.display = 'flex';
+        }
+
+        function setQtd(n) { document.getElementById('inQtd').value = n; refreshTotal(); }
+        function adjust(d) { let v = parseInt(document.getElementById('inQtd').value) + d; if(v > 0 && v <= estoqueSel) document.getElementById('inQtd').value = v; refreshTotal(); }
+        function refreshTotal() { document.getElementById('totalModal').innerText = 'R$ ' + (parseInt(document.getElementById('inQtd').value) * precoUnico).toFixed(2); }
+
+        function addCarrinho() {
+            const q = parseInt(document.getElementById('inQtd').value);
+            db.ref('rifas/'+rifaSelId).once('value', s => {
+                carrinho.push({ id: rifaSelId, nome: s.val().nome, preco: precoUnico, qtd: q });
+                updateUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart();
             });
         }
 
         /* --- CARRINHO --- */
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
-        function abrirCotas(id, preco, max) {
-            rifaIdSel = id; precoSel = preco;
-            document.getElementById('inputManual').max = max;
-            const grid = document.getElementById('cotasGrid');
-            const opts = [10, 50, 100, 250].filter(o => o <= max);
-            grid.innerHTML = opts.map(o => `<div style="background:#000; border:1px solid #333; padding:10px; text-align:center; cursor:pointer;" onclick="addCota(${o})"><b>+${o}</b><br><small>R$ ${(o*preco).toFixed(2)}</small></div>`).join('');
-            document.getElementById('modalCotas').style.display = 'flex';
-        }
-
-        function addCota(q) {
-            db.ref('rifas/'+rifaIdSel).once('value', s => {
-                carrinho.push({ id: rifaIdSel, nome: s.val().nome, preco: precoSel, qtd: q });
-                updateUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart();
-            });
-        }
-        function addManual() { addCota(parseInt(document.getElementById('inputManual').value)); }
-
         function updateUI() {
             let t = 0, c = 0;
             document.getElementById('cartList').innerHTML = carrinho.map((it, i) => {
@@ -265,15 +282,12 @@
             document.getElementById('cartTotal').innerText = `R$ ${t.toFixed(2)}`;
         }
 
-        function finalizarPix() {
+        function checkout() {
             if(!carrinho.length) return;
             db.ref('config/pix/chave').once('value', s => {
-                const chave = s.val() || "Não configurada";
-                if(confirm("PIX: " + chave + "\nConfirmar envio do pedido?")) {
-                    carrinho.forEach(it => {
-                        db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', data: new Date().toLocaleString() });
-                    });
-                    carrinho = []; updateUI(); toggleCart(); alert("Pedido enviado!"); tab('minhas');
+                if(confirm("PIX: " + (s.val()||"---") + "\nConfirmar envio do pedido?")) {
+                    carrinho.forEach(it => { db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', data: new Date().toLocaleString() }); });
+                    carrinho = []; updateUI(); toggleCart(); alert("Enviado!"); tab('minhas');
                 }
             });
         }
@@ -283,8 +297,9 @@
             db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
                 const pags = Object.values(s.val() || {}).reverse();
                 document.getElementById('listaMinhasRifas').innerHTML = pags.map(p => {
-                    const nums = p.numeros ? p.numeros.map(n => `<span class="n-badge">${n}</span>`).join('') : '<small style="color:#666">Aguardando aprovação...</small>';
-                    return `<div class="ticket-card"><b>${p.rifa}</b><br><small style="color:${p.status==='aprovado'?'var(--green)':'#888'}">● ${p.status.toUpperCase()}</small><div style="margin-top:10px;">${nums}</div></div>`;
+                    const cor = p.status === 'aprovado' ? 'var(--green)' : p.status === 'recusado' ? 'var(--red)' : '#888';
+                    const nums = p.numeros ? p.numeros.map(n => `<span class="n-badge">${n}</span>`).join('') : '<small>Aguardando aprovação...</small>';
+                    return `<div class="ticket-box" style="border-left-color:${cor}"><b>${p.rifa}</b><br><small style="color:${cor}">● ${p.status.toUpperCase()}</small><div style="margin-top:10px;">${nums}</div></div>`;
                 }).join('') || '<p style="text-align:center; padding:50px; color:#555;">Nenhuma rifa adquirida.</p>';
             });
         }
@@ -292,15 +307,15 @@
         /* --- CHAT --- */
         function loadChat() {
             db.ref('chatLog').orderByChild('userCpf').equalTo(userAtivo.cpf).on('value', s => {
-                const msgs = Object.values(s.val() || {});
-                document.getElementById('chatBox').innerHTML = msgs.map(m => `<div class="${m.from==='user'?'msg msg-u':'msg msg-a'}">${m.text}</div>`).join('');
+                const logs = Object.values(s.val() || {});
+                document.getElementById('chatBox').innerHTML = logs.map(m => `<div style="align-self:${m.from==='user'?'flex-end':'flex-start'}; background:${m.from==='user'?'var(--primary)':'#333'}; color:${m.from==='user'?'#000':'#fff'}; padding:10px; border-radius:8px; max-width:75%;">${m.text}</div>`).join('');
                 document.getElementById('chatBox').scrollTop = 9999;
             });
         }
-        function sendMsg() {
-            const t = document.getElementById('chatIn').value;
+        function enviarMsg() {
+            const t = document.getElementById('chatInput').value;
             if(t) db.ref('chatLog').push({ userCpf: userAtivo.cpf, from: 'user', text: t, time: new Date().toLocaleTimeString() });
-            document.getElementById('chatIn').value = '';
+            document.getElementById('chatInput').value = '';
         }
 
         function saveP() {

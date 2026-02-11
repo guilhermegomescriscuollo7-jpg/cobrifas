@@ -70,7 +70,46 @@
         tr td:first-child { border-radius: 10px 0 0 10px; border-left: 3px solid var(--primary); }
         tr td:last-child { border-radius: 0 10px 10px 0; }
 
-        /* CHAT LAYOUT (WhatsApp Style) */
+        .user-cell { display: flex; align-items: center; gap: 12px; }
+        .user-img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+
+        /* BUTTONS */
+        .btn-action { padding: 8px 12px; border: none; border-radius: 4px; font-family: 'Orbitron'; font-size: 0.6rem; cursor: pointer; transition: 0.3s; margin-right: 5px; font-weight: bold; }
+        .btn-green { background: var(--green); color: #000; }
+        .btn-red { background: rgba(255, 68, 68, 0.1); color: var(--red); border: 1px solid var(--red); }
+        .btn-red:hover { background: var(--red); color: #fff; }
+        .btn-blue { background: rgba(0, 162, 255, 0.15); color: var(--blue); border: 1px solid var(--blue); }
+        .btn-blue:hover { background: var(--blue); color: #fff; }
+        .btn-orange { background: rgba(255, 170, 0, 0.15); color: var(--orange); border: 1px solid var(--orange); }
+        .btn-orange:hover { background: var(--orange); color: #fff; }
+        .btn-gold { background: var(--primary); color: #000; box-shadow: 0 0 15px rgba(255,204,0,0.4); text-transform: uppercase; font-weight: 900; }
+        .btn-gold:hover { transform: scale(1.05); }
+
+        /* MODAL SORTEIO */
+        #modalSorteio { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(15px); }
+        .sorteio-card { text-align: center; width: 100%; max-width: 550px; padding: 40px; border: 2px solid var(--primary); border-radius: 20px; background: #000; box-shadow: 0 0 80px rgba(255,204,0,0.2); position: relative; }
+        .sorteio-title { font-family: 'Orbitron'; color: #fff; font-size: 1.5rem; margin-bottom: 20px; letter-spacing: 2px; }
+        .sorteio-numero { font-size: 7rem; font-family: 'Orbitron'; color: var(--primary); text-shadow: 0 0 40px var(--primary); margin: 10px 0; font-weight: 900; line-height: 1; }
+        .winner-info { margin-top: 30px; border-top: 1px dashed #333; padding-top: 20px; display: none; }
+        .winner-label { font-size: 0.8rem; color: #888; font-family: 'Orbitron'; letter-spacing: 1px; margin-bottom: 5px; }
+        .winner-name { font-size: 1.8rem; color: #fff; font-family: 'Rajdhani'; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
+        .winner-details { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .detail-item b { display: block; color: var(--primary); font-size: 0.7rem; font-family: 'Orbitron'; }
+        .detail-item span { color: #ccc; font-family: 'Rajdhani'; font-size: 1.1rem; }
+        .btn-confirm-winner { background: var(--green); color: #000; font-family: 'Orbitron'; font-weight: 900; width: 100%; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; text-transform: uppercase; margin-top: 10px; }
+        .btn-confirm-winner:hover { box-shadow: 0 0 20px var(--green); }
+
+        /* INPUTS & STATS */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--glass-bg); padding: 30px; border-radius: 12px; border: var(--glass-border); text-align: center; }
+        .stat-val { font-family: 'Orbitron'; font-size: 2rem; color: var(--primary); font-weight: 900; }
+        .input-group { margin-bottom: 20px; }
+        label { display:block; color:var(--primary); font-size:0.7rem; margin-bottom:8px; font-family:'Orbitron'; }
+        input, textarea, select { width:100%; padding:15px; background:rgba(0,0,0,0.5); border:1px solid #333; color:#fff; border-radius: 6px; font-family: 'Rajdhani'; }
+        .btn-save { width:100%; padding:15px; background:var(--primary); border:none; font-weight:900; cursor:pointer; font-family: 'Orbitron'; color: #000; border-radius: 6px; margin-top: 10px; }
+        .bonus-section { background: rgba(255, 204, 0, 0.05); border: 1px dashed var(--primary); padding: 20px; border-radius: 8px; margin-bottom: 20px; display: none; }
+
+        /* --- CHAT LAYOUT (WhatsApp Style) --- */
         .chat-layout { display: grid; grid-template-columns: 300px 1fr; height: 600px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; }
         .chat-sidebar { background: rgba(0, 0, 0, 0.8); border-right: 1px solid rgba(255, 255, 255, 0.1); overflow-y: auto; }
         .contact-item { padding: 15px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer; transition: 0.3s; }
@@ -86,13 +125,6 @@
         .msg-admin { align-self: flex-end; background: var(--primary); color: #000; border-bottom-right-radius: 0; font-weight: 600; }
         .msg-time { font-size: 0.6rem; opacity: 0.6; text-align: right; margin-top: 4px; }
         .chat-input-area { padding: 15px; background: rgba(0, 0, 0, 0.9); display: flex; gap: 10px; }
-
-        /* BUTTONS & INPUTS */
-        .btn-action { padding: 8px 12px; border: none; border-radius: 4px; font-family: 'Orbitron'; font-size: 0.6rem; cursor: pointer; transition: 0.3s; margin-right: 5px; font-weight: bold; }
-        .btn-green { background: var(--green); color: #000; }
-        .btn-red { background: rgba(255, 68, 68, 0.1); color: var(--red); border: 1px solid var(--red); }
-        .btn-save { width:100%; padding:15px; background:var(--primary); border:none; font-weight:900; cursor:pointer; font-family: 'Orbitron'; color: #000; border-radius: 6px; margin-top: 10px; }
-        input, select { width:100%; padding:15px; background:rgba(0,0,0,0.5); border:1px solid #333; color:#fff; border-radius: 6px; font-family: 'Rajdhani'; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -116,14 +148,18 @@
         <main>
             <section id="dash" class="tab-content active">
                 <div class="header-title">VISÃO GERAL</div>
-                <div id="statsContainer">Carregando dados da nuvem...</div>
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-val" id="countMembros">0</div><div style="font-size:0.8rem; color:#666; font-family:'Orbitron';">MEMBROS TOTAIS</div></div>
+                    <div class="stat-card"><div class="stat-val" id="countRifas">0</div><div style="font-size:0.8rem; color:#666; font-family:'Orbitron';">RIFAS ATIVAS</div></div>
+                    <div class="stat-card"><div class="stat-val" id="totalVendas">R$ 0,00</div><div style="font-size:0.8rem; color:#666; font-family:'Orbitron';">VENDAS APROVADAS</div></div>
+                </div>
             </section>
 
             <section id="membros" class="tab-content">
                 <div class="header-title">GERENCIAR MEMBROS</div>
                 <div class="glass-panel">
                     <table>
-                        <thead><tr><th>MEMBRO</th><th>CPF</th><th>STATUS</th><th>AÇÕES</th></tr></thead>
+                        <thead><tr><th>MEMBRO</th><th>STATUS / CARGO</th><th>TELEFONE</th><th>CPF</th><th>AÇÕES</th></tr></thead>
                         <tbody id="listaMembrosBody"></tbody>
                     </table>
                 </div>
@@ -133,8 +169,8 @@
                 <div class="header-title">APROVAR PAGAMENTOS</div>
                 <div class="glass-panel">
                     <table>
-                        <thead><tr><th>USUÁRIO</th><th>RIFA</th><th>VALOR</th><th>COMPROVANTE</th><th>AÇÃO</th></tr></thead>
-                        <tbody id="listaPagamentosBody"></tbody>
+                        <thead><tr><th>MEMBRO</th><th>RIFA</th><th>VALOR / COTAS</th><th>COMPROVANTE</th><th>AÇÃO</th></tr></thead>
+                        <tbody id="listaPagamentos"></tbody>
                     </table>
                 </div>
             </section>
@@ -142,11 +178,20 @@
             <section id="rifas" class="tab-content">
                 <div class="header-title">GERENCIAR RIFAS</div>
                 <div class="glass-panel">
-                    <h3 style="margin-bottom:20px; font-family:Orbitron;">NOVA RIFA</h3>
-                    <input type="text" id="rifaNome" placeholder="Nome da Skin">
-                    <input type="text" id="rifaImg" placeholder="URL da Imagem">
-                    <input type="number" id="rifaPreco" placeholder="Preço (R$)">
-                    <input type="number" id="rifaTotal" placeholder="Total de Cotas">
+                    <h3 style="font-family:'Orbitron'; margin-bottom:20px; color:#888;">NOVA RIFA</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                        <input type="text" id="rifaNome" placeholder="Nome da Skin">
+                        <input type="text" id="rifaImg" placeholder="URL da Imagem">
+                        <input type="number" id="rifaPreco" placeholder="Preço (R$)">
+                        <input type="number" id="rifaTotal" placeholder="Total Cotas">
+                    </div>
+                    <div style="margin-bottom:20px;"><label style="cursor:pointer; display:flex; align-items:center; gap:10px;"><input type="checkbox" id="checkBonus" onchange="toggleBonus()" style="width:auto;"> ADICIONAR PRÊMIO TOP COMPRADOR?</label></div>
+                    <div class="bonus-section" id="bonusFields">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                            <input type="text" id="bNome" placeholder="Nome do Item Bônus">
+                            <input type="text" id="bImg" placeholder="URL Imagem Bônus">
+                        </div>
+                    </div>
                     <button class="btn-save" onclick="addRifa()">CRIAR RIFA NO FIREBASE</button>
                 </div>
                 <div id="listaRifasAdm"></div>
@@ -155,14 +200,21 @@
             <section id="pix" class="tab-content">
                 <div class="header-title">CONFIGURAR CHAVE PIX</div>
                 <div class="glass-panel" style="max-width: 500px;">
-                    <select id="pixTipo">
-                        <option value="CPF">CPF</option>
-                        <option value="CNPJ">CNPJ</option>
-                        <option value="EMAIL">E-mail</option>
-                        <option value="ALEATORIA">Chave Aleatória</option>
-                    </select>
-                    <input type="text" id="pixChave" placeholder="Digite sua chave...">
-                    <button class="btn-save" onclick="salvarPixFirebase()">SALVAR CONFIGURAÇÃO</button>
+                    <div class="input-group">
+                        <label>TIPO DE CHAVE</label>
+                        <select id="pixTipo">
+                            <option value="CPF">CPF</option>
+                            <option value="CNPJ">CNPJ</option>
+                            <option value="EMAIL">E-mail</option>
+                            <option value="TELEFONE">Telefone</option>
+                            <option value="ALEATORIA">Chave Aleatória</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>CHAVE PIX</label>
+                        <input type="text" id="pixChave" placeholder="Digite sua chave aqui...">
+                    </div>
+                    <button class="btn-save" onclick="salvarPix()">SALVAR CONFIGURAÇÃO</button>
                 </div>
             </section>
 
@@ -172,7 +224,9 @@
                     <div class="chat-sidebar" id="listaContatos"></div>
                     <div class="chat-main">
                         <div class="chat-header" id="chatHeaderName">SELECIONE UM MEMBRO</div>
-                        <div class="chat-messages-area" id="chatMessagesBox"></div>
+                        <div class="chat-messages-area" id="chatMessagesBox">
+                            <div style="text-align:center; color:#555; margin-top:100px;">Clique em um contato ao lado para ver a conversa.</div>
+                        </div>
                         <div class="chat-input-area">
                             <input type="text" id="respAdm" placeholder="Digite sua resposta..." disabled>
                             <button class="btn-action btn-green" onclick="responderChat()" id="btnEnviarChat" disabled>ENVIAR</button>
@@ -183,8 +237,24 @@
         </main>
     </div>
 
+    <div id="modalSorteio">
+        <div class="sorteio-card">
+            <div class="sorteio-title" id="sorteioItemName">ITEM SORTEADO</div>
+            <div id="sorteioNumero" class="sorteio-numero">---</div>
+            <div id="winnerContainer" class="winner-info">
+                <div class="winner-label">VENCEDOR:</div>
+                <div class="winner-name" id="winName">CARREGANDO...</div>
+                <div class="winner-details">
+                    <div class="detail-item"><b>CPF</b><span id="winCpf">***.***.***-**</span></div>
+                    <div class="detail-item"><b>TELEFONE</b><span id="winTel">(**) *****-****</span></div>
+                </div>
+                <button class="btn-confirm-winner" onclick="document.getElementById('modalSorteio').style.display='none';">FECHAR</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 1. CONFIGURAÇÃO FIREBASE
+        // --- 1. CONFIGURAÇÃO FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg",
             authDomain: "cobrifas.firebaseapp.com",
@@ -193,106 +263,186 @@
             messagingSenderId: "1098617388770",
             appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // --- SISTEMA DE ABAS ---
         function openTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(e) e.currentTarget.classList.add('active');
-            if(id === 'chat') renderContatos();
+            if(id === 'chat') renderChat();
         }
 
-        /* --- PIX NO FIREBASE --- */
-        function salvarPixFirebase() {
-            db.ref('config/pix').set({
-                tipo: document.getElementById('pixTipo').value,
-                chave: document.getElementById('pixChave').value
-            }).then(() => alert("Chave Pix atualizada!"));
-        }
-        function carregarPix() {
-            db.ref('config/pix').once('value', s => {
-                const data = s.val();
-                if(data) {
-                    document.getElementById('pixTipo').value = data.tipo;
-                    document.getElementById('pixChave').value = data.chave;
+        /* --- DASHBOARD REALTIME --- */
+        function updateDash() {
+            db.ref('/').on('value', s => {
+                const data = s.val() || {};
+                const membros = data.membros ? Object.keys(data.membros).length : 0;
+                const rifas = data.rifas ? Object.keys(data.rifas).length : 0;
+                let total = 0;
+                if(data.pagamentos) {
+                    Object.values(data.pagamentos).forEach(p => { if(p.status === 'aprovado') total += parseFloat(p.valor); });
                 }
+                document.getElementById('countMembros').innerText = membros;
+                document.getElementById('countRifas').innerText = rifas;
+                document.getElementById('totalVendas').innerText = `R$ ${total.toFixed(2)}`;
             });
         }
 
-        /* --- RIFAS --- */
+        /* --- PIX REALTIME --- */
+        function salvarPix() {
+            db.ref('config/pix').set({
+                tipo: document.getElementById('pixTipo').value,
+                chave: document.getElementById('pixChave').value
+            }).then(() => alert("Chave Pix Salva!"));
+        }
+        function carregarPix() {
+            db.ref('config/pix').once('value', s => {
+                const p = s.val();
+                if(p) { document.getElementById('pixTipo').value = p.tipo; document.getElementById('pixChave').value = p.chave; }
+            });
+        }
+
+        /* --- MEMBROS REALTIME --- */
+        function renderMembros() {
+            db.ref('membros').on('value', s => {
+                const membros = s.val() || {};
+                const body = document.getElementById('listaMembrosBody');
+                body.innerHTML = Object.keys(membros).map(id => {
+                    const m = membros[id];
+                    const isBan = m.status === 'BANIDO', isAdmin = m.cargo === 'ADMIN';
+                    return `<tr style="opacity:${isBan?'0.5':'1'}">
+                        <td><div class="user-cell"><img src="${m.avatar}" class="user-img"><div><b>${m.nome}</b><br><small>${m.nick||''}</small></div></div></td>
+                        <td><span style="color:${isAdmin?'var(--blue)':'#fff'}">${m.cargo||'MEMBRO'}</span><br><span style="color:${isBan?'var(--red)':'var(--green)'}">${m.status||'ATIVO'}</span></td>
+                        <td>${m.tel||'--'}</td><td>${m.cpf}</td>
+                        <td>
+                            <button class="btn-action btn-blue" onclick="toggleMembro('${id}','cargo')">ADMIN</button>
+                            <button class="btn-action btn-orange" onclick="toggleMembro('${id}','status')">BANIR</button>
+                            <button class="btn-action btn-red" onclick="db.ref('membros/${id}').remove()">EXCLUIR</button>
+                        </td></tr>`;
+                }).join('') || '<tr><td colspan="5" align="center">Sem membros.</td></tr>';
+            });
+        }
+        function toggleMembro(id, field) {
+            db.ref(`membros/${id}`).once('value', s => {
+                const m = s.val();
+                if(field === 'cargo') db.ref(`membros/${id}`).update({ cargo: m.cargo === 'ADMIN' ? 'MEMBRO' : 'ADMIN' });
+                if(field === 'status') db.ref(`membros/${id}`).update({ status: m.status === 'BANIDO' ? 'ATIVO' : 'BANIDO' });
+            });
+        }
+
+        /* --- RIFAS REALTIME --- */
+        function toggleBonus() { document.getElementById('bonusFields').style.display = document.getElementById('checkBonus').checked ? 'block' : 'none'; }
         function addRifa() {
             const n=document.getElementById('rifaNome').value, i=document.getElementById('rifaImg').value, p=document.getElementById('rifaPreco').value, t=document.getElementById('rifaTotal').value;
-            if(!n||!i||!p||!t) return alert("Campos vazios");
-            db.ref('rifas').push({ nome:n, img:i, preco:p, total:t, vendidas:0, numerosVendidos:[] });
-            alert("Rifa Criada!");
+            const b = document.getElementById('checkBonus').checked ? {nome:document.getElementById('bNome').value, img:document.getElementById('bImg').value} : null;
+            if(!n||!i||!p||!t) return alert("Preencha tudo");
+            db.ref('rifas').push({ nome:n, img:i, preco:p, total:t, vendidas:0, bonus:b, numerosVendidos:[] });
+            alert("Rifa criada!");
         }
         function renderRifas() {
             db.ref('rifas').on('value', s => {
                 const rifas = s.val() || {};
                 document.getElementById('listaRifasAdm').innerHTML = Object.keys(rifas).map(id => {
-                    const r = rifas[id];
-                    return `<div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
-                        <div style="display:flex; align-items:center; gap:15px;"><img src="${r.img}" style="width:40px;"><b>${r.nome}</b></div>
-                        <button class="btn-action btn-red" onclick="db.ref('rifas/${id}').remove()">EXCLUIR</button>
-                    </div>`;
+                    const x = rifas[id];
+                    const vendidos = x.numerosVendidos ? Object.keys(x.numerosVendidos).length : 0;
+                    const pct = (vendidos/x.total)*100;
+                    let btnSorteio = x.ganhador ? '<span style="color:#666">FINALIZADA</span>' : (vendidos >= x.total ? `<button class="btn-action btn-gold" onclick="abrirSorteio('${id}')">SORTEAR</button>` : '<span style="color:#666">AGUARDANDO 100%</span>');
+                    return `<div class="glass-panel" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <div style="display:flex; gap:15px; align-items:center;"><img src="${x.img}" style="width:50px;"><div><b>${x.nome}</b><div style="height:4px; background:#333; margin-top:5px; width:100px;"><div style="width:${pct}%; background:var(--primary); height:100%;"></div></div></div></div>
+                        <div>${btnSorteio} <button class="btn-action btn-red" onclick="db.ref('rifas/${id}').remove()">EXCLUIR</button></div></div>`;
                 }).join('');
             });
         }
 
-        /* --- PAGAMENTOS --- */
+        /* --- PAGAMENTOS REALTIME --- */
         function renderPagamentos() {
             db.ref('pagamentos').on('value', s => {
                 const pags = s.val() || {};
-                document.getElementById('listaPagamentosBody').innerHTML = Object.keys(pags).map(id => {
-                    const p = pags[id];
-                    if(p.status !== 'pendente') return '';
-                    return `<tr><td>${p.usuario}</td><td>${p.rifa}</td><td>R$ ${p.valor}</td><td><a href="${p.comprovante}" download style="color:var(--primary)">BAIXAR</a></td><td>
-                        <button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${p.rifaId}',${p.cotas})">APROVAR</button></td></tr>`;
-                }).join('');
+                document.getElementById('listaPagamentos').innerHTML = Object.keys(pags).map(id => {
+                    const x = pags[id];
+                    if(x.status !== 'pendente') return '';
+                    return `<tr><td><b>${x.usuario}</b><br><small>${x.cpf}</small></td><td>${x.rifa}</td><td>R$ ${x.valor} (${x.cotas})</td>
+                        <td><a href="${x.comprovante}" download style="color:var(--primary); font-size:0.7rem;">BAIXAR</a></td>
+                        <td><button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${x.rifaId}',${x.cotas})">APROVAR</button>
+                        <button class="btn-action btn-red" onclick="db.ref('pagamentos/${id}').update({status:'recusado'})">RECUSAR</button></td></tr>`;
+                }).join('') || '<tr><td colspan="5" align="center">Vazio.</td></tr>';
             });
         }
         function aprovarPagamento(pagId, rifaId, qtd) {
-            db.ref('rifas/'+rifaId).once('value', s => {
+            db.ref(`rifas/${rifaId}`).once('value', s => {
                 const r = s.val();
-                let nums = r.numerosVendidos || [];
+                let existentes = r.numerosVendidos || [];
                 const novos = [];
                 while(novos.length < qtd) {
-                    let n = Math.floor(Math.random() * r.total) + 1;
-                    let fmt = String(n).padStart(3,'0');
-                    if(!nums.includes(fmt) && !novos.includes(fmt)) novos.push(fmt);
+                    let num = Math.floor(Math.random() * r.total) + 1;
+                    let fmt = String(num).padStart(3, '0');
+                    if(!existentes.includes(fmt) && !novos.includes(fmt)) novos.push(fmt);
                 }
-                db.ref('rifas/'+rifaId).update({ vendidas: r.vendidas + qtd, numerosVendidos: [...nums, ...novos] });
-                db.ref('pagamentos/'+pagId).update({ status: 'aprovado', numeros: novos });
+                db.ref(`rifas/${rifaId}`).update({ vendidas: (r.vendidas||0) + qtd, numerosVendidos: [...existentes, ...novos] });
+                db.ref(`pagamentos/${pagId}`).update({ status: 'aprovado', numeros: novos });
                 alert("Aprovado!");
             });
         }
 
-        /* --- CHAT FIREBASE (WHATSAPP STYLE) --- */
-        let chatSelecionadoCPF = null;
-        function renderContatos() {
+        /* --- SORTEIO REALTIME --- */
+        function abrirSorteio(id) {
+            db.ref(`rifas/${id}`).once('value', s => {
+                const rifa = s.val();
+                document.getElementById('modalSorteio').style.display = 'flex';
+                document.getElementById('sorteioItemName').innerText = rifa.nome.toUpperCase();
+                document.getElementById('winnerContainer').style.display = 'none';
+                let counter = 0;
+                const intv = setInterval(() => {
+                    document.getElementById('sorteioNumero').innerText = Math.floor(Math.random() * rifa.total) + 1;
+                    if(++counter > 20) { clearInterval(intv); realizarSorteio(id); }
+                }, 100);
+            });
+        }
+        function realizarSorteio(id) {
+            db.ref(`rifas/${id}`).once('value', sr => {
+                const rifa = sr.val();
+                const numVencedor = rifa.numerosVendidos[Math.floor(Math.random() * rifa.numerosVendidos.length)];
+                db.ref('pagamentos').once('value', sp => {
+                    const pags = sp.val();
+                    const pgVenc = Object.values(pags).find(p => p.numeros && p.numeros.includes(numVencedor));
+                    const winName = pgVenc ? pgVenc.usuario : "Não Identificado";
+                    const winCpf = pgVenc ? pgVenc.cpf : "---";
+                    document.getElementById('sorteioNumero').innerText = numVencedor;
+                    document.getElementById('winName').innerText = winName;
+                    document.getElementById('winCpf').innerText = winCpf;
+                    document.getElementById('winnerContainer').style.display = 'block';
+                    db.ref(`rifas/${id}`).update({ ganhador: { nome: winName, numero: numVencedor, cpf: winCpf, dataSorteio: new Date().toLocaleString() } });
+                });
+            });
+        }
+
+        /* --- CHAT REALTIME (WhatsApp Style) --- */
+        let chatAtivoCPF = null;
+        function renderChat() {
             db.ref('chatLog').on('value', s => {
                 const logs = s.val() || {};
                 const cpfs = [...new Set(Object.values(logs).map(l => l.userCpf))];
                 document.getElementById('listaContatos').innerHTML = cpfs.map(cpf => {
-                    const active = chatSelecionadoCPF === cpf ? 'active' : '';
-                    return `<div class="contact-item ${active}" onclick="abrirChat('${cpf}')"><div class="contact-info"><b>CPF: ${cpf}</b><span>Ver conversa</span></div></div>`;
+                    const active = chatAtivoCPF === cpf ? 'active' : '';
+                    return `<div class="contact-item ${active}" onclick="abrirChat('${cpf}')">
+                        <div class="contact-info"><b>CPF: ${cpf}</b><span>Ver conversa</span></div></div>`;
                 }).join('');
-                if(chatSelecionadoCPF) renderMensagens();
+                if(chatAtivoCPF) renderMensagens();
             });
         }
         function abrirChat(cpf) {
-            chatSelecionadoCPF = cpf;
+            chatAtivoCPF = cpf;
             document.getElementById('chatHeaderName').innerText = "CONVERSA: " + cpf;
             document.getElementById('respAdm').disabled = false;
             document.getElementById('btnEnviarChat').disabled = false;
-            renderContatos();
+            renderMensagens();
         }
         function renderMensagens() {
-            db.ref('chatLog').once('value', s => {
-                const logs = Object.values(s.val() || {}).filter(l => l.userCpf === chatSelecionadoCPF);
+            db.ref('chatLog').on('value', s => {
+                const logs = Object.values(s.val() || {}).filter(l => l.userCpf === chatAtivoCPF);
                 document.getElementById('chatMessagesBox').innerHTML = logs.map(m => `
                     <div class="msg-bubble ${m.from==='admin'?'msg-admin':'msg-user'}">${m.text}<div class="msg-time">${m.time}</div></div>
                 `).join('');
@@ -302,11 +452,11 @@
         function responderChat() {
             const txt = document.getElementById('respAdm').value;
             if(!txt) return;
-            db.ref('chatLog').push({ userCpf: chatSelecionadoCPF, from: 'admin', text: txt, time: new Date().toLocaleTimeString().slice(0,5) });
-            document.getElementById('respAdm').value = ''; renderMensagens();
+            db.ref('chatLog').push({ userCpf: chatAtivoCPF, from: 'admin', text: txt, time: new Date().toLocaleTimeString().slice(0,5) });
+            document.getElementById('respAdm').value = '';
         }
 
-        window.onload = () => { carregarPix(); renderRifas(); renderPagamentos(); };
+        window.onload = () => { updateDash(); carregarPix(); renderRifas(); renderPagamentos(); renderMembros(); };
     </script>
 </body>
 </html>

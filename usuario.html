@@ -1,360 +1,194 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Conta | COBRIFAS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minha Conta | COBRIFAS</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --primary: #ffcc00;
-            --primary-glow: rgba(255, 204, 0, 0.5);
-            --bg-dark: #050505;
-            --card-bg: #0f0f0f;
-            --glass: rgba(20, 20, 20, 0.95);
-            --red: #ff4444;
-            --green: #00ff66;
-            --btn-orange: #f1b44c;
-        }
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<style>
+:root{--primary:#ffcc00;--bg-dark:#050505;--card-bg:#0f0f0f;--glass:rgba(20,20,20,.95);--red:#ff4444;--green:#00ff66;--btn-orange:#f1b44c;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050505 url('https://images8.alphacoders.com/132/1328325.png');background-size:cover;color:#fff;font-family:'Rajdhani'}
+header{display:flex;justify-content:space-between;align-items:center;padding:15px 8%;background:#000;border-bottom:2px solid var(--primary)}
+.logo{font-family:Orbitron;color:#fff;text-decoration:none}
+.logo span{color:var(--primary)}
+.nav-item{cursor:pointer;margin-right:10px}
+.tab-content{display:none;padding:20px}
+.tab-content.active{display:block}
 
-        body {
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 10%, rgba(255, 204, 0, 0.05) 0%, transparent 50%),
-                url('https://images8.alphacoders.com/132/1328325.png');
-            background-attachment: fixed; background-size: cover;
-            color: #fff; font-family: 'Rajdhani', sans-serif;
-            overflow-x: hidden;
-        }
+#cartSidebar{position:fixed;right:-400px;top:0;width:350px;height:100vh;background:#111;border-left:2px solid var(--primary);transition:.3s;padding:20px;z-index:3000}
+#cartSidebar.open{right:0}
 
-        /* --- HEADER --- */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900; color: #fff; text-decoration: none; }
-        .logo span { color: var(--primary); }
-        .nav-user { display: flex; gap: 5px; align-items: center; }
-        .nav-item { text-decoration: none; font-family: 'Orbitron'; font-weight: bold; font-size: 0.65rem; padding: 10px 15px; border-radius: 2px; transition: 0.3s; color: #888; cursor: pointer; border: 1px solid transparent; text-transform: uppercase; }
-        .nav-item:hover, .nav-item.active { color: var(--primary); border-color: rgba(255,204,0,0.3); background: rgba(255, 204, 0, 0.05); }
-        
-        .cart-btn { position: relative; cursor: pointer; margin: 0 15px; color: var(--primary); font-size: 1.2rem; }
-        .cart-badge { position: absolute; top: -8px; right: -8px; background: var(--red); color: #fff; font-size: 0.6rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+#modalCotas,#modalPix{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);align-items:center;justify-content:center;z-index:5000}
 
-        /* --- SIDEBAR CARRINHO --- */
-        #cartSidebar { position: fixed; top: 0; right: -400px; width: 350px; height: 100vh; background: var(--glass); border-left: 2px solid var(--primary); z-index: 2000; padding: 30px; transition: 0.4s ease; display: flex; flex-direction: column; backdrop-filter: blur(20px); }
-        #cartSidebar.open { right: 0; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.modal-card-cota,.modal-card-pix{background:#111;padding:20px;border-radius:10px;width:95%;max-width:600px;border:2px solid var(--primary)}
 
-        /* --- LAYOUT --- */
-        .container { padding: 40px 8%; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .section-title { font-family: 'Orbitron'; font-size: 1.5rem; margin-bottom: 40px; display: flex; align-items: center; gap: 15px; text-transform: uppercase; }
-        .section-title::before { content: '⚡'; color: var(--primary); }
+.cota-item{background:#000;padding:10px;margin:5px;border:1px solid #333;cursor:pointer;text-align:center}
+.cota-item.active{border-color:var(--primary);background:#222}
 
-        /* --- CARDS LOJA --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 25px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
-        .price-tag { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 20px; font-size: 1rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
-        .skin-img { width: 100%; height: 150px; object-fit: contain; margin: 20px 0; align-self: center; }
-        .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 15px; }
-        .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; transition: 0.5s; }
-        .btn-action { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; }
-        .btn-action:hover { background: var(--primary); color: #000; }
-
-        /* --- POPUP COTAS (ESTILO WHATSAPP) --- */
-        #modalCotas { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
-        .modal-card-cota { background: #e9ecef; width: 95%; max-width: 650px; border-radius: 12px; overflow: hidden; }
-        .modal-header-text { background: #fff; color: #555; text-align: center; padding: 12px; font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid #ddd; }
-        .modal-body { padding: 20px; background: #e9ecef; }
-        .cotas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .cota-item { background: #000; border: 2px solid transparent; border-radius: 10px; padding: 15px 5px; text-align: center; cursor: pointer; position: relative; transition: 0.2s; }
-        .cota-item.active { border-color: var(--primary); background: #fffbeb; }
-        .cota-item.active .cq, .cota-item.active .cp { color: #000; }
-        .cq { font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900; color: #fff; display: block; }
-        .cp { color: #888; font-size: 0.8rem; font-weight: bold; margin: 5px 0; display: block; }
-        .cl { color: #666; font-size: 0.6rem; text-transform: uppercase; font-weight: 900; }
-        .tag-pop { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--btn-orange); color: #fff; font-size: 0.5rem; padding: 3px 10px; border-radius: 20px; font-weight: bold; font-family: Orbitron; }
-        .controls-row { display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; padding: 0 20px 20px; }
-        .qtd-sel { display: flex; align-items: center; background: #fff; border-radius: 8px; padding: 5px; justify-content: space-between; border: 1px solid #ccc; }
-        .btn-step { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #333; background: transparent; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
-        .btn-final { background: var(--btn-orange); border: none; border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; }
-        .btn-final b { font-size: 1.2rem; display: block; color: #000; }
-
-        /* --- MODAL PIX (RESTAURADO) --- */
-        #modalPix { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px); }
-        .modal-card-pix { background: #111; border: 2px solid var(--primary); padding: 40px; border-radius: 12px; text-align: center; max-width: 450px; width: 90%; }
-        .pix-box { background: #222; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #333; text-align: left; }
-        .upload-label { display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px dashed #666; padding: 15px; border-radius: 6px; cursor: pointer; transition: 0.3s; font-family: 'Orbitron'; font-size: 0.7rem; color: #aaa; margin-top: 20px; }
-        .upload-label:hover { border-color: var(--primary); color: var(--primary); }
-        .btn-disabled { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
-
-        /* --- CHAT & PERFIL --- */
-        #chatBox { height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; }
-        .msg-u { align-self: flex-end; background: var(--primary); color: #000; padding: 10px 15px; border-radius: 8px; max-width: 75%; font-weight: 600; }
-        .msg-a { align-self: flex-start; background: #333; color: #fff; padding: 10px 15px; border-radius: 8px; max-width: 75%; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
-        .input-group label { color: var(--primary); font-family: 'Orbitron'; font-size: 0.65rem; text-transform: uppercase; }
-        .input-group input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Rajdhani'; }
-
-        /* --- MINHAS RIFAS --- */
-        .ticket-box { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #444; }
-        .n-badge { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 3px; font-family: Orbitron; font-size: 0.7rem; margin: 3px; display: inline-block; font-weight: bold; }
-    </style>
+.btn-action{padding:10px 15px;border:1px solid var(--primary);background:transparent;color:var(--primary);cursor:pointer;margin-top:10px}
+.btn-action:hover{background:var(--primary);color:#000}
+</style>
 </head>
 <body>
 
-    <header>
-        <a href="index.html" class="logo">COB<span>RIFAS</span></a>
-        <nav class="nav-user">
-            <div class="nav-item active" onclick="tab('loja')">Loja</div>
-            <div class="nav-item" onclick="tab('minhas')">Minhas Rifas</div>
-            <div class="nav-item" onclick="tab('suporte')">Suporte</div>
-            <div class="nav-item" onclick="tab('perfil')">Perfil</div>
-            <div class="cart-btn" onclick="toggleCart()">🛒 <div class="cart-badge" id="cartCount">0</div></div>
-            <div class="user-profile" onclick="tab('perfil')">
-                <img src="" id="headAvatar" class="avatar">
-                <span id="headName" class="user-name-header">...</span>
-            </div>
-            <div style="color:red; font-size:0.6rem; cursor:pointer; font-family:Orbitron; margin-left:10px;" onclick="logout()">SAIR</div>
-        </nav>
-    </header>
+<header>
+<a class="logo">COB<span>RIFAS</span></a>
+<div>
+<span class="nav-item" onclick="tab('loja')">Loja</span>
+<span class="nav-item" onclick="tab('minhas')">Minhas</span>
+<span class="nav-item" onclick="tab('suporte')">Suporte</span>
+<span class="nav-item" onclick="tab('perfil')">Perfil</span>
+<span class="nav-item" onclick="toggleCart()">🛒 <b id="cartCount">0</b></span>
+</div>
+</header>
 
-    <div id="cartSidebar">
-        <h3 style="font-family:Orbitron; margin-bottom:25px; color:var(--primary);">CARRINHO TÁTICO</h3>
-        <div id="cartList" style="flex:1; overflow-y:auto;"></div>
-        <div style="border-top:1px solid #333; padding-top:20px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-family:Orbitron;"><span>TOTAL:</span><span id="cartTotal" style="color:var(--primary)">R$ 0,00</span></div>
-            <button class="btn-action" style="background:var(--primary); color:#000; border:none;" onclick="abrirCheckoutPix()">FINALIZAR PEDIDO</button>
-            <button class="btn-action" style="border:none; color:#555; margin-top:10px;" onclick="toggleCart()">FECHAR</button>
-        </div>
-    </div>
+<div id="cartSidebar">
+<h3>Carrinho</h3>
+<div id="cartList"></div>
+<div id="cartTotal"></div>
+<button class="btn-action" onclick="abrirCheckoutPix()">Finalizar</button>
+<button class="btn-action" onclick="toggleCart()">Fechar</button>
+</div>
 
-    <div class="container">
-        <section id="loja" class="tab-content active">
-            <h2 class="section-title">RIFAS DISPONÍVEIS</h2>
-            <div class="grid" id="gridLoja"></div>
-        </section>
+<div id="loja" class="tab-content active">
+<h2>Rifas</h2>
+<div id="gridLoja"></div>
+</div>
 
-        <section id="minhas" class="tab-content">
-            <h2 class="section-title">MINHAS PARTICIPAÇÕES</h2>
-            <div id="listaMinhasRifas"></div>
-        </section>
+<div id="minhas" class="tab-content">
+<h2>Minhas Rifas</h2>
+<div id="listaMinhasRifas"></div>
+</div>
 
-        <section id="suporte" class="tab-content">
-            <h2 class="section-title">CENTRAL DE SUPORTE</h2>
-            <div class="glass-panel">
-                <div id="chatBox"></div>
-                <div style="display:flex; gap:10px; margin-top:20px;">
-                    <input type="text" id="chatInput" placeholder="Mensagem para o comando central..." style="flex:1; padding:12px; background:#000; border:1px solid #333; color:#fff;">
-                    <button class="btn-action" style="width:auto; padding:0 30px;" onclick="enviarMsg()">ENVIAR</button>
-                </div>
-            </div>
-        </section>
+<div id="suporte" class="tab-content">
+<h2>Suporte</h2>
+<div id="chatBox"></div>
+<input id="chatInput"><button onclick="enviarMsg()">Enviar</button>
+</div>
 
-        <section id="perfil" class="tab-content">
-            <h2 class="section-title">DADOS DO OPERADOR</h2>
-            <div class="glass-panel">
-                <div class="form-grid">
-                    <div class="input-group"><label>NOME COMPLETO</label><input type="text" id="pNome"></div>
-                    <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
-                    <div class="input-group"><label>CPF</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
-                    <div class="input-group"><label>NOVA SENHA</label><input type="password" id="pPass" placeholder="••••••••"></div>
-                </div>
-                <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
-            </div>
-        </section>
-    </div>
+<div id="perfil" class="tab-content">
+<h2>Perfil</h2>
+<input id="pNome"><input id="pTel">
+<button onclick="saveP()">Salvar</button>
+</div>
 
-    <div id="modalCotas">
-        <div class="modal-card-cota">
-            <div class="modal-header-text">Quanto mais títulos, mais chances de ganhar!</div>
-            <div class="modal-body">
-                <div class="cotas-grid">
-                    <div class="cota-item" onclick="setQtd(10)"><span class="cq">+10</span><span class="cp" id="p10">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item active" id="c50" onclick="setQtd(50)"><div class="tag-pop">Mais popular</div><span class="cq">+50</span><span class="cp" id="p50">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item" onclick="setQtd(100)"><span class="cq">+100</span><span class="cp" id="p100">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item" onclick="setQtd(500)"><span class="cq">+500</span><span class="cp" id="p500">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item" onclick="setQtd(1000)"><span class="cq">+1000</span><span class="cp" id="p1000">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item" onclick="setQtd(2500)"><span class="cq">+2500</span><span class="cp" id="p2500">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                </div>
-            </div>
-            <div class="controls-row">
-                <div class="qtd-sel">
-                    <button class="btn-step" onclick="adjust(-1)">−</button>
-                    <input type="number" id="inQtd" value="10" readonly style="border:none; text-align:center; width:50px; font-weight:bold; font-size:1.1rem; outline:none;">
-                    <button class="btn-step" onclick="adjust(1)">+</button>
-                </div>
-                <button class="btn-final" onclick="addCarrinho()">
-                    <div style="border:1px solid #000; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">✔</div>
-                    <span>Quero participar<br><b id="totalModal">R$ 0,00</b></span>
-                </button>
-            </div>
-        </div>
-    </div>
+<!-- MODAL COTAS -->
+<div id="modalCotas" onclick="if(event.target.id=='modalCotas')fecharCotas()">
+<div class="modal-card-cota">
+<h3>Escolha cotas</h3>
+<div id="listaCotas"></div>
+<input id="inQtd" type="number" value="10" readonly>
+<div id="totalModal"></div>
+<button class="btn-action" onclick="addCarrinho()">Adicionar</button>
+</div>
+</div>
 
-    <div id="modalPix">
-        <div class="modal-card-pix">
-            <h2 style="font-family:Orbitron; color:var(--primary); margin-bottom:20px;">PAGAMENTO PIX</h2>
-            <p style="color:#888; font-size:0.9rem;">Realize a transferência e anexe o comprovante abaixo:</p>
-            <div class="pix-box">
-                <label style="color:var(--primary); font-size:0.7rem;">CHAVE PIX</label>
-                <div id="txtChavePix" style="color:#fff; font-size:1.1rem; font-weight:bold; word-break:break-all;">...</div>
-            </div>
-            <div class="upload-area">
-                <label for="compInput" class="upload-label">📎 ANEXAR COMPROVANTE (IMAGEM/PDF)</label>
-                <input type="file" id="compInput" accept="image/*, application/pdf" style="display:none;" onchange="validarArquivo()">
-                <small id="fileName" style="color:var(--green); display:block; margin-top:10px; font-weight:bold;"></small>
-            </div>
-            <button id="btnFinalizarPix" class="btn-action btn-disabled" style="background:var(--primary); color:#000; border:none; width:100%; margin-top:20px;" onclick="enviarPedidoFirebase()">JÁ REALIZEI O PAGAMENTO</button>
-            <button class="btn-action" style="background:transparent; color:#888; border:none; margin-top:10px;" onclick="document.getElementById('modalPix').style.display='none'">CANCELAR</button>
-        </div>
-    </div>
+<!-- MODAL PIX -->
+<div id="modalPix" onclick="if(event.target.id=='modalPix')fecharPix()">
+<div class="modal-card-pix">
+<h3>Pagamento PIX</h3>
+<div id="txtChavePix"></div>
+<input type="file" id="compInput" onchange="validarArquivo()">
+<button id="btnFinalizarPix" class="btn-action" onclick="enviarPedidoFirebase()">Já paguei</button>
+</div>
+</div>
 
-    <script>
-        // --- FIREBASE CONFIG ---
-        const firebaseConfig = { apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg", authDomain: "cobrifas.firebaseapp.com", projectId: "cobrifas", storageBucket: "cobrifas.firebasestorage.app", messagingSenderId: "1098617388770", appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb" };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+<script>
+const firebaseConfig={apiKey:"AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg",authDomain:"cobrifas.firebaseapp.com",projectId:"cobrifas",databaseURL:"https://cobrifas-default-rtdb.firebaseio.com"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
 
-        let userAtivo = null, userFirebaseId = null, carrinho = [];
-        let rifaSelId = null, precoUnico = 0, estoqueSel = 0, comprovanteBase64 = null;
+let userAtivo=null,userFirebaseId=null,carrinho=[];
+let rifaSelId=null,precoUnico=0,estoqueSel=0,comprovanteBase64=null;
 
-        function carregarPagina() {
-            const sessao = JSON.parse(localStorage.getItem('sessaoAtiva'));
-            if (!sessao) { window.location.href = 'index.html'; return; }
-            db.ref('membros').orderByChild('cpf').equalTo(sessao.cpf).on('value', s => {
-                const data = s.val();
-                if(data) {
-                    userFirebaseId = Object.keys(data)[0]; userAtivo = data[userFirebaseId];
-                    document.getElementById('headName').innerText = userAtivo.nick || userAtivo.nome.split(' ')[0];
-                    document.getElementById('headAvatar').src = userAtivo.avatar;
-                    document.getElementById('pNome').value = userAtivo.nome; document.getElementById('pTel').value = userAtivo.tel; document.getElementById('pCpf').value = userAtivo.cpf;
-                    loadMinhas();
-                }
-            });
-            loadLoja(); loadChat();
-        }
+function tab(id){document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function toggleCart(){document.getElementById('cartSidebar').classList.toggle('open');}
+function fecharCotas(){modalCotas.style.display='none'}
+function fecharPix(){modalPix.style.display='none'}
 
-        function loadLoja() {
-            db.ref('rifas').on('value', s => {
-                const rifas = s.val() || {};
-                const grid = document.getElementById('gridLoja');
-                const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
-                grid.innerHTML = ativas.map(id => {
-                    const r = rifas[id]; const v = r.vendidas || 0; const res = r.total - v; const p = (v / r.total) * 100;
-                    return `<div class="card"><div class="price-tag">R$ ${r.preco}</div><img src="${r.img}" class="skin-img"><h3>${r.nome}</h3><div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div><div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div><button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
-                }).join('');
-            });
-        }
+function carregarPagina(){
+const sessao=JSON.parse(localStorage.getItem('sessaoAtiva')||'null');
+if(!sessao)return;
 
-        /* --- MODAL COTAS --- */
-        function openModal(id, preco, estoque) {
-            rifaSelId = id; precoUnico = preco; estoqueSel = estoque;
-            [10, 50, 100, 500, 1000, 2500].forEach(q => {
-                const el = document.getElementById('p' + q); if(el) el.innerText = 'R$ ' + (q * preco).toFixed(2);
-            });
-            document.getElementById('inQtd').value = 10; refreshTotal(); document.getElementById('modalCotas').style.display = 'flex';
-        }
-        function setQtd(n) { if(n <= estoqueSel) { document.getElementById('inQtd').value = n; refreshTotal(); } }
-        function adjust(d) { let v = parseInt(document.getElementById('inQtd').value) + d; if(v > 0 && v <= estoqueSel) document.getElementById('inQtd').value = v; refreshTotal(); }
-        function refreshTotal() { document.getElementById('totalModal').innerText = 'R$ ' + (parseInt(document.getElementById('inQtd').value) * precoUnico).toFixed(2); }
+loadLoja();
+loadMinhas();
+loadChat();
+}
 
-        function addCarrinho() {
-            const q = parseInt(document.getElementById('inQtd').value);
-            db.ref('rifas/'+rifaSelId).once('value', s => {
-                carrinho.push({ id: rifaSelId, nome: s.val().nome, preco: precoUnico, qtd: q });
-                updateUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart();
-            });
-        }
+function loadLoja(){
+db.ref('rifas').on('value',s=>{
+const rifas=s.val()||{};
+const g=document.getElementById('gridLoja');
+g.innerHTML='';
+Object.keys(rifas).forEach(id=>{
+const r=rifas[id];
+const div=document.createElement('div');
+div.innerHTML=`<b>${r.nome}</b> - R$ ${r.preco} <button onclick="openModal('${id}',${r.preco},${r.total-r.vendidas})">Cotas</button>`;
+g.appendChild(div);
+});
+});}
 
-        /* --- CARRINHO & CHECKOUT PIX --- */
-        function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
-        function updateUI() {
-            let t = 0, c = 0;
-            document.getElementById('cartList').innerHTML = carrinho.map((it, i) => {
-                t += it.preco * it.qtd; c += it.qtd;
-                return `<div class="cart-item"><div><b>${it.qtd}x ${it.nome}</b><br><small>R$ ${(it.preco*it.qtd).toFixed(2)}</small></div><span onclick="carrinho.splice(${i},1);updateUI()" style="color:red; cursor:pointer;">✕</span></div>`;
-            }).join('');
-            document.getElementById('cartCount').innerText = c; document.getElementById('cartTotal').innerText = `R$ ${t.toFixed(2)}`;
-        }
+function openModal(id,preco,estoque){
+rifaSelId=id;precoUnico=preco;estoqueSel=estoque;
+const l=document.getElementById('listaCotas');l.innerHTML='';
+[10,50,100,500].forEach(q=>{
+const d=document.createElement('div');d.className='cota-item';d.innerText=q+' = R$'+(q*preco);
+d.onclick=()=>setQtd(q);
+l.appendChild(d);
+});
+inQtd.value=10;refreshTotal();
+modalCotas.style.display='flex';
+}
 
-        function abrirCheckoutPix() {
-            if(!carrinho.length) return alert("Carrinho vazio!");
-            db.ref('config/pix/chave').once('value', s => {
-                document.getElementById('txtChavePix').innerText = s.val() || "Chave não configurada";
-                document.getElementById('modalPix').style.display = 'flex';
-                toggleCart();
-            });
-        }
+function setQtd(n){if(n<=estoqueSel){inQtd.value=n;refreshTotal();}}
+function refreshTotal(){totalModal.innerText='R$ '+(inQtd.value*precoUnico).toFixed(2);}
 
-        function validarArquivo() {
-            const file = document.getElementById('compInput').files[0];
-            if(file) {
-                document.getElementById('fileName').innerText = "✔ " + file.name;
-                const reader = new FileReader();
-                reader.onload = e => { 
-                    comprovanteBase64 = e.target.result;
-                    document.getElementById('btnFinalizarPix').classList.remove('btn-disabled');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+function addCarrinho(){
+carrinho.push({id:rifaSelId,preco:precoUnico,qtd:+inQtd.value});
+updateUI();fecharCotas();toggleCart();
+}
 
-        function enviarPedidoFirebase() {
-            if(!comprovanteBase64) return alert("O comprovante é obrigatório!");
-            carrinho.forEach(it => {
-                db.ref('pagamentos').push({
-                    usuario: userAtivo.nome, cpf: userAtivo.cpf,
-                    rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2),
-                    cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64,
-                    data: new Date().toLocaleString()
-                });
-            });
-            carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none';
-            alert("Pedido enviado para análise!"); tab('minhas');
-        }
+function updateUI(){
+let t=0;
+cartList.innerHTML=carrinho.map((c,i)=>{
+t+=c.preco*c.qtd;
+return `<div>${c.qtd}x - R$${c.preco*c.qtd} <span onclick="carrinho.splice(${i},1);updateUI()">x</span></div>`;
+}).join('');
+cartTotal.innerText='Total: R$'+t.toFixed(2);
+cartCount.innerText=carrinho.length;
+}
 
-        /* --- OUTRAS FUNÇÕES --- */
-        function loadMinhas() {
-            db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
-                const pags = Object.values(s.val() || {}).reverse();
-                document.getElementById('listaMinhasRifas').innerHTML = pags.map(p => {
-                    const cor = p.status === 'aprovado' ? 'var(--green)' : p.status === 'recusado' ? 'var(--red)' : '#888';
-                    const nums = p.numeros ? p.numeros.map(n => `<span class="n-badge">${n}</span>`).join('') : '<small>Aguardando PIX...</small>';
-                    return `<div class="ticket-box" style="border-left-color:${cor}"><b>${p.rifa}</b><br><small style="color:${cor}">● ${p.status.toUpperCase()}</small><div style="margin-top:10px;">${nums}</div></div>`;
-                }).join('');
-            });
-        }
+function abrirCheckoutPix(){
+db.ref('config/pix/chave').once('value',s=>{
+txtChavePix.innerText=s.val()||'sem chave';
+modalPix.style.display='flex';
+});}
 
-        function loadChat() {
-            db.ref('chatLog').orderByChild('userCpf').equalTo(userAtivo.cpf).on('value', s => {
-                const msgs = Object.values(s.val() || {});
-                document.getElementById('chatBox').innerHTML = msgs.map(m => `<div class="${m.from==='user'?'msg-u':'msg-a'}">${m.text}</div>`).join('');
-                document.getElementById('chatBox').scrollTop = 9999;
-            });
-        }
-        function enviarMsg() {
-            const t = document.getElementById('chatInput').value;
-            if(t) db.ref('chatLog').push({ userCpf: userAtivo.cpf, from: 'user', text: t, time: new Date().toLocaleTimeString() });
-            document.getElementById('chatInput').value = '';
-        }
+function validarArquivo(){
+const f=compInput.files[0];
+if(!f)return;
+const r=new FileReader();
+r.onload=e=>{comprovanteBase64=e.target.result;};
+r.readAsDataURL(f);
+}
 
-        function tab(id) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
+function enviarPedidoFirebase(){
+carrinho.forEach(it=>{
+db.ref('pagamentos').push({rifaId:it.id,qtd:it.qtd,valor:it.preco*it.qtd,status:'pendente',comprovante:comprovanteBase64});
+});
+carrinho=[];updateUI();fecharPix();alert('Enviado!');
+}
 
-        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-        function saveP() { db.ref('membros/'+userFirebaseId).update({ nome: document.getElementById('pNome').value, tel: document.getElementById('pTel').value }).then(() => alert("Salvo!")); }
-        window.onload = carregarPagina;
-    </script>
-</body>
-</html>
+function loadMinhas(){db.ref('pagamentos').on('value',s=>{listaMinhasRifas.innerHTML=JSON.stringify(s.val());});}
+function loadChat(){db.ref('chatLog').on('value',s=>{chatBox.innerHTML=JSON.stringify(s.val());});}
+function enviarMsg(){db.ref('chatLog').push({text:chatInput.value});chatInput.value='';}
+function saveP(){alert('salvo fake');}
+
+window.onload=carregarPagina;
+</script>
+</body></html>

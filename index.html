@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COBRIFAS | Skins de Elite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffcc00;
+            --bg-dark: #050505;
+            --card-bg: #0f0f0f;
+            --glass: rgba(20, 20, 20, 0.95);
+            --red: #ff4444;
+            --green: #00ff66;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 10%, rgba(255, 204, 0, 0.05) 0%, transparent 50%),
+                url('https://images8.alphacoders.com/132/1328325.png');
+            background-attachment: fixed; background-size: cover;
+            color: #fff; font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER (IDENTICO À IMAGEM ENVIADA) --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; background: rgba(0, 0, 0, 0.95);
+            border-bottom: 2px solid var(--primary);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-family: 'Orbitron'; font-size: 2rem; font-weight: 900; color: #fff; text-decoration: none; letter-spacing: 1px; }
+        .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+        
+        .auth-nav { display: flex; align-items: center; gap: 30px; }
+        
+        .link-login {
+            color: #888; text-decoration: none; font-family: 'Orbitron'; 
+            font-size: 0.9rem; font-weight: bold; transition: 0.3s; letter-spacing: 1px;
+        }
+        .link-login:hover { color: #fff; }
+
+        .btn-register {
+            background: var(--primary); color: #000;
+            padding: 12px 25px; border-radius: 4px;
+            font-family: 'Orbitron'; font-weight: 900; font-size: 0.9rem;
+            text-decoration: none; transition: 0.3s; letter-spacing: 1px;
+        }
+        .btn-register:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
+
+        /* --- TICKER --- */
+        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid #333; height: 40px; display: flex; align-items: center; }
+        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 2rem; font-size: 0.9rem; color: #ccc; font-family: 'Orbitron'; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        /* --- HERO --- */
+        .hero { padding: 100px 5% 60px; text-align: center; }
+        .hero h1 { font-family: 'Orbitron'; font-size: clamp(2.5rem, 6vw, 4.5rem); font-style: italic; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
+        .hero h1 span { color: var(--primary); display: block; }
+        .hero p { color: #888; font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+
+        /* --- CONTEÚDO --- */
+        .container { padding: 40px 8%; }
+        .section-title { font-family: 'Orbitron'; font-size: 1.5rem; margin-bottom: 40px; display: flex; align-items: center; gap: 15px; text-transform: uppercase; }
+        .section-title::before { content: '⚡'; color: var(--primary); }
+
+        /* --- CARDS (IGUAIS AO DO USUÁRIO) --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 25px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-8px); border-color: rgba(255,204,0,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 25px; font-size: 1rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
+        .skin-img { width: 100%; height: 180px; object-fit: contain; margin: 20px 0 10px; align-self: center; }
+        .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; text-align: center; margin-bottom: 20px; }
+        
+        .stats-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: #666; margin-bottom: 5px; font-family: 'Orbitron'; font-weight: bold; }
+        .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
+        .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; }
+        
+        /* Bônus Box */
+        .bonus-box { border: 1px dashed var(--primary); background: rgba(255, 204, 0, 0.03); border-radius: 6px; padding: 10px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .bonus-img { width: 40px; height: 30px; object-fit: contain; }
+        .bonus-info { font-size: 0.7rem; color: #ccc; text-transform: uppercase; font-weight: bold; }
+        .bonus-title { color: var(--primary); font-family: 'Orbitron'; font-size: 0.65rem; display: block; margin-bottom: 2px; }
+
+        /* Mini Ranking */
+        .mini-ranking { background: rgba(0,0,0,0.3); border-radius: 4px; padding: 10px; margin-bottom: 20px; font-size: 0.7rem; }
+        .ranking-header { display: flex; justify-content: space-between; color: #666; font-family: 'Orbitron'; margin-bottom: 8px; font-weight: bold; }
+        .ranking-row { display: flex; justify-content: space-between; margin-bottom: 4px; color: #aaa; }
+        .rank-pos { margin-right: 5px; font-weight: bold; }
+
+        .btn-participar { 
+            width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); 
+            font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; 
+        }
+        .btn-participar:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px rgba(255,204,0,0.4); }
+
+        /* RANKINGS FOOTER */
+        .rankings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-top: 80px; }
+        .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; }
+        .rank-title { font-family: 'Orbitron'; font-size: 1rem; color: #fff; text-transform: uppercase; margin-bottom: 25px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+        .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 10px; }
+
+        footer { text-align: center; padding: 60px; color: #444; font-family: 'Orbitron'; font-size: 0.7rem; border-top: 1px solid #111; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">COB<span>RIFAS</span></a>
+        <div class="auth-nav">
+            <a href="login.html" class="link-login">LOGIN</a>
+            <a href="cadastro.html" class="btn-register">CRIAR CONTA</a>
+        </div>
+    </header>
+
+    <div class="ticker-wrap"><div class="ticker" id="tickerContainer"></div></div>
+
+    <section class="hero">
+        <h1 id="heroTitle">SUA PRÓXIMA <span>SKIN DE ELITE</span></h1>
+        <p id="heroDesc">Participe de sorteios rápidos e seguros com as melhores skins de Counter-Strike 2.</p>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">RIFAS ATIVAS</h2>
+        <div class="grid" id="gridLoja"></div>
+
+        <div class="rankings-grid">
+            <div class="rank-card">
+                <div class="rank-title">🏆 ÚLTIMOS GANHADORES</div>
+                <div class="rank-item" style="border-left-color: var(--primary)">
+                    <span>Sem vencedores recentes<br> <small style="color:#888">Aguardando sorteio...</small></span>
+                </div>
+            </div>
+            
+            <div class="rank-card">
+                <div class="rank-title">💎 TOP MEMBROS (COTAS)</div>
+                <div id="globalRankingList"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>COBRIFAS © 2026 - TODOS OS DIREITOS RESERVADOS.</footer>
+
+    <script>
+        function init() {
+            renderConfig();
+            renderLoja();
+            renderGlobalRanking();
+        }
+
+        /* --- CARREGA CONFIG DO ADMIN --- */
+        function renderConfig() {
+            const c = JSON.parse(localStorage.getItem('configSite')) || {};
+            if(c.titulo) document.getElementById('heroTitle').innerHTML = c.titulo;
+            if(c.ticker) document.getElementById('tickerContainer').innerHTML = c.ticker.split('\n').map(m => `<div class="ticker-item">${m}</div>`).join('');
+        }
+
+        /* --- RENDERIZA RIFAS (IGUAL USUÁRIO, MAS BOTÃO VAI PRO LOGIN) --- */
+        function renderLoja() {
+            const rifas = JSON.parse(localStorage.getItem('rifas')) || [];
+            const grid = document.getElementById('gridLoja');
+            
+            if(rifas.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:#555;">Nenhuma rifa ativa no momento.</div>';
+                return;
+            }
+
+            grid.innerHTML = rifas.map((r, i) => {
+                const pct = (r.vendidas/r.total)*100;
+                
+                // HTML do Bônus
+                const bonusHtml = r.bonus ? `
+                    <div class="bonus-box">
+                        <img src="${r.bonus.img}" class="bonus-img">
+                        <div class="bonus-info">
+                            <span class="bonus-title">🏆 TOP COMPRADOR:</span>
+                            ${r.bonus.nome}
+                        </div>
+                    </div>` : '';
+
+                // HTML do Ranking Dinâmico da Rifa
+                const rankingHtml = gerarRankingHTML(r.nome);
+
+                return `
+                <div class="card">
+                    <div class="price-badge">R$ ${r.preco}</div>
+                    <img src="${r.img}" class="skin-img">
+                    <h3>${r.nome}</h3>
+                    
+                    <div class="stats-row">
+                        <span>RESTANTES:</span> <span>${r.total - r.vendidas}</span>
+                    </div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div>
+                    
+                    ${bonusHtml}
+                    ${rankingHtml}
+                    
+                    <button class="btn-participar" onclick="irParaLogin()">PARTICIPAR</button>
+                </div>`;
+            }).join('');
+        }
+
+        function gerarRankingHTML(nomeRifa) {
+            const pagamentos = JSON.parse(localStorage.getItem('pagamentos')) || [];
+            const vendas = pagamentos.filter(p => p.status === 'aprovado' && p.rifa === nomeRifa);
+            
+            if (vendas.length === 0) return '<div class="mini-ranking" style="text-align:center; color:#555; padding:15px;">Seja o primeiro a comprar!</div>';
+
+            const ranking = {};
+            vendas.forEach(v => {
+                if (!ranking[v.usuario]) ranking[v.usuario] = 0;
+                ranking[v.usuario] += parseInt(v.cotas);
+            });
+
+            const top3 = Object.entries(ranking)
+                .map(([user, qtd]) => ({ user, qtd }))
+                .sort((a, b) => b.qtd - a.qtd)
+                .slice(0, 3);
+
+            let html = `<div class="mini-ranking"><div class="ranking-header"><span>RANKING DA RIFA</span><span>COTAS</span></div>`;
+            top3.forEach((item, index) => {
+                let cor = index === 0 ? 'var(--primary)' : index === 1 ? 'var(--silver)' : 'var(--bronze)';
+                html += `<div class="ranking-row"><span><b style="color:${cor}" class="rank-pos">${index + 1}.</b> ${item.user}</span><span style="color:#fff">${item.qtd}</span></div>`;
+            });
+            html += `</div>`;
+            return html;
+        }
+
+        /* --- RANKING GLOBAL --- */
+        function renderGlobalRanking() {
+            const pagamentos = JSON.parse(localStorage.getItem('pagamentos')) || [];
+            const aprovados = pagamentos.filter(p => p.status === 'aprovado');
+            const ranking = {};
+
+            aprovados.forEach(p => {
+                if (!ranking[p.usuario]) ranking[p.usuario] = 0;
+                ranking[p.usuario] += parseInt(p.cotas);
+            });
+
+            const sorted = Object.entries(ranking).map(([user, cotas]) => ({ user, cotas })).sort((a, b) => b.cotas - a.cotas).slice(0, 5);
+            const container = document.getElementById('globalRankingList');
+            
+            if (sorted.length === 0) { container.innerHTML = '<div style="padding:15px;text-align:center;color:#666;">Sem dados.</div>'; return; }
+
+            container.innerHTML = sorted.map((item, i) => `
+                <div class="rank-item" style="border-left-color: var(--primary)">
+                    <span>${i+1}. ${item.user}</span>
+                    <b style="color:var(--primary)">${item.cotas} Cotas</b>
+                </div>
+            `).join('');
+        }
+
+        function irParaLogin() {
+            window.location.href = 'login.html';
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

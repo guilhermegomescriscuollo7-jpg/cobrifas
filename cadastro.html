@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta | COBRIFAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffcc00;
+            --primary-glow: rgba(255, 204, 0, 0.5);
+            --bg-dark: #050505;
+            --glass: rgba(20, 20, 20, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 204, 0, 0.05) 0%, transparent 50%),
+                url('https://images8.alphacoders.com/132/1328325.png');
+            background-attachment: fixed; background-size: cover;
+            color: var(--white); font-family: 'Rajdhani', sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+
+        header { padding: 40px 0; text-align: center; }
+        .logo { font-family: 'Orbitron'; font-size: 2.2rem; font-weight: 900; color: #fff; text-decoration: none; }
+        .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+
+        .container { width: 90%; max-width: 850px; margin-bottom: 60px; }
+        
+        .section-title { 
+            font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 30px; 
+            display: flex; align-items: center; gap: 10px; text-transform: uppercase; 
+        }
+        .section-title::before { content: '⚡'; color: var(--primary); }
+
+        .glass-panel { 
+            background: var(--glass); backdrop-filter: blur(15px); 
+            border: 1px solid var(--glass-border); border-radius: 12px; padding: 40px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px; }
+        label { color: var(--primary); font-family: 'Orbitron'; font-size: 0.65rem; display: block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        input { 
+            width: 100%; padding: 15px; background: #000; border: 1px solid #333; 
+            color: #fff; border-radius: 4px; font-family: 'Rajdhani'; font-size: 1rem; 
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 10px rgba(255, 204, 0, 0.1); }
+
+        /* Seleção de Ícone */
+        .avatar-selection { margin-top: 30px; }
+        .avatar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 15px; margin-top: 15px; }
+        .avatar-opt { 
+            width: 70px; height: 70px; border-radius: 50%; border: 3px solid transparent; 
+            cursor: pointer; transition: 0.3s; object-fit: cover; background: #222; padding: 3px;
+        }
+        .avatar-opt:hover { border-color: var(--primary); transform: scale(1.1); }
+        .avatar-opt.selected { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+
+        .btn-register { 
+            width: 100%; padding: 18px; background: var(--primary); border: none; 
+            color: #000; font-family: 'Orbitron'; font-weight: 900; font-size: 0.9rem; 
+            cursor: pointer; transition: 0.3s; margin-top: 40px; text-transform: uppercase;
+        }
+        .btn-register:hover { box-shadow: 0 0 25px var(--primary-glow); transform: translateY(-2px); }
+
+        .login-link { text-align: center; margin-top: 25px; font-size: 0.9rem; color: #888; }
+        .login-link a { color: var(--primary); text-decoration: none; font-weight: bold; }
+
+        @media (max-width: 650px) { .form-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">COB<span>RIFAS</span></a>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">CADASTRAR NOVO MEMBRO</h2>
+        
+        <div class="glass-panel">
+            <div class="form-grid">
+                <div>
+                    <label>NOME COMPLETO</label>
+                    <input type="text" id="regNome" placeholder="Seu nome real">
+                </div>
+                <div>
+                    <label>NICK (NOME DE EXIBIÇÃO)</label>
+                    <input type="text" id="regNick" placeholder="Ex: ProPlayer_CS">
+                </div>
+                <div>
+                    <label>TELEFONE / WHATSAPP</label>
+                    <input type="text" id="regTel" placeholder="(00) 00000-0000">
+                </div>
+                <div>
+                    <label>CPF (OBRIGATÓRIO)</label>
+                    <input type="text" id="regCpf" placeholder="000.000.000-00">
+                </div>
+                <div>
+                    <label>SENHA DE ACESSO</label>
+                    <input type="password" id="regPass" placeholder="••••••••">
+                </div>
+                <div>
+                    <label>CONFIRMAR SENHA</label>
+                    <input type="password" id="regConfirm" placeholder="••••••••">
+                </div>
+            </div>
+
+            <div class="avatar-selection">
+                <label>ESCOLHA SEU ÍCONE DE MEMBRO:</label>
+                <div class="avatar-grid" id="avatarGrid"></div>
+            </div>
+
+            <button class="btn-register" onclick="finalizarCadastro()">CRIAR MINHA CONTA DE MEMBRO AGORA</button>
+
+            <div class="login-link">
+                Já faz parte do time? <a href="login.html">Faça login aqui</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const avatares = [
+            "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+            "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+            "https://cdn-icons-png.flaticon.com/512/4333/4333609.png",
+            "https://cdn-icons-png.flaticon.com/512/236/236831.png",
+            "https://cdn-icons-png.flaticon.com/512/4140/4140048.png",
+            "https://cdn-icons-png.flaticon.com/512/6997/6997662.png"
+        ];
+
+        let avatarSelecionado = avatares[0];
+
+        window.onload = function() {
+            const grid = document.getElementById('avatarGrid');
+            grid.innerHTML = avatares.map((url, index) => `
+                <img src="${url}" class="avatar-opt ${index === 0 ? 'selected' : ''}" 
+                     onclick="escolherAvatar(this, '${url}')">
+            `).join('');
+        };
+
+        function escolherAvatar(el, url) {
+            document.querySelectorAll('.avatar-opt').forEach(img => img.classList.remove('selected'));
+            el.classList.add('selected');
+            avatarSelecionado = url;
+        }
+
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/[^\d]+/g,'');
+            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+            let add = 0;
+            for (let i = 0; i < 9; i++) add += parseInt(cpf.charAt(i)) * (10 - i);
+            let rev = 11 - (add % 11);
+            if (rev === 10 || rev === 11) rev = 0;
+            if (rev !== parseInt(cpf.charAt(9))) return false;
+            add = 0;
+            for (let i = 0; i < 10; i++) add += parseInt(cpf.charAt(i)) * (11 - i);
+            rev = 11 - (add % 11);
+            if (rev === 10 || rev === 11) rev = 0;
+            if (rev !== parseInt(cpf.charAt(10))) return false;
+            return true;
+        }
+
+        function finalizarCadastro() {
+            const nome = document.getElementById('regNome').value.trim();
+            const nick = document.getElementById('regNick').value.trim();
+            const tel = document.getElementById('regTel').value.trim();
+            const cpf = document.getElementById('regCpf').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const confirm = document.getElementById('regConfirm').value;
+
+            if (!nome || !nick || !tel || !cpf || !pass) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            if (!validarCPF(cpf)) {
+                alert("CPF inválido! Verifique os dados.");
+                return;
+            }
+
+            if (pass !== confirm) {
+                alert("As senhas não coincidem!");
+                return;
+            }
+
+            // Lógica de armazenamento usando "membros" em vez de "usuarios"
+            let membros = JSON.parse(localStorage.getItem('membros')) || [];
+
+            if (membros.some(m => m.cpf === cpf)) {
+                alert("Este CPF já está cadastrado!");
+                return;
+            }
+
+            const novoMembro = {
+                nome: nome,
+                nick: nick,
+                tel: tel,
+                cpf: cpf,
+                pass: pass,
+                avatar: avatarSelecionado,
+                cargo: "MEMBRO"
+            };
+
+            membros.push(novoMembro);
+            localStorage.setItem('membros', JSON.stringify(membros));
+
+            alert("Cadastro de Membro realizado com sucesso!");
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

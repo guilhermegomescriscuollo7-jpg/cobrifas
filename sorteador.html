@@ -68,6 +68,17 @@
             font-family: 'Orbitron'; font-size: 0.7rem; border-radius: 4px;
         }
 
+        /* --- HISTÓRICO (NOVO CSS) --- */
+        .history-container { width: 90%; max-width: 1200px; margin-top: 80px; margin-bottom: 50px; }
+        .glass-table-panel { background: var(--glass-bg); border: var(--glass-border); border-radius: 15px; padding: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        th { text-align: left; padding: 15px; font-family: 'Orbitron'; color: var(--primary); text-transform: uppercase; font-size: 0.8rem; }
+        td { background: rgba(255,255,255,0.03); padding: 15px; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
+        tr td:first-child { border-radius: 8px 0 0 8px; border-left: 2px solid var(--primary); }
+        tr td:last-child { border-radius: 0 8px 8px 0; }
+        .hist-date { color: #888; font-size: 0.9rem; }
+        .hist-num { color: var(--primary); font-family: 'Orbitron'; font-weight: bold; font-size: 1.2rem; }
+
         /* --- TELA DE SORTEIO (MODAL FULLSCREEN) --- */
         #sorteioScreen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -130,6 +141,25 @@
         </div>
     </div>
 
+    <div class="history-container">
+        <h2 class="page-title">Histórico de Sorteios</h2>
+        <div class="glass-table-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DATA / HORA</th>
+                        <th>RIFA</th>
+                        <th>GANHADOR</th>
+                        <th>NÚMERO</th>
+                    </tr>
+                </thead>
+                <tbody id="listaHistorico">
+                    <tr><td colspan="4" align="center">Carregando histórico...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <div id="sorteioScreen">
         <div class="btn-close" onclick="fecharSorteio()">×</div>
         
@@ -166,28 +196,35 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // 1. CARREGAR RIFAS QUE PODEM SER SORTEADAS
+        // 1. CARREGAR RIFAS E HISTÓRICO
         function carregarRifas() {
             db.ref('rifas').on('value', snapshot => {
                 const rifas = snapshot.val() || {};
-                const container = document.getElementById('gridSorteios');
-                container.innerHTML = '';
+                const containerSorteios = document.getElementById('gridSorteios');
+                const containerHistorico = document.getElementById('listaHistorico');
+                
+                containerSorteios.innerHTML = '';
+                containerHistorico.innerHTML = '';
 
-                let temRifa = false;
+                let temRifaAtiva = false;
+                let temHistorico = false;
 
+                // Ordenar para mostrar as mais recentes no histórico? 
+                // Como Firebase retorna chaves ordenadas por criação, iteramos normalmente.
+                
                 Object.keys(rifas).forEach(id => {
                     const r = rifas[id];
                     const total = parseInt(r.total);
                     const vendidas = r.numerosVendidos ? r.numerosVendidos.length : 0;
                     
-                    // Mostrar apenas se estiver 100% vendida ou já tiver ganhador
+                    // --- PREENCHE A GRADE (Sorteios Ativos ou Recém Finalizados) ---
                     if (vendidas >= total || r.ganhador) {
-                        temRifa = true;
+                        temRifaAtiva = true;
                         const status = r.ganhador ? "FINALIZADA" : "AGUARDANDO SORTEIO";
                         const btnText = r.ganhador ? "VER RESULTADO" : "REALIZAR SORTEIO";
-                        const corBtn = r.ganhador ? "background:#fff;" : ""; // Branco se ja foi, amarelo se nao
+                        const corBtn = r.ganhador ? "background:#fff;" : ""; 
 
-                        container.innerHTML += `
+                        containerSorteios.innerHTML += `
                             <div class="rifa-card">
                                 <div class="status-badge">${status}</div>
                                 <img src="${r.img}" class="rifa-img">
@@ -199,9 +236,44 @@
                             </div>
                         `;
                     }
+
+                    // --- PREENCHE O HISTÓRICO (Apenas Finalizadas) ---
+                    if (r.ganhador) {
+                        temHistorico = true;
+                        // Formatar Data
+                        let dataFormatada = "Data desconhecida";
+                        if(r.ganhador.data) {
+                            const d = new Date(r.ganhador.data);
+                            dataFormatada = d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+                        } else if(r.ganhador.dataSorteio) {
+                             // Fallback para versões antigas se houver
+                             dataFormatada = r.ganhador.dataSorteio;
+                        }
+
+                        // CPF Mascarado para o histórico
+                        const cpfMascarado = mascararCPF(r.ganhador.cpf || "00000000000");
+
+                        containerHistorico.innerHTML += `
+                            <tr>
+                                <td class="hist-date">${dataFormatada}</td>
+                                <td>
+                                    <div style="display:flex; align-items:center; gap:10px;">
+                                        <img src="${r.img}" style="width:40px; height:40px; border-radius:6px; object-fit:cover; border:1px solid #333;">
+                                        <span style="font-weight:bold;">${r.nome}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-weight:bold;">${r.ganhador.nome}</div>
+                                    <div style="font-size:0.8rem; color:#666;">CPF: ${cpfMascarado}</div>
+                                </td>
+                                <td class="hist-num">${r.ganhador.numero}</td>
+                            </tr>
+                        `;
+                    }
                 });
 
-                if(!temRifa) container.innerHTML = '<p style="text-align:center; color:#666;">Nenhuma rifa pronta para sorteio no momento.</p>';
+                if(!temRifaAtiva) containerSorteios.innerHTML = '<p style="text-align:center; color:#666;">Nenhuma rifa pronta para sorteio no momento.</p>';
+                if(!temHistorico) containerHistorico.innerHTML = '<tr><td colspan="4" align="center" style="padding:30px; color:#666;">Nenhum sorteio realizado ainda.</td></tr>';
             });
         }
 
@@ -316,10 +388,8 @@
 
                 // Configurar botão de Chat
                 // Redireciona para o admin já "setando" o CPF para abrir o chat
-                // Nota: Você precisará adicionar uma pequena lógica no admin.html para ler ?chatCPF=...
                 const btnChat = document.getElementById('btnChatLink');
                 btnChat.onclick = function() {
-                    // Salva no LocalStorage ou manda via URL
                     window.location.href = `admin.html?openChat=${user.cpf}`;
                 };
 
@@ -329,7 +399,6 @@
         // --- MÁSCARAS DE PRIVACIDADE ---
         function mascararCPF(cpf) {
             // Ex: 123.456.789-00 -> ***.456.789-**
-            // Se vier limpo: 12345678900
             let limpo = cpf.replace(/\D/g, '');
             if(limpo.length !== 11) return "***.***.***-**";
             return `***.${limpo.substr(3,3)}.${limpo.substr(6,3)}-**`;

@@ -18,8 +18,6 @@
             --glass: rgba(20, 20, 20, 0.95);
             --red: #ff4444;
             --green: #00ff66;
-            --silver: #c0c0c0;
-            --bronze: #cd7f32;
             --btn-orange: #f1b44c;
         }
 
@@ -34,57 +32,45 @@
             overflow-x: hidden;
         }
 
-        /* HEADER */
+        /* --- HEADER --- */
         header { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
         .logo { font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900; color: #fff; text-decoration: none; }
-        .logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        .logo span { color: var(--primary); }
         .nav-user { display: flex; gap: 5px; align-items: center; }
-        .nav-item { text-decoration: none; font-family: 'Orbitron'; font-weight: bold; font-size: 0.65rem; padding: 10px 15px; border-radius: 2px; transition: 0.4s; text-transform: uppercase; color: #888; cursor: pointer; border: 1px solid transparent; }
+        .nav-item { text-decoration: none; font-family: 'Orbitron'; font-weight: bold; font-size: 0.65rem; padding: 10px 15px; border-radius: 2px; transition: 0.3s; color: #888; cursor: pointer; border: 1px solid transparent; text-transform: uppercase; }
         .nav-item:hover, .nav-item.active { color: var(--primary); border-color: rgba(255,204,0,0.3); background: rgba(255, 204, 0, 0.05); }
         
-        .cart-icon-btn { font-size: 1.2rem; color: var(--primary); margin: 0 15px; cursor: pointer; position: relative; display: flex; align-items: center; }
-        .cart-count { position: absolute; top: -8px; right: -8px; background: var(--red); color: #fff; font-size: 0.6rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .user-header-profile { display: flex; align-items: center; gap: 12px; margin: 0 15px; cursor: pointer; }
-        .user-avatar-circle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: 0 0 10px var(--primary-glow); }
-        .user-name-header { font-family: 'Orbitron'; font-size: 0.85rem; color: var(--primary); font-weight: 900; text-transform: uppercase; }
-        .btn-exit { color: var(--red); border: 1px solid var(--red); padding: 8px 18px; font-family: 'Orbitron'; font-weight: bold; font-size: 0.65rem; cursor: pointer; border-radius: 2px; transition: 0.3s; }
+        .cart-btn { position: relative; cursor: pointer; margin: 0 15px; color: var(--primary); font-size: 1.2rem; }
+        .cart-badge { position: absolute; top: -8px; right: -8px; background: var(--red); color: #fff; font-size: 0.6rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
-        /* SIDEBAR CARRINHO */
-        #cartSidebar { position: fixed; top: 0; right: -400px; width: 400px; height: 100vh; background: var(--glass); border-left: 2px solid var(--primary); z-index: 2000; padding: 30px; transition: 0.5s ease; display: flex; flex-direction: column; backdrop-filter: blur(20px); }
+        /* --- SIDEBAR CARRINHO --- */
+        #cartSidebar { position: fixed; top: 0; right: -400px; width: 350px; height: 100vh; background: var(--glass); border-left: 2px solid var(--primary); z-index: 2000; padding: 30px; transition: 0.4s ease; display: flex; flex-direction: column; backdrop-filter: blur(20px); }
         #cartSidebar.open { right: 0; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-        /* HERO & TICKER */
-        .hero { padding: 80px 5% 40px; text-align: center; }
-        .hero h1 { font-family: 'Orbitron'; font-size: clamp(2rem, 5vw, 4rem); font-style: italic; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
-        .hero h1 span { color: var(--primary); display: block; }
-        .hero p { color: #888; font-size: 1rem; max-width: 600px; margin: 0 auto; }
+        /* --- LAYOUT & CONTEÚDO --- */
         .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid #333; height: 40px; display: flex; align-items: center; }
         .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 2rem; font-size: 0.9rem; color: #ccc; font-family: 'Orbitron'; }
+        .ticker-item { display: inline-block; padding: 0 2rem; font-size: 0.8rem; color: #ccc; font-family: 'Orbitron'; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* CONTEÚDO */
         .container { padding: 40px 8%; }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .section-title { font-family: 'Orbitron'; font-size: 1.5rem; margin-bottom: 40px; display: flex; align-items: center; gap: 15px; text-transform: uppercase; }
-        .section-title::before { content: '⚡'; color: var(--primary); }
 
-        /* CARDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        /* --- CARDS LOJA --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 25px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
-        .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 25px; font-size: 1rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
-        .skin-img { width: 100%; height: 160px; object-fit: contain; margin: 20px 0 10px; align-self: center; }
-        .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; text-align: center; margin-bottom: 20px; }
-        .stats-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: #666; margin-bottom: 5px; font-family: 'Orbitron'; font-weight: bold; }
-        .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
-        .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; }
-        .btn-participar { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; }
-        .btn-participar:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px rgba(255,204,0,0.4); }
+        .price-tag { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 20px; font-size: 1rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
+        .skin-img { width: 100%; height: 150px; object-fit: contain; margin: 20px 0; align-self: center; }
+        .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 15px; }
+        .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; transition: 0.5s; }
+        .btn-action { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; }
 
-        /* MODAL DE COTAS TÁTICO */
+        /* --- POPUP COTAS TÁTICO --- */
         #modalCotas { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
         .modal-card-cota { background: #e9ecef; width: 95%; max-width: 650px; border-radius: 12px; overflow: hidden; }
         .modal-header-text { background: #fff; color: #555; text-align: center; padding: 12px; font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid #ddd; }
@@ -103,7 +89,7 @@
         .btn-final { background: var(--btn-orange); border: none; border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; }
         .btn-final b { font-size: 1.1rem; display: block; color: #000; }
 
-        /* MODAL PIX COM ANEXO */
+        /* --- POPUP PIX COM ANEXO --- */
         #modalPix { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px); }
         .modal-card-pix { background: #111; border: 2px solid var(--primary); padding: 40px; border-radius: 12px; text-align: center; max-width: 450px; width: 90%; }
         .pix-box { background: #222; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #333; text-align: left; }
@@ -111,14 +97,14 @@
         .upload-label:hover { border-color: var(--primary); color: var(--primary); }
         .btn-disabled { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
 
-        /* OUTROS ESTILOS */
+        /* --- CHAT, PERFIL E RANKINGS --- */
         #chatBox { height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; }
         .msg-u { align-self: flex-end; background: var(--primary); color: #000; padding: 10px 15px; border-radius: 8px; max-width: 75%; font-weight: 600; }
         .msg-a { align-self: flex-start; background: #333; color: #fff; padding: 10px 15px; border-radius: 8px; max-width: 75%; }
         .ticket-box { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #444; }
         .n-badge { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 3px; font-family: Orbitron; font-size: 0.7rem; margin: 3px; display: inline-block; font-weight: bold; }
         .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; }
-        .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -130,12 +116,12 @@
             <div class="nav-item" onclick="tab('minhas')">Minhas Rifas</div>
             <div class="nav-item" onclick="tab('suporte')">Suporte</div>
             <div class="nav-item" onclick="tab('perfil')">Perfil</div>
-            <div class="cart-icon-btn" onclick="toggleCart()">🛒 <div class="cart-count" id="cartCount">0</div></div>
-            <div class="user-header-profile" onclick="tab('perfil')">
-                <img src="" id="headAvatar" class="user-avatar-circle">
-                <span id="headName" class="user-name-header"></span>
+            <div class="cart-btn" onclick="toggleCart()">🛒 <div class="cart-badge" id="cartCount">0</div></div>
+            <div class="user-profile" onclick="tab('perfil')">
+                <img src="" id="headAvatar" class="avatar">
+                <span id="headName" class="user-name-header">...</span>
             </div>
-            <div class="btn-exit" onclick="logout()" style="color:var(--red); border:1px solid var(--red); padding:5px 15px; border-radius:2px; font-size:0.6rem; cursor:pointer;">SAIR</div>
+            <div style="color:red; font-size:0.6rem; cursor:pointer; font-family:Orbitron; margin-left:10px;" onclick="logout()">SAIR</div>
         </nav>
     </header>
 
@@ -157,8 +143,8 @@
             <div class="grid" id="gridLoja"></div>
             
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:40px; margin-top:60px;">
-                <div class="rank-card"><div style="font-family:Orbitron; margin-bottom:20px;">🏆 GANHADORES RECENTES</div><div id="recentWinnersList"></div></div>
-                <div class="rank-card"><div style="font-family:Orbitron; margin-bottom:20px;">💎 TOP MEMBROS</div><div id="globalRankingList"></div></div>
+                <div class="rank-card"><div style="font-family:Orbitron; margin-bottom:20px;">🏆 ÚLTIMOS SORTEIOS</div><div id="recentWinnersList"></div></div>
+                <div class="rank-card"><div style="font-family:Orbitron; margin-bottom:20px;">💎 TOP COMPRADORES</div><div id="globalRankingList"></div></div>
             </div>
         </section>
 
@@ -172,22 +158,22 @@
             <div class="glass-panel">
                 <div id="chatBox"></div>
                 <div style="display:flex; gap:10px; margin-top:20px;">
-                    <input type="text" id="chatInput" placeholder="Mensagem para o comando central..." style="flex:1; padding:12px; background:#000; border:1px solid #333; color:#fff;">
-                    <button class="btn-action" style="width:auto; padding:0 30px; background:var(--primary); border:none; color:#000; font-family:Orbitron; font-weight:900; cursor:pointer;" onclick="enviarMsg()">ENVIAR</button>
+                    <input type="text" id="chatInput" placeholder="Sua dúvida..." style="flex:1; padding:12px; background:#000; border:1px solid #333; color:#fff;">
+                    <button class="btn-action" style="width:auto; padding:0 30px; background:var(--primary); border:none; color:#000; font-weight:900;" onclick="enviarMsg()">ENVIAR</button>
                 </div>
             </div>
         </section>
 
         <section id="perfil" class="tab-content">
-            <h2 class="section-title">DADOS DO OPERADOR</h2>
+            <h2 class="section-title">MEU PERFIL</h2>
             <div class="glass-panel">
-                <div class="form-grid">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
                     <div class="input-group"><label>NOME COMPLETO</label><input type="text" id="pNome"></div>
                     <div class="input-group"><label>NICKNAME</label><input type="text" id="pNick"></div>
                     <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
                     <div class="input-group"><label>CPF</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
                 </div>
-                <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none; width:100%; padding:15px; font-family:Orbitron; font-weight:900; cursor:pointer;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
+                <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none; width:100%; padding:15px; font-weight:900;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
             </div>
         </section>
     </div>
@@ -222,17 +208,17 @@
                 <input type="file" id="compInput" accept="image/*, application/pdf" style="display:none;" onchange="validarArquivo()">
                 <small id="fileName" style="color:var(--green); display:block; margin-top:10px; font-weight:bold;"></small>
             </div>
-            <button id="btnFinalizarPix" class="btn-action btn-disabled" style="background:var(--primary); color:#000; border:none; width:100%; margin-top:20px; padding:15px; font-family:Orbitron; font-weight:900; cursor:pointer;" onclick="enviarPedidoFirebase()">JÁ REALIZEI O PAGAMENTO</button>
-            <button class="btn-action" style="background:transparent; color:#888; border:none; margin-top:10px; width:100%; cursor:pointer;" onclick="document.getElementById('modalPix').style.display='none'">CANCELAR</button>
+            <button id="btnFinalizarPix" class="btn-action btn-disabled" style="background:var(--primary); color:#000; border:none; width:100%; margin-top:20px; padding:15px; font-weight:900;" onclick="enviarPedidoFirebase()">JÁ REALIZEI O PAGAMENTO</button>
+            <button class="btn-action" style="background:transparent; color:#888; border:none; margin-top:10px; width:100%;" onclick="document.getElementById('modalPix').style.display='none'">CANCELAR</button>
         </div>
     </div>
 
     <div id="modalVictory" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px);">
         <div style="text-align: center; width: 100%; max-width: 500px; padding: 40px; border: 2px solid var(--primary); border-radius: 20px; background: #000; box-shadow: 0 0 100px var(--primary);">
-            <h1 style="color:var(--primary); font-family:'Orbitron';">🏆 PARABÉNS!</h1>
+            <h1 style="color:var(--primary); font-family:'Orbitron';">🏆 VITÓRIA!</h1>
             <p style="color:#fff; font-size:1.2rem; margin:20px 0;">Você foi sorteado na rifa: <br><b id="vicItemName" style="font-size:1.5rem;">...</b></p>
-            <p>Seu número: <b id="vicNumber" style="color:var(--primary); font-size:2rem;">...</b></p>
-            <button class="btn-action" style="background:var(--primary); color:#000; border:none; width:100%; padding:15px; margin-top:20px;" onclick="document.getElementById('modalVictory').style.display='none'">FECHAR</button>
+            <p>Seu número da sorte: <b id="vicNumber" style="color:var(--primary); font-size:2.5rem;">...</b></p>
+            <button class="btn-action" style="background:var(--primary); color:#000; border:none; width:100%; padding:15px; margin-top:20px; font-weight:900;" onclick="document.getElementById('modalVictory').style.display='none'">RECEBER PRÊMIO</button>
         </div>
     </div>
 
@@ -261,23 +247,14 @@
             loadLoja(); renderConfig(); renderGlobalRanking(); renderGanhadoresRecentes();
         }
 
-        /* --- CARREGAR LOJA REALTIME (A CORREÇÃO) --- */
+        /* --- LOJA COM RIFAS REAIS --- */
         function loadLoja() {
             db.ref('rifas').on('value', s => {
                 const rifas = s.val() || {};
                 const grid = document.getElementById('gridLoja');
                 const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
-                
-                if (ativas.length === 0) {
-                    grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:#555;">Nenhuma rifa ativa encontrada no banco de dados.</div>';
-                    return;
-                }
-
                 grid.innerHTML = ativas.map(id => {
-                    const r = rifas[id];
-                    const vendidas = r.vendidas || 0;
-                    const res = r.total - vendidas;
-                    const p = (vendidas / r.total) * 100;
+                    const r = rifas[id]; const vendidas = r.vendidas || 0; const res = r.total - vendidas; const p = (vendidas / r.total) * 100;
                     return `<div class="card"><div class="price-tag">R$ ${r.preco}</div><img src="${r.img}" class="skin-img"><h3>${r.nome}</h3><div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div><div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div><button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
                 }).join('');
             });
@@ -315,22 +292,21 @@
         function enviarPedidoFirebase() {
             if(!comprovanteBase64) return alert("Anexe o comprovante!");
             carrinho.forEach(it => { db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64, data: new Date().toLocaleString() }); });
-            carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none'; alert("Enviado para análise!"); tab('minhas');
+            carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none'; alert("Enviado!"); tab('minhas');
         }
 
-        /* --- SUPORTE E MINHAS RIFAS --- */
-        function loadMinhas() { db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => { const pags = Object.values(s.val() || {}).reverse(); document.getElementById('listaMinhasRifas').innerHTML = pags.map(p => { const cor = p.status === 'aprovado' ? 'var(--green)' : p.status === 'recusado' ? 'var(--red)' : '#888'; const nums = p.numeros ? p.numeros.map(n => `<span class="n-badge">${n}</span>`).join('') : '<small>Aguardando aprovação...</small>'; return `<div class="ticket-box" style="border-left-color:${cor}"><b>${p.rifa}</b><br><small style="color:${cor}">● ${p.status.toUpperCase()}</small><div style="margin-top:10px;">${nums}</div></div>`; }).join(''); }); }
+        /* --- MINHAS RIFAS E RANKINGS --- */
+        function loadMinhas() { db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => { const pags = Object.values(s.val() || {}).reverse(); document.getElementById('listaMinhasRifas').innerHTML = pags.map(p => { const cor = p.status === 'aprovado' ? 'var(--green)' : p.status === 'recusado' ? 'var(--red)' : '#888'; const nums = p.numeros ? p.numeros.map(n => `<span class="n-badge">${n}</span>`).join('') : '<small>Aguardando PIX...</small>'; return `<div class="ticket-box" style="border-left-color:${cor}"><b>${p.rifa}</b><br><small style="color:${cor}">● ${p.status.toUpperCase()}</small><div style="margin-top:10px;">${nums}</div></div>`; }).join(''); }); }
+        function renderGlobalRanking() { db.ref('pagamentos').on('value', s => { const rank = {}; Object.values(s.val() || {}).filter(p => p.status === 'aprovado').forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); }); const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5); document.getElementById('globalRankingList').innerHTML = sorted.map((it, i) => `<div class="rank-item"><span>${i+1}. ${it[0]}</span><b>${it[1]} Cotas</b></div>`).join('') || 'Sem dados.'; }); }
+        function renderGanhadoresRecentes() { db.ref('rifas').on('value', s => { const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5); document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `<div class="rank-item"><span>${r.ganhador.nome.split(' ')[0]}... <br> <small>${r.nome}</small></span><b>#${r.ganhador.numero}</b></div>`).join('') || 'Aguardando sorteios...'; }); }
+
+        function checkVitorias() { db.ref('rifas').on('value', s => { const rifas = s.val() || {}; Object.keys(rifas).forEach(id => { const r = rifas[id]; if(r.ganhador && r.ganhador.cpfReal === userAtivo.cpf && !r.ganhador.vistoPeloUser) { document.getElementById('vicItemName').innerText = r.nome; document.getElementById('vicNumber').innerText = r.ganhador.numero; document.getElementById('modalVictory').style.display = 'flex'; db.ref(`rifas/${id}/ganhador`).update({vistoPeloUser: true}); } }); }); }
         function carregarChat() { db.ref('chatLog').orderByChild('userCpf').equalTo(userAtivo.cpf).on('value', s => { const logs = Object.values(s.val() || {}); document.getElementById('chatBox').innerHTML = logs.map(m => `<div class="${m.from==='user'?'msg-u':'msg-a'}">${m.text}</div>`).join(''); document.getElementById('chatBox').scrollTop = 9999; }); }
         function enviarMsg() { const t = document.getElementById('chatInput').value; if(t) db.ref('chatLog').push({ userCpf: userAtivo.cpf, from: 'user', text: t, time: new Date().toLocaleTimeString() }); document.getElementById('chatInput').value = ''; }
-        function checkVitorias() { db.ref('rifas').on('value', s => { const rifas = Object.values(s.val() || {}); rifas.forEach(r => { if(r.ganhador && r.ganhador.cpfReal === userAtivo.cpf && !r.ganhador.vistoPeloUser) { document.getElementById('vicItemName').innerText = r.nome; document.getElementById('vicNumber').innerText = r.ganhador.numero; document.getElementById('modalVictory').style.display = 'flex'; db.ref(`rifas/${r.id}/ganhador`).update({vistoPeloUser: true}); } }); }); }
-
         function tab(id) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function renderConfig() { db.ref('configSite/ticker').on('value', s => { if(s.val()) document.getElementById('tickerContainer').innerHTML = s.val().split('\n').map(m => `<div class="ticker-item">${m}</div>`).join(''); }); }
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
         function saveP() { db.ref('membros/'+userFirebaseId).update({ nome: document.getElementById('pNome').value, tel: document.getElementById('pTel').value, nick: document.getElementById('pNick').value }).then(() => alert("Salvo!")); }
-        function renderConfig() { db.ref('configSite').on('value', s => { if(s.val() && s.val().ticker) document.getElementById('tickerContainer').innerHTML = s.val().ticker.split('\n').map(m => `<div class="ticker-item">${m}</div>`).join(''); }); }
-        function renderGlobalRanking() { db.ref('pagamentos').on('value', s => { const rank = {}; Object.values(s.val() || {}).filter(p => p.status === 'aprovado').forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); }); const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5); document.getElementById('globalRankingList').innerHTML = sorted.map((it, i) => `<div class="rank-item"><span>${i+1}. ${it[0]}</span><b>${it[1]} Cotas</b></div>`).join(''); }); }
-        function renderGanhadoresRecentes() { db.ref('rifas').on('value', s => { const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5); document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `<div class="rank-item"><span>${r.ganhador.nome.split(' ')[0]}... <br> <small>${r.nome}</small></span><b>#${r.ganhador.numero}</b></div>`).join(''); }); }
-
         window.onload = carregarPagina;
     </script>
 </body>

@@ -267,9 +267,19 @@
                 document.getElementById('listaRifasAdm').innerHTML = Object.keys(rifas).map(id => {
                     const r = rifas[id];
                     const v = r.numerosVendidos ? r.numerosVendidos.length : 0;
+                    // CALCULO DAS COTAS RESTANTES (NOVO)
+                    const restantes = parseInt(r.total) - v;
+                    
                     let btn = r.ganhador ? '🏆 FINALIZADA' : (v >= r.total ? `<button class="btn-action btn-gold" onclick="abrirSorteio('${id}')">SORTEAR</button>` : 'EM ANDAMENTO');
+                    
                     return `<div class="glass-panel" style="display:flex; justify-content:space-between; align-items:center;">
-                        <div style="display:flex; align-items:center; gap:15px;"><img src="${r.img}" style="width:50px;"><b>${r.nome}</b></div>
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <img src="${r.img}" style="width:50px;">
+                            <div>
+                                <b>${r.nome}</b>
+                                <div style="font-size:0.75rem; color:#aaa;">Restam: <span style="color:var(--primary); font-weight:bold;">${restantes}</span> / ${r.total}</div>
+                            </div>
+                        </div>
                         <div>${btn} <button class="btn-action btn-red" onclick="if(confirm('Excluir?')) db.ref('rifas/${id}').remove()">X</button></div></div>`;
                 }).join('');
             });

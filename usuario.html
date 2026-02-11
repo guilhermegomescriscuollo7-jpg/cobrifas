@@ -20,6 +20,7 @@
             --green: #00ff66;
             --silver: #c0c0c0;
             --bronze: #cd7f32;
+            --btn-orange: #f1b44c;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,13 +41,13 @@
         .nav-user { display: flex; gap: 5px; align-items: center; }
         .nav-item { text-decoration: none; font-family: 'Orbitron'; font-weight: bold; font-size: 0.65rem; padding: 10px 15px; border-radius: 2px; transition: 0.4s; text-transform: uppercase; color: #888; cursor: pointer; border: 1px solid transparent; }
         .nav-item:hover, .nav-item.active { color: var(--primary); border-color: rgba(255,204,0,0.3); background: rgba(255, 204, 0, 0.05); }
+        
         .cart-icon-btn { font-size: 1.2rem; color: var(--primary); margin: 0 15px; cursor: pointer; position: relative; display: flex; align-items: center; }
         .cart-count { position: absolute; top: -8px; right: -8px; background: var(--red); color: #fff; font-size: 0.6rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .user-header-profile { display: flex; align-items: center; gap: 12px; margin: 0 15px; cursor: pointer; }
         .user-avatar-circle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: 0 0 10px var(--primary-glow); }
         .user-name-header { font-family: 'Orbitron'; font-size: 0.85rem; color: var(--primary); font-weight: 900; text-transform: uppercase; }
         .btn-exit { color: var(--red); border: 1px solid var(--red); padding: 8px 18px; font-family: 'Orbitron'; font-weight: bold; font-size: 0.65rem; cursor: pointer; border-radius: 2px; transition: 0.3s; }
-        .btn-exit:hover { background: var(--red); color: #fff; }
 
         /* SIDEBAR CARRINHO */
         #cartSidebar { position: fixed; top: 0; right: -400px; width: 400px; height: 100vh; background: var(--glass); border-left: 2px solid var(--primary); z-index: 2000; padding: 30px; transition: 0.5s ease; display: flex; flex-direction: column; backdrop-filter: blur(20px); }
@@ -74,7 +75,6 @@
         /* CARDS */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
         .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-bottom: 4px solid var(--red); padding: 25px; border-radius: 4px; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-5px); border-color: rgba(255,204,0,0.3); }
         .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; font-family: 'Orbitron'; padding: 8px 25px; font-size: 1rem; clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); }
         .skin-img { width: 100%; height: 160px; object-fit: contain; margin: 20px 0 10px; align-self: center; }
         .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; text-align: center; margin-bottom: 20px; }
@@ -83,68 +83,42 @@
         .progress-fill { background: linear-gradient(90deg, #333, var(--primary)); height: 100%; }
         .btn-participar { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: auto; }
         .btn-participar:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px rgba(255,204,0,0.4); }
-        .bonus-box { border: 1px dashed var(--primary); background: rgba(255, 204, 0, 0.03); border-radius: 6px; padding: 10px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .bonus-img { width: 40px; height: 30px; object-fit: contain; }
-        .bonus-info { font-size: 0.7rem; color: #ccc; text-transform: uppercase; font-weight: bold; }
-        .bonus-title { color: var(--primary); font-family: 'Orbitron'; font-size: 0.65rem; display: block; margin-bottom: 2px; }
-        .mini-ranking { background: rgba(0,0,0,0.3); border-radius: 4px; padding: 10px; margin-bottom: 20px; font-size: 0.7rem; }
-        .ranking-header { display: flex; justify-content: space-between; color: #666; font-family: 'Orbitron'; margin-bottom: 8px; font-weight: bold; }
-        .ranking-row { display: flex; justify-content: space-between; margin-bottom: 4px; color: #aaa; }
-        .rank-pos { margin-right: 5px; font-weight: bold; }
 
-        /* MODAL DE COTAS */
+        /* MODAL DE COTAS TÁTICO */
         #modalCotas { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
-        .modal-card { background: #151515; border: 1px solid #333; width: 90%; max-width: 600px; border-radius: 12px; padding: 30px; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #666; }
-        .modal-title { font-family: 'Orbitron'; text-align: center; color: #fff; margin-bottom: 25px; font-size: 1rem; }
-        .cotas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
-        .cota-btn { background: #000; border: 1px solid #333; border-radius: 8px; padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
-        .cota-btn:hover, .cota-btn.active { border-color: var(--primary); background: rgba(255, 204, 0, 0.05); }
-        .cota-qtd { font-family: 'Orbitron'; font-size: 1.5rem; font-weight: 900; color: #fff; display: block; }
-        .cota-preco { font-family: 'Rajdhani'; color: #888; font-size: 0.9rem; font-weight: bold; }
-        .cota-select { font-size: 0.6rem; text-transform: uppercase; color: #666; margin-top: 5px; display: block; }
-        .tag-popular { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; font-size: 0.55rem; font-weight: bold; padding: 2px 10px; border-radius: 0 0 6px 6px; font-family: 'Orbitron'; }
-        .action-row { display: flex; gap: 15px; align-items: center; }
-        .qtd-input-wrapper { display: flex; align-items: center; background: #fff; border-radius: 6px; padding: 5px; flex: 1; justify-content: space-between; }
-        .qtd-btn { width: 40px; height: 40px; border: none; background: transparent; font-size: 1.5rem; cursor: pointer; font-weight: bold; }
-        .qtd-display { font-size: 1.2rem; font-weight: bold; border: none; text-align: center; width: 60px; outline: none; }
-        .btn-confirmar { flex: 2; background: var(--primary); border: none; padding: 15px; border-radius: 6px; font-family: 'Rajdhani'; font-weight: bold; font-size: 1rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
-        .btn-confirmar:hover { filter: brightness(1.1); }
-        .btn-confirmar small { font-size: 0.8rem; font-weight: normal; }
+        .modal-card-cota { background: #e9ecef; width: 95%; max-width: 650px; border-radius: 12px; overflow: hidden; }
+        .modal-header-text { background: #fff; color: #555; text-align: center; padding: 12px; font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid #ddd; }
+        .modal-body { padding: 20px; background: #e9ecef; }
+        .cotas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .cota-item { background: #000; border: 2px solid transparent; border-radius: 10px; padding: 15px 5px; text-align: center; cursor: pointer; position: relative; transition: 0.2s; }
+        .cota-item.active { border-color: var(--primary); background: #fffbeb; }
+        .cota-item.active .cq, .cota-item.active .cp { color: #000; }
+        .cq { font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900; color: #fff; display: block; }
+        .cp { color: #888; font-size: 0.8rem; font-weight: bold; margin: 5px 0; display: block; }
+        .cl { color: #666; font-size: 0.6rem; text-transform: uppercase; font-weight: 900; }
+        .tag-pop { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--btn-orange); color: #fff; font-size: 0.5rem; padding: 3px 10px; border-radius: 20px; font-weight: bold; font-family: Orbitron; }
+        .controls-row { display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; padding: 0 20px 20px; }
+        .qtd-sel { display: flex; align-items: center; background: #fff; border-radius: 8px; padding: 5px; justify-content: space-between; border: 1px solid #ccc; }
+        .btn-step { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #333; background: transparent; font-size: 1.2rem; cursor: pointer; font-weight: bold; color: #000; display: flex; align-items: center; justify-content: center; }
+        .btn-final { background: var(--btn-orange); border: none; border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; }
+        .btn-final b { font-size: 1.1rem; display: block; color: #000; }
+
+        /* MODAL PIX COM ANEXO */
+        #modalPix { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px); }
+        .modal-card-pix { background: #111; border: 2px solid var(--primary); padding: 40px; border-radius: 12px; text-align: center; max-width: 450px; width: 90%; }
+        .pix-box { background: #222; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #333; text-align: left; }
+        .upload-label { display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px dashed #666; padding: 15px; border-radius: 6px; cursor: pointer; transition: 0.3s; font-family: 'Orbitron'; font-size: 0.7rem; color: #aaa; margin-top: 20px; }
+        .upload-label:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-disabled { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
 
         /* OUTROS ESTILOS */
-        .compra-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 10px; }
-        .ticket-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; }
-        .ticket-number { background: var(--primary); color: #000; font-family: 'Orbitron'; font-weight: 900; font-size: 0.75rem; padding: 5px 10px; border-radius: 4px; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        .upload-area { margin-top: 20px; border-top: 1px dashed #333; padding-top: 20px; }
-        .upload-label { display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px dashed #666; padding: 15px; border-radius: 6px; cursor: pointer; transition: 0.3s; font-family: 'Orbitron'; font-size: 0.8rem; color: #aaa; }
-        .upload-label:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,204,0,0.05); }
-        .btn-disabled { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
-        .glass-panel { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 40px; }
-        .rankings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-top: 60px; }
+        #chatBox { height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; }
+        .msg-u { align-self: flex-end; background: var(--primary); color: #000; padding: 10px 15px; border-radius: 8px; max-width: 75%; font-weight: 600; }
+        .msg-a { align-self: flex-start; background: #333; color: #fff; padding: 10px 15px; border-radius: 8px; max-width: 75%; }
+        .ticket-box { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #444; }
+        .n-badge { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 3px; font-family: Orbitron; font-size: 0.7rem; margin: 3px; display: inline-block; font-weight: bold; }
         .rank-card { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; }
-        .rank-title { font-family: 'Orbitron'; font-size: 1rem; color: #fff; text-transform: uppercase; margin-bottom: 25px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
         .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .rank-item:hover { background: rgba(255,255,255,0.05); }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px; }
-        label { color: var(--primary); font-family: 'Orbitron'; font-size: 0.65rem; display: block; margin-bottom: 10px; text-transform: uppercase; }
-        input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Rajdhani'; }
-        .avatar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 15px; margin-top: 20px; }
-        .avatar-opt { width: 70px; height: 70px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; transition: 0.3s; object-fit: cover; background: #222; }
-        .avatar-opt.selected { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
-        footer { text-align: center; padding: 60px; color: #444; font-family: 'Orbitron'; font-size: 0.7rem; border-top: 1px solid #111; margin-top: 40px; }
-
-        /* MODAL DE NOTIFICAÇÃO (VITÓRIA) */
-        #modalVictory { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px); }
-        .victory-card { text-align: center; width: 100%; max-width: 500px; padding: 40px; border: 2px solid var(--primary); border-radius: 20px; background: #000; box-shadow: 0 0 100px var(--primary); animation: popIn 0.5s ease; }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .trophy-icon { font-size: 5rem; margin-bottom: 20px; display: block; animation: float 2s infinite ease-in-out; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        /* MODAL DETALHES SORTEIO */
-        #modalDetails { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4500; align-items:center; justify-content:center; }
-        .details-card { width: 90%; max-width: 400px; background: #111; border: 1px solid #333; padding: 30px; border-radius: 12px; }
-        .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed #333; padding-bottom: 8px; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -152,324 +126,212 @@
     <header>
         <a href="index.html" class="logo">COB<span>RIFAS</span></a>
         <nav class="nav-user">
-            <div class="nav-item active" onclick="openTab(event, 'loja')">Loja de Rifas</div>
-            <div class="nav-item" onclick="openTab(event, 'minhas')">Minhas Rifas</div>
-            <div class="nav-item" onclick="openTab(event, 'suporte')">Suporte Online</div>
-            <div class="nav-item" onclick="openTab(event, 'perfil')">Editar Perfil</div>
+            <div class="nav-item active" onclick="tab('loja')">Loja</div>
+            <div class="nav-item" onclick="tab('minhas')">Minhas Rifas</div>
+            <div class="nav-item" onclick="tab('suporte')">Suporte</div>
+            <div class="nav-item" onclick="tab('perfil')">Perfil</div>
             <div class="cart-icon-btn" onclick="toggleCart()">🛒 <div class="cart-count" id="cartCount">0</div></div>
-            <div class="user-header-profile" onclick="openTab(event, 'perfil')">
+            <div class="user-header-profile" onclick="tab('perfil')">
                 <img src="" id="headAvatar" class="user-avatar-circle">
                 <span id="headName" class="user-name-header"></span>
             </div>
-            <div class="btn-exit" onclick="logout()">SAIR</div>
+            <div class="btn-exit" onclick="logout()" style="color:var(--red); border:1px solid var(--red); padding:5px 15px; border-radius:2px; font-size:0.6rem; cursor:pointer;">SAIR</div>
         </nav>
     </header>
 
     <div class="ticker-wrap"><div class="ticker" id="tickerContainer"></div></div>
 
     <div id="cartSidebar">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; font-family:'Orbitron';">
-            <h3>CARRINHO</h3>
-            <span style="cursor:pointer;" onclick="toggleCart()">✕ FECHAR</span>
+        <h3 style="font-family:Orbitron; margin-bottom:25px; color:var(--primary);">CARRINHO</h3>
+        <div id="cartList" style="flex:1; overflow-y:auto;"></div>
+        <div style="border-top:1px solid #333; padding-top:20px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-family:Orbitron;"><span>TOTAL:</span><span id="cartTotal" style="color:var(--primary)">R$ 0,00</span></div>
+            <button class="btn-action" style="background:var(--primary); color:#000; border:none; width:100%; padding:15px; font-family:Orbitron; font-weight:900; cursor:pointer;" onclick="abrirCheckoutPix()">FINALIZAR PEDIDO</button>
+            <button class="btn-action" style="border:none; color:#555; margin-top:10px; width:100%; cursor:pointer;" onclick="toggleCart()">FECHAR</button>
         </div>
-        <div id="cartItemsList" style="flex:1; overflow-y:auto;"></div>
-        <div style="padding-top:20px; border-top:1px solid var(--primary);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-family:'Orbitron';"><span>TOTAL:</span><span id="cartTotalPrice" style="color:var(--primary);">R$ 0.00</span></div>
-            <button class="btn-participar" style="background:var(--primary); color:#000;" onclick="finalizarPedido()">FINALIZAR PEDIDO (PIX)</button>
-        </div>
-    </div>
-
-    <div id="heroMirror">
-        <section class="hero">
-            <h1 id="heroTitle">SUA PRÓXIMA <span>SKIN DE ELITE</span></h1>
-            <p id="heroDesc">Participe de sorteios rápidos e seguros com as melhores skins de Counter-Strike 2.</p>
-        </section>
     </div>
 
     <div class="container">
         <section id="loja" class="tab-content active">
-            <h2 class="section-title">VITRINE DE SKINS</h2>
+            <h2 class="section-title">RIFAS DISPONÍVEIS</h2>
             <div class="grid" id="gridLoja"></div>
-
-            <div class="rankings-grid">
-                <div class="rank-card">
-                    <div class="rank-title">🏆 GANHADORES RECENTES</div>
-                    <div id="recentWinnersList"></div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-title">💎 TOP MEMBROS</div>
-                    <div id="globalRankingList"></div>
-                </div>
+            
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:40px; margin-top:60px;">
+                <div class="rank-card"><div style="font-family:Orbitron; margin-bottom:20px;">🏆 GANHADORES RECENTES</div><div id="recentWinnersList"></div></div>
+                <div class="rank-card"><div style="font-family:Orbitron; margin-bottom:20px;">💎 TOP MEMBROS</div><div id="globalRankingList"></div></div>
             </div>
         </section>
 
         <section id="minhas" class="tab-content">
             <h2 class="section-title">MINHAS PARTICIPAÇÕES</h2>
-            <div class="glass-panel"><div id="listaParticipacoes"></div></div>
+            <div id="listaMinhasRifas"></div>
         </section>
 
         <section id="suporte" class="tab-content">
             <h2 class="section-title">CHAT DE SUPORTE</h2>
             <div class="glass-panel">
-                <div id="chatBox" style="height:400px; overflow-y:auto; margin-bottom:20px; display:flex; flex-direction:column; gap:10px;"></div>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="msgInput" placeholder="Sua dúvida..." style="flex:1; padding:15px; background:#000; border:1px solid #333; color:#fff;">
-                    <button class="btn-participar" style="width:auto; margin:0; padding:0 30px;" onclick="enviarMsg()">ENVIAR</button>
+                <div id="chatBox"></div>
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <input type="text" id="chatInput" placeholder="Mensagem para o comando central..." style="flex:1; padding:12px; background:#000; border:1px solid #333; color:#fff;">
+                    <button class="btn-action" style="width:auto; padding:0 30px; background:var(--primary); border:none; color:#000; font-family:Orbitron; font-weight:900; cursor:pointer;" onclick="enviarMsg()">ENVIAR</button>
                 </div>
             </div>
         </section>
 
         <section id="perfil" class="tab-content">
-            <h2 class="section-title">MEU PERFIL</h2>
+            <h2 class="section-title">DADOS DO OPERADOR</h2>
             <div class="glass-panel">
                 <div class="form-grid">
-                    <div><label>NOME COMPLETO</label><input type="text" id="editNome"></div>
-                    <div><label>NICK</label><input type="text" id="editNick"></div>
-                    <div><label>TELEFONE</label><input type="text" id="editTel"></div>
-                    <div><label>CPF</label><input type="text" id="dispCpf" disabled style="opacity:0.4"></div>
-                    <div><label>NOVA SENHA</label><input type="password" id="editPass"></div>
-                    <div><label>CONFIRMAR SENHA</label><input type="password" id="editConfirm"></div>
+                    <div class="input-group"><label>NOME COMPLETO</label><input type="text" id="pNome"></div>
+                    <div class="input-group"><label>NICKNAME</label><input type="text" id="pNick"></div>
+                    <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
+                    <div class="input-group"><label>CPF</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
                 </div>
-                <div class="avatar-selection"><label>ESCOLHA SEU ÍCONE:</label><div class="avatar-grid" id="avatarGrid"></div></div>
-                <button class="btn-participar" style="margin-top:40px; background:var(--primary); color:#000;" onclick="salvarPerfil()">SALVAR ALTERAÇÕES</button>
+                <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none; width:100%; padding:15px; font-family:Orbitron; font-weight:900; cursor:pointer;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
             </div>
         </section>
     </div>
 
     <div id="modalCotas">
-        <div class="modal-card">
-            <span class="close-modal" onclick="document.getElementById('modalCotas').style.display='none'">×</span>
-            <div class="modal-title">Quanto mais títulos, mais chances de ganhar!</div>
-            <div class="cotas-grid" id="cotasGrid"></div>
-            <div class="action-row">
-                <div class="qtd-input-wrapper">
-                    <button class="qtd-btn" onclick="adjustQtd(-1)">-</button>
-                    <input type="number" class="qtd-display" id="inputQtd" value="10" onchange="updateTotal()">
-                    <button class="qtd-btn" onclick="adjustQtd(1)">+</button>
+        <div class="modal-card-cota">
+            <div class="modal-header-text">Quanto mais títulos, mais chances de ganhar!</div>
+            <div class="modal-body"><div class="cotas-grid" id="cotasGridContent"></div></div>
+            <div class="controls-row">
+                <div class="qtd-sel">
+                    <button type="button" class="btn-step" onclick="adjust(-1)">−</button>
+                    <input type="number" id="inQtd" value="10" readonly style="border:none; text-align:center; width:50px; font-weight:bold; font-size:1.1rem; outline:none; background:transparent; color:#000;">
+                    <button type="button" class="btn-step" onclick="adjust(1)">+</button>
                 </div>
-                <button class="btn-confirmar" onclick="confirmarAdicaoCarrinho()">
-                    <small>Quero participar</small>
-                    <span id="btnTotalValor">R$ 0,00</span>
+                <button class="btn-final" onclick="addCarrinho()">
+                    <div style="border:1px solid #000; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">✔</div>
+                    <span>Quero participar<br><b id="totalModal">R$ 0,00</b></span>
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="modalPix" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center;">
-        <div style="background:#111; border:2px solid var(--primary); padding:40px; border-radius:12px; text-align:center; max-width:450px; width:90%;">
-            <h2 style="font-family:'Orbitron'; color:var(--primary); margin-bottom:20px;">PAGAMENTO PIX</h2>
-            <div style="background:#222; padding:20px; border-radius:8px; margin:20px 0; border:1px solid #333;">
-                <label style="color:var(--primary); font-size:0.7rem; display:block; margin-bottom:5px;">CHAVE PIX</label>
-                <div id="txtChavePix" style="color:#fff; font-size:1.1rem; font-weight:bold; word-break:break-all;">---</div>
+    <div id="modalPix">
+        <div class="modal-card-pix">
+            <h2 style="font-family:Orbitron; color:var(--primary); margin-bottom:20px;">PAGAMENTO PIX</h2>
+            <div class="pix-box">
+                <label style="color:var(--primary); font-size:0.7rem;">CHAVE PIX</label>
+                <div id="txtChavePix" style="color:#fff; font-size:1.1rem; font-weight:bold; word-break:break-all;">...</div>
             </div>
             <div class="upload-area">
-                <label for="comprovanteInput" class="upload-label"><span>📎 ANEXAR COMPROVANTE</span></label>
-                <input type="file" id="comprovanteInput" accept="image/*, application/pdf" style="display:none;" onchange="verificarComprovante()">
-                <small id="fileNameDisplay" style="color:#888; font-size:0.7rem; display:block; margin-top:10px;">Nenhum arquivo selecionado</small>
+                <label for="compInput" class="upload-label">📎 ANEXAR COMPROVANTE</label>
+                <input type="file" id="compInput" accept="image/*, application/pdf" style="display:none;" onchange="validarArquivo()">
+                <small id="fileName" style="color:var(--green); display:block; margin-top:10px; font-weight:bold;"></small>
             </div>
-            <button id="btnConfirmarPag" class="btn-participar btn-disabled" style="background:var(--primary); color:#000; width:100%; margin-top:20px;" onclick="confirmarPixReal()">JÁ REALIZEI O PAGAMENTO</button>
-            <button class="btn-participar" style="background:transparent; border:1px solid #444; color:#888; margin-top:10px; width:100%;" onclick="document.getElementById('modalPix').style.display='none'">CANCELAR</button>
+            <button id="btnFinalizarPix" class="btn-action btn-disabled" style="background:var(--primary); color:#000; border:none; width:100%; margin-top:20px; padding:15px; font-family:Orbitron; font-weight:900; cursor:pointer;" onclick="enviarPedidoFirebase()">JÁ REALIZEI O PAGAMENTO</button>
+            <button class="btn-action" style="background:transparent; color:#888; border:none; margin-top:10px; width:100%; cursor:pointer;" onclick="document.getElementById('modalPix').style.display='none'">CANCELAR</button>
         </div>
     </div>
 
-    <div id="modalVictory">
-        <div class="victory-card">
-            <span class="trophy-icon">🏆</span>
-            <h1 style="color:var(--primary); font-family:'Orbitron'; line-height:1; margin-bottom:10px;">PARABÉNS!</h1>
-            <p style="color:#fff; font-size:1.2rem; margin-bottom:20px;">Você foi sorteado!</p>
-            <div style="background:rgba(255,255,255,0.1); padding:20px; border-radius:10px; margin-bottom:20px;">
-                <b id="vicItemName" style="font-size:1.5rem; display:block; color:#fff;">---</b>
-                <small style="color:#aaa;">NÚMERO DA SORTE: <span id="vicNumber" style="color:var(--primary); font-weight:bold;">---</span></small>
-            </div>
-            <button class="btn-participar" style="background:var(--primary); color:#000;" onclick="fecharNotificacao()">RECEBER PRÊMIO</button>
+    <div id="modalVictory" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(10px);">
+        <div style="text-align: center; width: 100%; max-width: 500px; padding: 40px; border: 2px solid var(--primary); border-radius: 20px; background: #000; box-shadow: 0 0 100px var(--primary);">
+            <h1 style="color:var(--primary); font-family:'Orbitron';">🏆 PARABÉNS!</h1>
+            <p style="color:#fff; font-size:1.2rem; margin:20px 0;">Você foi sorteado na rifa: <br><b id="vicItemName" style="font-size:1.5rem;">...</b></p>
+            <p>Seu número: <b id="vicNumber" style="color:var(--primary); font-size:2rem;">...</b></p>
+            <button class="btn-action" style="background:var(--primary); color:#000; border:none; width:100%; padding:15px; margin-top:20px;" onclick="document.getElementById('modalVictory').style.display='none'">FECHAR</button>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÃO FIREBASE
-        const firebaseConfig = {
-            apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg",
-            authDomain: "cobrifas.firebaseapp.com",
-            projectId: "cobrifas",
-            storageBucket: "cobrifas.firebasestorage.app",
-            messagingSenderId: "1098617388770",
-            appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb"
-        };
+        // --- 1. CONFIGURAÇÃO FIREBASE ---
+        const firebaseConfig = { apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg", authDomain: "cobrifas.firebaseapp.com", projectId: "cobrifas", storageBucket: "cobrifas.firebasestorage.app", messagingSenderId: "1098617388770", appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let userAtivo = null, userFirebaseId = null, carrinho = [], avatarTemp = "";
-        let rifaSelecionadaIndex = null, precoUnitario = 0, comprovanteAtual = null;
-        const avatares = ["https://cdn-icons-png.flaticon.com/512/149/149071.png", "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", "https://cdn-icons-png.flaticon.com/512/4333/4333609.png", "https://cdn-icons-png.flaticon.com/512/236/236831.png", "https://cdn-icons-png.flaticon.com/512/4140/4140048.png", "https://cdn-icons-png.flaticon.com/512/6997/6997662.png"];
+        let userAtivo = null, userFirebaseId = null, carrinho = [];
+        let rifaSelId = null, precoUnico = 0, estoqueSel = 0, comprovanteBase64 = null;
 
-        function carregarDados() {
+        function carregarPagina() {
             const sessao = JSON.parse(localStorage.getItem('sessaoAtiva'));
             if (!sessao) { window.location.href = 'index.html'; return; }
-
-            // Sincroniza dados do usuário do Firebase
             db.ref('membros').orderByChild('cpf').equalTo(sessao.cpf).on('value', s => {
-                const membros = s.val();
-                if(membros) {
-                    userFirebaseId = Object.keys(membros)[0];
-                    userAtivo = membros[userFirebaseId];
+                const data = s.val();
+                if(data) {
+                    userFirebaseId = Object.keys(data)[0]; userAtivo = data[userFirebaseId];
                     document.getElementById('headName').innerText = userAtivo.nick || userAtivo.nome.split(' ')[0];
-                    document.getElementById('headAvatar').src = userAtivo.avatar || avatares[0];
-                    if(document.getElementById('editNome')) {
-                        document.getElementById('editNome').value = userAtivo.nome;
-                        document.getElementById('editNick').value = userAtivo.nick || "";
-                        document.getElementById('editTel').value = userAtivo.tel || "";
-                        document.getElementById('dispCpf').value = userAtivo.cpf;
-                    }
-                    avatarTemp = userAtivo.avatar || avatares[0];
-                    renderAvatares();
+                    document.getElementById('headAvatar').src = userAtivo.avatar;
+                    document.getElementById('pNome').value = userAtivo.nome; document.getElementById('pTel').value = userAtivo.tel; document.getElementById('pCpf').value = userAtivo.cpf;
+                    loadMinhas(); carregarChat(); checkVitorias();
                 }
             });
-
-            renderConfig();
-            carregarLoja();
-            carregarParticipacoes();
-            carregarChat();
-            carregarGanhadores();
-            carregarRankingGlobal();
-            checkVitorias();
+            loadLoja(); renderConfig(); renderGlobalRanking(); renderGanhadoresRecentes();
         }
 
-        function carregarLoja() {
+        /* --- CARREGAR LOJA REALTIME (A CORREÇÃO) --- */
+        function loadLoja() {
             db.ref('rifas').on('value', s => {
                 const rifas = s.val() || {};
                 const grid = document.getElementById('gridLoja');
                 const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
+                
+                if (ativas.length === 0) {
+                    grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:#555;">Nenhuma rifa ativa encontrada no banco de dados.</div>';
+                    return;
+                }
+
                 grid.innerHTML = ativas.map(id => {
                     const r = rifas[id];
-                    const pct = ((r.vendidas || 0) / r.total) * 100;
-                    return `<div class="card"><div class="price-badge">R$ ${r.preco}</div><img src="${r.img}" class="skin-img"><h3>${r.nome}</h3><div class="stats-row"><span>RESTANTES:</span> <span>${r.total - (r.vendidas || 0)}</span></div><div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div><button class="btn-participar" onclick="abrirModalCompra('${id}')">PARTICIPAR</button></div>`;
-                }).join('') || '<div style="grid-column:1/-1;text-align:center;">Nenhuma rifa ativa.</div>';
+                    const vendidas = r.vendidas || 0;
+                    const res = r.total - vendidas;
+                    const p = (vendidas / r.total) * 100;
+                    return `<div class="card"><div class="price-tag">R$ ${r.preco}</div><img src="${r.img}" class="skin-img"><h3>${r.nome}</h3><div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div><div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div><button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
+                }).join('');
             });
         }
 
-        function abrirModalCompra(id) {
-            db.ref('rifas/'+id).once('value', s => {
-                const r = s.val();
-                rifaSelecionadaId = id;
-                precoUnitario = parseFloat(r.preco);
-                const restantes = r.total - (r.vendidas || 0);
-                const opts = [10, 50, 100, 500, 1000, 2500].filter(o => o <= restantes);
-                const grid = document.getElementById('cotasGrid');
-                grid.innerHTML = opts.map(q => `<div class="cota-btn ${q===50?'active':''}" onclick="selecionarQtd(${q})">${q===50?'<div class="tag-popular">Mais popular</div>':''}<span class="cota-qtd">+${q}</span><span class="cota-preco">R$ ${(q*precoUnitario).toFixed(2)}</span></div>`).join('');
-                document.getElementById('inputQtd').max = restantes;
-                document.getElementById('inputQtd').value = 10;
-                updateTotal();
-                document.getElementById('modalCotas').style.display = 'flex';
+        /* --- LÓGICA DO MODAL TÁTICO (+/-) --- */
+        function openModal(id, preco, estoque) {
+            rifaSelId = id; precoUnico = Number(preco); estoqueSel = Number(estoque);
+            const grid = document.getElementById('cotasGridContent');
+            const opts = [10, 50, 100, 500, 1000, 2500];
+            grid.innerHTML = opts.map(q => `<div class="cota-item ${q===50?'active':''}" onclick="setQtd(${q}, this)">${q===50?'<div class="tag-pop">Mais popular</div>':''}<span class="cq">+${q}</span><span class="cp">R$ ${(q*precoUnico).toFixed(2)}</span><span class="cl">SELECIONAR</span></div>`).join('');
+            document.getElementById('inQtd').value = 10; refreshTotal(); document.getElementById('modalCotas').style.display = 'flex';
+        }
+        function setQtd(n, el) { if(n > estoqueSel) return alert("Estoque insuficiente!"); document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active')); if(el) el.classList.add('active'); document.getElementById('inQtd').value = n; refreshTotal(); }
+        function adjust(d) { const input = document.getElementById('inQtd'); let v = parseInt(input.value) + d; if(v > 0 && v <= estoqueSel) { input.value = v; refreshTotal(); } }
+        function refreshTotal() { document.getElementById('totalModal').innerText = 'R$ ' + (parseInt(document.getElementById('inQtd').value) * precoUnico).toFixed(2); }
+
+        function addCarrinho() {
+            db.ref('rifas/'+rifaSelId).once('value', s => {
+                carrinho.push({ id: rifaSelId, nome: s.val().nome, preco: precoUnico, qtd: parseInt(document.getElementById('inQtd').value) });
+                updateUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart();
             });
         }
 
-        function selecionarQtd(n) { document.getElementById('inputQtd').value = n; updateTotal(); }
-        function adjustQtd(d) { let v = parseInt(document.getElementById('inputQtd').value) + d; if(v > 0) { document.getElementById('inputQtd').value = v; updateTotal(); } }
-        function updateTotal() { document.getElementById('btnTotalValor').innerText = `R$ ${(parseInt(document.getElementById('inputQtd').value) * precoUnitario).toFixed(2)}`; }
-
-        function confirmarAdicaoCarrinho() {
-            db.ref('rifas/'+rifaSelecionadaId).once('value', s => {
-                const r = s.val();
-                const q = parseInt(document.getElementById('inputQtd').value);
-                carrinho.push({id: rifaSelecionadaId, nome: r.nome, preco: precoUnitario, qtd: q});
-                updateCartUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart();
-            });
-        }
-
-        function updateCartUI() {
-            let t = 0, q = 0;
-            document.getElementById('cartItemsList').innerHTML = carrinho.map((it, i) => {
-                t += it.preco * it.qtd; q += it.qtd;
-                return `<div class="cart-item"><span>${it.qtd}x ${it.nome}</span><span onclick="carrinho.splice(${i},1);updateCartUI()" style="cursor:pointer;color:red">✕</span></div>`;
-            }).join('');
-            document.getElementById('cartCount').innerText = q;
-            document.getElementById('cartTotalPrice').innerText = `R$ ${t.toFixed(2)}`;
-        }
-
-        function finalizarPedido() {
-            if(!carrinho.length) return;
-            db.ref('config/pix/chave').once('value', s => {
-                document.getElementById('txtChavePix').innerText = s.val() || "Não configurado";
-                document.getElementById('modalPix').style.display = 'flex';
-            });
-        }
-
-        function verificarComprovante() {
-            const file = document.getElementById('comprovanteInput').files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = e => { comprovanteAtual = e.target.result; document.getElementById('btnConfirmarPag').classList.remove('btn-disabled'); };
-                reader.readAsDataURL(file);
-                document.getElementById('fileNameDisplay').innerText = file.name;
-            }
-        }
-
-        function confirmarPixReal() {
-            carrinho.forEach(it => {
-                db.ref('pagamentos').push({
-                    usuario: userAtivo.nome, cpf: userAtivo.cpf,
-                    rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2),
-                    cotas: it.qtd, status: 'pendente', comprovante: comprovanteAtual,
-                    data: new Date().toLocaleString()
-                });
-            });
-            carrinho = []; updateCartUI(); document.getElementById('modalPix').style.display = 'none';
-            alert("Enviado para aprovação!");
-        }
-
-        function carregarParticipacoes() {
-            db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
-                const pags = Object.values(s.val() || {}).reverse();
-                document.getElementById('listaParticipacoes').innerHTML = pags.map(p => {
-                    const cor = p.status === 'aprovado' ? 'var(--green)' : p.status === 'recusado' ? 'var(--red)' : '#888';
-                    const nums = p.numeros ? p.numeros.map(n => `<span class="ticket-number">${n}</span>`).join('') : '<small>Aguardando...</small>';
-                    return `<div style="background:rgba(255,255,255,0.03);padding:20px;border-radius:8px;margin-bottom:20px;border-left:4px solid ${cor}"><b>${p.rifa}</b> - ${p.status.toUpperCase()}<div class="ticket-grid">${nums}</div></div>`;
-                }).join('') || '<p>Sem participações.</p>';
-            });
-        }
-
-        function carregarChat() {
-            db.ref('chatLog').orderByChild('userCpf').equalTo(userAtivo.cpf).on('value', s => {
-                const msgs = Object.values(s.val() || {});
-                document.getElementById('chatBox').innerHTML = msgs.map(m => `<div style="align-self:${m.from==='user'?'flex-end':'flex-start'}; background:${m.from==='user'?'var(--primary)':'#333'}; color:${m.from==='user'?'#000':'#fff'}; padding:12px; border-radius:8px; max-width:75%;">${m.text}</div>`).join('');
-                document.getElementById('chatBox').scrollTop = 9999;
-            });
-        }
-
-        function enviarMsg() {
-            const t = document.getElementById('msgInput').value.trim();
-            if(t) db.ref('chatLog').push({userCpf: userAtivo.cpf, from:'user', text:t, time: new Date().toLocaleTimeString()});
-            document.getElementById('msgInput').value = '';
-        }
-
-        function checkVitorias() {
-            db.ref('rifas').on('value', s => {
-                const rifas = Object.values(s.val() || {});
-                rifas.forEach(r => {
-                    if(r.ganhador && r.ganhador.cpfReal === userAtivo.cpf && !r.ganhador.vistoPeloUser) {
-                        document.getElementById('vicItemName').innerText = r.nome;
-                        document.getElementById('vicNumber').innerText = r.ganhador.numero;
-                        document.getElementById('modalVictory').style.display = 'flex';
-                    }
-                });
-            });
-        }
-
-        function openTab(e, id) {
-            document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(e) e.currentTarget.classList.add('active');
-        }
-
+        /* --- CHECKOUT COM COMPROVANTE --- */
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
-        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-        function salvarPerfil() {
-            const up = { nome: document.getElementById('editNome').value, nick: document.getElementById('editNick').value, tel: document.getElementById('editTel').value, avatar: avatarTemp };
-            db.ref('membros/'+userFirebaseId).update(up).then(() => alert("Salvo!"));
+        function updateUI() {
+            let t = 0, c = 0;
+            document.getElementById('cartList').innerHTML = carrinho.map((it, i) => { t += it.preco * it.qtd; c += it.qtd; return `<div class="cart-item"><div><b>${it.qtd}x ${it.nome}</b><br><small>R$ ${(it.preco*it.qtd).toFixed(2)}</small></div><span onclick="carrinho.splice(${i},1);updateUI()" style="color:red; cursor:pointer;">✕</span></div>`; }).join('');
+            document.getElementById('cartCount').innerText = c; document.getElementById('cartTotal').innerText = `R$ ${t.toFixed(2)}`;
+        }
+        function abrirCheckoutPix() { if(!carrinho.length) return alert("Carrinho vazio!"); db.ref('config/pix/chave').once('value', s => { document.getElementById('txtChavePix').innerText = s.val() || "---"; document.getElementById('modalPix').style.display = 'flex'; toggleCart(); }); }
+        function validarArquivo() { const file = document.getElementById('compInput').files[0]; if(file) { document.getElementById('fileName').innerText = "✔ " + file.name; const reader = new FileReader(); reader.onload = e => { comprovanteBase64 = e.target.result; document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); }; reader.readAsDataURL(file); } }
+
+        function enviarPedidoFirebase() {
+            if(!comprovanteBase64) return alert("Anexe o comprovante!");
+            carrinho.forEach(it => { db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64, data: new Date().toLocaleString() }); });
+            carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none'; alert("Enviado para análise!"); tab('minhas');
         }
 
-        window.onload = carregarDados;
+        /* --- SUPORTE E MINHAS RIFAS --- */
+        function loadMinhas() { db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => { const pags = Object.values(s.val() || {}).reverse(); document.getElementById('listaMinhasRifas').innerHTML = pags.map(p => { const cor = p.status === 'aprovado' ? 'var(--green)' : p.status === 'recusado' ? 'var(--red)' : '#888'; const nums = p.numeros ? p.numeros.map(n => `<span class="n-badge">${n}</span>`).join('') : '<small>Aguardando aprovação...</small>'; return `<div class="ticket-box" style="border-left-color:${cor}"><b>${p.rifa}</b><br><small style="color:${cor}">● ${p.status.toUpperCase()}</small><div style="margin-top:10px;">${nums}</div></div>`; }).join(''); }); }
+        function carregarChat() { db.ref('chatLog').orderByChild('userCpf').equalTo(userAtivo.cpf).on('value', s => { const logs = Object.values(s.val() || {}); document.getElementById('chatBox').innerHTML = logs.map(m => `<div class="${m.from==='user'?'msg-u':'msg-a'}">${m.text}</div>`).join(''); document.getElementById('chatBox').scrollTop = 9999; }); }
+        function enviarMsg() { const t = document.getElementById('chatInput').value; if(t) db.ref('chatLog').push({ userCpf: userAtivo.cpf, from: 'user', text: t, time: new Date().toLocaleTimeString() }); document.getElementById('chatInput').value = ''; }
+        function checkVitorias() { db.ref('rifas').on('value', s => { const rifas = Object.values(s.val() || {}); rifas.forEach(r => { if(r.ganhador && r.ganhador.cpfReal === userAtivo.cpf && !r.ganhador.vistoPeloUser) { document.getElementById('vicItemName').innerText = r.nome; document.getElementById('vicNumber').innerText = r.ganhador.numero; document.getElementById('modalVictory').style.display = 'flex'; db.ref(`rifas/${r.id}/ganhador`).update({vistoPeloUser: true}); } }); }); }
+
+        function tab(id) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+        function saveP() { db.ref('membros/'+userFirebaseId).update({ nome: document.getElementById('pNome').value, tel: document.getElementById('pTel').value, nick: document.getElementById('pNick').value }).then(() => alert("Salvo!")); }
+        function renderConfig() { db.ref('configSite').on('value', s => { if(s.val() && s.val().ticker) document.getElementById('tickerContainer').innerHTML = s.val().ticker.split('\n').map(m => `<div class="ticker-item">${m}</div>`).join(''); }); }
+        function renderGlobalRanking() { db.ref('pagamentos').on('value', s => { const rank = {}; Object.values(s.val() || {}).filter(p => p.status === 'aprovado').forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); }); const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5); document.getElementById('globalRankingList').innerHTML = sorted.map((it, i) => `<div class="rank-item"><span>${i+1}. ${it[0]}</span><b>${it[1]} Cotas</b></div>`).join(''); }); }
+        function renderGanhadoresRecentes() { db.ref('rifas').on('value', s => { const rifas = Object.values(s.val() || {}).filter(r => r.ganhador).reverse().slice(0, 5); document.getElementById('recentWinnersList').innerHTML = rifas.map(r => `<div class="rank-item"><span>${r.ganhador.nome.split(' ')[0]}... <br> <small>${r.nome}</small></span><b>#${r.ganhador.numero}</b></div>`).join(''); }); }
+
+        window.onload = carregarPagina;
     </script>
 </body>
 </html>

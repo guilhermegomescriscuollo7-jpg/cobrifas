@@ -240,7 +240,7 @@
             </div>
 
             <div id="view-ganhas" class="sub-content">
-                <div id="containerGanhas" style="display:none;">
+                <div id="containerGanhas">
                      <div id="listaGanhas"></div>
                 </div>
                 <div id="msgSemGanhas" style="display:none; text-align:center; color:#555; margin-top:30px;">
@@ -498,7 +498,77 @@
         function abrirCheckoutPix() { if(!carrinho.length) return alert("Carrinho vazio!"); db.ref('config/pix/chave').once('value', s => { document.getElementById('txtChavePix').innerText = s.val() || "---"; document.getElementById('modalPix').style.display = 'flex'; toggleCart(); }); }
         function validarArquivo() { const file = document.getElementById('compInput').files[0]; if(file) { document.getElementById('fileName').innerText = "✔ " + file.name; const reader = new FileReader(); reader.onload = e => { comprovanteBase64 = e.target.result; document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); }; reader.readAsDataURL(file); } }
         function enviarPedidoFirebase() { if(!comprovanteBase64) return alert("Anexe o comprovante!"); carrinho.forEach(it => { db.ref('pagamentos').push({ usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64, data: new Date().toLocaleString() }); }); carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none'; alert("Enviado!"); tab('minhas'); }
-        function loadMinhas() { db.ref('rifas').once('value', sRifas => { const mapRifas = sRifas.val() || {}; db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => { const pags = Object.values(s.val() || {}).reverse(); let htmlGanhas = '', htmlAprovadas = '', htmlPendentes = '', hasWins = false; pags.forEach(p => { const rDetails = mapRifas[p.rifaId] || {}; const img = rDetails.img || 'https://via.placeholder.com/100?text=Rifa'; const unitVal = (parseFloat(p.valor) / parseInt(p.cotas)).toFixed(2); const isWinner = rDetails.ganhador && rDetails.ganhador.cpf === userAtivo.cpf; const numerosHtml = p.numeros ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>'; const cardHtml = `<div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}"><img src="${img}" class="rd-img"><div class="rd-info"><div class="rd-header"><div class="rd-title">${p.rifa}</div><div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div></div><div class="rd-stats-row"><span class="rd-stat">Cotas: <b>${p.cotas}</b></span><span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span><span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span></div><div><span class="rd-nums-label">SEUS NÚMEROS:</span><div class="rd-nums-container">${numerosHtml}</div></div></div></div>`; if (isWinner && p.status === 'aprovado') { htmlGanhas += cardHtml; hasWins = true; } if (p.status === 'aprovado') { htmlAprovadas += cardHtml; } else if (p.status === 'pendente' || p.status === 'recusado') { htmlPendentes += cardHtml; } }); document.getElementById('listaGanhas').innerHTML = htmlGanhas; document.getElementById('containerGanhas').style.display = hasWins ? 'block' : 'none'; document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>'; document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>'; }); }); }
+        
+        // --- FUNÇÃO PARA ALTERNAR ABAS (SUBMENUS) ---
+        function openSubTab(tabName) {
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('btn-' + tabName).classList.add('active');
+            document.getElementById('view-' + tabName).classList.add('active');
+        }
+
+        function loadMinhas() {
+            db.ref('rifas').once('value', sRifas => {
+                const mapRifas = sRifas.val() || {};
+                db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
+                    const pags = Object.values(s.val() || {}).reverse();
+                    let htmlGanhas = '', htmlAprovadas = '', htmlPendentes = '', hasWins = false;
+
+                    pags.forEach(p => {
+                        const rDetails = mapRifas[p.rifaId] || {};
+                        const img = rDetails.img || 'https://via.placeholder.com/100?text=Rifa';
+                        const unitVal = (parseFloat(p.valor) / parseInt(p.cotas)).toFixed(2);
+                        
+                        // Determina se o usuário ganhou ESSA rifa específica
+                        const isWinner = rDetails.ganhador && rDetails.ganhador.cpf === userAtivo.cpf;
+                        
+                        const numerosHtml = p.numeros ? p.numeros.map(n => `<span class="num-tag">${n}</span>`).join('') : '<span style="opacity:0.5; font-size:0.8rem;">Aguardando aprovação...</span>';
+                        
+                        const cardHtml = `
+                            <div class="rifa-detalhada ${isWinner ? 'status-ganho' : p.status==='pendente'?'status-pendente':'status-aprovado'}">
+                                <img src="${img}" class="rd-img">
+                                <div class="rd-info">
+                                    <div class="rd-header">
+                                        <div class="rd-title">${p.rifa}</div>
+                                        <div style="color:${isWinner?'var(--primary)':p.status==='aprovado'?'var(--green)':'var(--red)'}; font-weight:900; font-size:0.8rem;">${isWinner ? '🏆 VOCÊ GANHOU!' : p.status.toUpperCase()}</div>
+                                    </div>
+                                    <div class="rd-stats-row">
+                                        <span class="rd-stat">Cotas: <b>${p.cotas}</b></span>
+                                        <span class="rd-stat">Unit: <b>R$ ${unitVal}</b></span>
+                                        <span class="rd-stat">Total: <b style="color:var(--primary)">R$ ${p.valor}</b></span>
+                                    </div>
+                                    <div>
+                                        <span class="rd-nums-label">SEUS NÚMEROS:</span>
+                                        <div class="rd-nums-container">${numerosHtml}</div>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                        // SEPARANDO AS LISTAS CORRETAMENTE
+                        if (isWinner && p.status === 'aprovado') {
+                            htmlGanhas += cardHtml;
+                            hasWins = true;
+                        } else if (p.status === 'aprovado') { 
+                            // Se já ganhou, não entra aqui (por causa do 'else')
+                            htmlAprovadas += cardHtml;
+                        } else if (p.status === 'pendente' || p.status === 'recusado') {
+                            htmlPendentes += cardHtml;
+                        }
+                    });
+
+                    document.getElementById('listaGanhas').innerHTML = htmlGanhas;
+                    if(hasWins) {
+                        document.getElementById('containerGanhas').style.display = 'block';
+                        document.getElementById('msgSemGanhas').style.display = 'none';
+                    } else {
+                        document.getElementById('msgSemGanhas').style.display = 'block';
+                    }
+                    
+                    document.getElementById('listaAprovadas').innerHTML = htmlAprovadas || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhuma compra aprovada ainda.</p>';
+                    document.getElementById('listaPendentes').innerHTML = htmlPendentes || '<p style="color:#666; font-size:0.8rem; text-align:center;">Nenhum pagamento pendente.</p>';
+                });
+            });
+        }
         
         function renderGlobalRanking() { db.ref('pagamentos').on('value', s => { const rank = {}; Object.values(s.val() || {}).filter(p => p.status === 'aprovado').forEach(p => { rank[p.usuario] = (rank[p.usuario] || 0) + parseInt(p.cotas); }); const sorted = Object.entries(rank).sort((a,b) => b[1] - a[1]).slice(0, 5); document.getElementById('globalRankingList').innerHTML = sorted.map((it, i) => `<div class="rank-item"><span>${i+1}. ${it[0]}</span><b>${it[1]} Cotas</b></div>`).join('') || 'Sem dados.'; }); }
         
@@ -517,18 +587,15 @@
         // --- NOVA FUNÇÃO: DETALHES DO SORTEIO E CÁLCULO DO TOP COMPRADOR ---
         function verDetalhesSorteio(nomeRifa) {
             db.ref('rifas').once('value', sRifas => {
-                // Encontra a rifa pelo nome (idealmente seria pelo ID, mas o render antigo usa nome)
                 const rKey = Object.keys(sRifas.val()).find(key => sRifas.val()[key].nome === nomeRifa);
                 const r = sRifas.val()[rKey];
 
                 if(r && r.ganhador) {
-                    // Preenche dados básicos do ganhador
                     document.getElementById('dtImg').src = r.img;
                     document.getElementById('dtItem').innerText = r.nome;
                     document.getElementById('dtNum').innerText = r.ganhador.numero;
                     document.getElementById('dtNome').innerText = r.ganhador.nome;
                     
-                    // Formata Data
                     let dataTexto = 'Recentemente';
                     if(r.ganhador.data) {
                         const d = new Date(r.ganhador.data);
@@ -536,11 +603,9 @@
                     }
                     document.getElementById('dtData').innerText = dataTexto;
                     
-                    // Mascara CPF
                     let cpfSafe = r.ganhador.cpf ? '***.' + r.ganhador.cpf.substr(3,3) + '.***-**' : '***';
                     document.getElementById('dtCpf').innerText = cpfSafe;
 
-                    // --- CÁLCULO DO TOP COMPRADOR (BÔNUS) ---
                     const bonusArea = document.getElementById('dtBonusArea');
                     
                     if (r.bonus && r.bonus.nome) {
@@ -549,7 +614,6 @@
                         document.getElementById('dtBonusItemName').innerText = r.bonus.nome;
                         document.getElementById('dtBonusWinner').innerText = "Calculando...";
 
-                        // Busca pagamentos desta rifa para achar o maior comprador
                         db.ref('pagamentos').orderByChild('rifaId').equalTo(rKey).once('value', sPags => {
                             const pags = sPags.val() || {};
                             const buyers = {};
@@ -560,11 +624,10 @@
                                 }
                             });
 
-                            // Ordena e pega o primeiro
                             const sorted = Object.entries(buyers).sort((a,b) => b[1] - a[1]);
                             
                             if (sorted.length > 0) {
-                                const topUser = sorted[0]; // [Nome, Qtd]
+                                const topUser = sorted[0]; 
                                 document.getElementById('dtBonusWinner').innerText = `${topUser[0]} (${topUser[1]} cotas)`;
                             } else {
                                 document.getElementById('dtBonusWinner').innerText = "Nenhum comprador elegível.";

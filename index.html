@@ -42,11 +42,13 @@
         .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
         
         .auth-nav { display: flex; align-items: center; }
+        
+        /* BOTÃO LOGIN AMARELO ATUALIZADO */
         .btn-login { 
-            background: transparent; 
-            color: var(--primary); 
-            padding: 10px 25px; 
-            border: 1px solid var(--primary); 
+            background: var(--primary); 
+            color: #000; 
+            padding: 10px 30px; 
+            border: none; 
             border-radius: 4px; 
             font-family: 'Orbitron'; 
             font-weight: 900; 
@@ -54,17 +56,18 @@
             transition: 0.3s; 
             font-size: 0.85rem; 
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
         .btn-login:hover { 
-            background: var(--primary); 
-            color: #000; 
-            box-shadow: 0 0 20px var(--primary-glow); 
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--primary-glow); 
+            filter: brightness(1.1);
         }
 
         /* --- TICKER --- */
-        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid #333; height: 35px; display: flex; align-items: center; }
-        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 35s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 1.5rem; font-size: 0.8rem; color: #ccc; font-family: 'Orbitron'; }
+        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid #333; height: 40px; display: flex; align-items: center; }
+        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 2rem; font-size: 0.9rem; color: #ccc; font-family: 'Orbitron'; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
         /* --- HERO --- */
@@ -93,7 +96,7 @@
         .rank-title { font-family: 'Orbitron'; font-size: 0.9rem; color: #fff; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
         .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 3px solid #444; margin-bottom: 8px; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
 
-        /* --- MODAL DETALHES --- */
+        /* --- MODAL --- */
         #modalDetails { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:4500; align-items:center; justify-content:center; backdrop-filter: blur(10px); padding: 20px; }
         .details-card { width: 100%; max-width: 450px; background: #111; border: 2px solid var(--primary); padding: 25px; border-radius: 12px; position: relative; max-height: 90vh; overflow-y: auto; }
         .winner-img-box { text-align: center; margin-bottom: 15px; }
@@ -114,7 +117,7 @@
     <header>
         <a href="index.html" class="logo">COB<span>RIFAS</span></a>
         <div class="auth-nav">
-            <a href="login.html" class="btn-login">LOGIN OPERADOR</a>
+            <a href="login.html" class="btn-login">LOGIN</a>
         </div>
     </header>
 

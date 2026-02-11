@@ -21,7 +21,6 @@
             --red: #ff4444;
             --green: #00ff66;
             --blue: #00a2ff;
-            --orange: #ffaa00;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -71,7 +70,7 @@
         tr td:last-child { border-radius: 0 10px 10px 0; }
 
         .user-cell { display: flex; align-items: center; gap: 12px; }
-        .user-img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+        .user-img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
         /* BUTTONS */
         .btn-action { padding: 8px 12px; border: none; border-radius: 4px; font-family: 'Orbitron'; font-size: 0.6rem; cursor: pointer; transition: 0.3s; margin-right: 5px; font-weight: bold; }
@@ -84,19 +83,28 @@
         .stat-card { background: var(--glass-bg); padding: 30px; border-radius: 12px; border: var(--glass-border); text-align: center; }
         .stat-val { font-family: 'Orbitron'; font-size: 2rem; color: var(--primary); font-weight: 900; }
 
-        /* MODAL SORTEIO */
-        #modalSorteio { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(15px); }
-        .sorteio-card { text-align: center; width: 100%; max-width: 550px; padding: 40px; border: 2px solid var(--primary); border-radius: 20px; background: #000; }
-        .sorteio-numero { font-size: 7rem; font-family: 'Orbitron'; color: var(--primary); text-shadow: 0 0 40px var(--primary); margin: 20px 0; font-weight: 900; }
-
         /* CHAT */
         .chat-layout { display: grid; grid-template-columns: 300px 1fr; height: 600px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; }
         .chat-sidebar { background: rgba(0, 0, 0, 0.8); border-right: 1px solid rgba(255, 255, 255, 0.1); overflow-y: auto; }
         .contact-item { padding: 15px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer; transition: 0.3s; }
         .contact-item.active { background: rgba(255, 204, 0, 0.1); border-left: 3px solid var(--primary); }
-        .msg-bubble { max-width: 70%; padding: 10px 15px; border-radius: 10px; font-size: 0.9rem; margin-bottom: 10px; }
-        .msg-user { align-self: flex-start; background: #333; }
+        .contact-info b { display: block; font-size: 0.9rem; color: #fff; }
+        .contact-info span { font-size: 0.7rem; color: #888; }
+        .winner-tag { background: var(--primary); color: #000; font-size: 0.55rem; font-weight: 900; padding: 2px 6px; border-radius: 3px; display: inline-block; margin-top: 4px; font-family: Orbitron; }
+        
+        .msg-bubble { max-width: 70%; padding: 10px 15px; border-radius: 10px; font-size: 0.9rem; margin-bottom: 10px; position: relative; }
+        .msg-user { align-self: flex-start; background: #333; color: #fff; }
         .msg-admin { align-self: flex-end; background: var(--primary); color: #000; font-weight: bold; }
+        .msg-time { font-size: 0.55rem; opacity: 0.5; margin-top: 5px; display: block; text-align: right; }
+
+        /* INPUTS */
+        input, select { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid #333; color: #fff; border-radius: 6px; font-family: 'Rajdhani'; }
+        .btn-save { width:100%; padding:15px; background:var(--primary); border:none; font-weight:900; cursor:pointer; font-family: 'Orbitron'; color: #000; border-radius: 6px; margin-top: 10px; }
+
+        /* MODAL SORTEIO */
+        #modalSorteio { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(15px); }
+        .sorteio-card { text-align: center; width: 100%; max-width: 550px; padding: 40px; border: 2px solid var(--primary); border-radius: 20px; background: #000; }
+        .sorteio-numero { font-size: 7rem; font-family: 'Orbitron'; color: var(--primary); text-shadow: 0 0 40px var(--primary); margin: 20px 0; font-weight: 900; }
     </style>
 </head>
 <body>
@@ -131,7 +139,7 @@
                 <div class="header-title">GERENCIAR MEMBROS</div>
                 <div class="glass-panel">
                     <table>
-                        <thead><tr><th>MEMBRO</th><th>STATUS</th><th>TELEFONE</th><th>AÇÕES</th></tr></thead>
+                        <thead><tr><th>MEMBRO</th><th>STATUS</th><th>TELEFONE</th><th>CPF</th><th>AÇÕES</th></tr></thead>
                         <tbody id="listaMembrosBody"></tbody>
                     </table>
                 </div>
@@ -180,11 +188,11 @@
                 <div class="chat-layout">
                     <div class="chat-sidebar" id="listaContatos"></div>
                     <div class="chat-main" style="display:flex; flex-direction:column;">
-                        <div id="chatHeader" style="padding:15px; border-bottom:1px solid #333; font-family:Orbitron;">SELECIONE UM OPERADOR</div>
+                        <div id="chatHeader" style="padding:15px; border-bottom:1px solid #333; font-family:Orbitron; background: rgba(0,0,0,0.5);">SELECIONE UM OPERADOR</div>
                         <div id="chatMessagesBox" style="flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column;"></div>
                         <div style="padding:15px; background:#000; display:flex; gap:10px;">
                             <input type="text" id="respAdm" placeholder="Sua resposta..." disabled>
-                            <button class="btn-action btn-green" onclick="responderChat()" id="btnEnviarChat" disabled>ENVIAR</button>
+                            <button class="btn-action btn-green" onclick="responderChat()" id="btnEnviarChat" disabled style="height:45px; width:80px;">ENVIAR</button>
                         </div>
                     </div>
                 </div>
@@ -196,9 +204,9 @@
         <div class="sorteio-card">
             <h2 id="sorteioItemName" style="font-family:Orbitron;">ITEM SORTEADO</h2>
             <div id="sorteioNumero" class="sorteio-numero">---</div>
-            <div id="winnerContainer" class="winner-info" style="display:none;">
-                <div class="winner-name" id="winName">CARREGANDO...</div>
-                <button class="btn-confirm-winner" onclick="document.getElementById('modalSorteio').style.display='none'">ENCERRAR</button>
+            <div id="winnerContainer" style="display:none; margin-top:20px;">
+                <div class="winner-name" id="winName" style="font-size:1.5rem; color:#fff; font-family:Orbitron;">VENCEDOR: CARREGANDO...</div>
+                <button class="btn-save" style="width:200px;" onclick="document.getElementById('modalSorteio').style.display='none'">FECHAR</button>
             </div>
         </div>
     </div>
@@ -215,6 +223,8 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+
+        let chatAtivoCPF = null;
 
         // --- SISTEMA DE ABAS ---
         function openTab(e, id) {
@@ -249,10 +259,10 @@
                     const m = membros[id];
                     return `<tr>
                         <td><div class="user-cell"><img src="${m.avatar}" class="user-img"><b>${m.nome}</b></div></td>
-                        <td>${m.status || 'ATIVO'}</td><td>${m.tel}</td>
+                        <td>${m.status || 'ATIVO'}</td><td>${m.tel}</td><td>${m.cpf}</td>
                         <td>
                             <button class="btn-action btn-orange" onclick="db.ref('membros/${id}').update({status:'BANIDO'})">BANIR</button>
-                            <button class="btn-action btn-red" onclick="db.ref('membros/${id}').remove()">APAGAR</button>
+                            <button class="btn-action btn-red" onclick="if(confirm('Apagar?')) db.ref('membros/${id}').remove()">APAGAR</button>
                         </td></tr>`;
                 }).join('');
             });
@@ -276,7 +286,7 @@
                     let btn = r.ganhador ? '🏆 FINALIZADA' : (v >= r.total ? `<button class="btn-action btn-gold" onclick="abrirSorteio('${id}')">SORTEAR</button>` : 'AGUARDANDO 100%');
                     return `<div class="glass-panel" style="display:flex; justify-content:space-between; align-items:center;">
                         <div style="display:flex; align-items:center; gap:15px;"><img src="${r.img}" style="width:50px;"><b>${r.nome}</b></div>
-                        <div>${btn} <button class="btn-action btn-red" onclick="db.ref('rifas/${id}').remove()">X</button></div></div>`;
+                        <div>${btn} <button class="btn-action btn-red" onclick="if(confirm('Excluir?')) db.ref('rifas/${id}').remove()">X</button></div></div>`;
                 }).join('');
             });
         }
@@ -289,9 +299,9 @@
                     const p = pags[id];
                     if(p.status !== 'pendente') return '';
                     return `<tr><td><b>${p.usuario}</b></td><td>${p.rifa}</td><td>R$ ${p.valor}</td>
-                        <td><a href="${p.comprovante}" download style="color:var(--primary)">BAIXAR</a></td>
+                        <td><a href="${p.comprovante}" download style="color:var(--primary); font-size:0.7rem;">BAIXAR</a></td>
                         <td><button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${p.rifaId}',${p.cotas})">OK</button></td></tr>`;
-                }).join('');
+                }).join('') || '<tr><td colspan="5" align="center">Nenhum pendente.</td></tr>';
             });
         }
 
@@ -307,7 +317,7 @@
                 }
                 db.ref(`rifas/${rifaId}`).update({ vendidas: (r.vendidas||0)+qtd, numerosVendidos: [...existentes, ...novos] });
                 db.ref(`pagamentos/${pagId}`).update({ status: 'aprovado', numeros: novos });
-                alert("Pagamento aprovado!");
+                alert("Aprovado!");
             });
         }
 
@@ -317,6 +327,7 @@
                 const rifa = s.val();
                 document.getElementById('modalSorteio').style.display = 'flex';
                 document.getElementById('sorteioItemName').innerText = rifa.nome;
+                document.getElementById('winnerContainer').style.display = 'none';
                 let c = 0;
                 const intv = setInterval(() => {
                     document.getElementById('sorteioNumero').innerText = Math.floor(Math.random()*rifa.total)+1;
@@ -342,36 +353,59 @@
             });
         }
 
-        /* --- CHAT REALTIME --- */
-        let chatAtivoCPF = null;
+        /* --- CHAT REALTIME TURBINADO --- */
         function renderChat() {
-            db.ref('chatLog').on('value', s => {
-                const logs = s.val() || {};
-                const cpfs = [...new Set(Object.values(logs).map(l => l.userCpf))];
-                document.getElementById('listaContatos').innerHTML = cpfs.map(cpf => `
-                    <div class="contact-item ${chatAtivoCPF === cpf ? 'active' : ''}" onclick="abrirChat('${cpf}')">
-                        <b>OPERADOR: ${cpf}</b></div>`).join('');
-                if(chatAtivoCPF) loadMessages();
+            db.ref('membros').once('value', sMemb => {
+                const membrosObj = sMemb.val() || {};
+                db.ref('rifas').once('value', sRifas => {
+                    const rifasObj = sRifas.val() || {};
+                    db.ref('chatLog').on('value', sLogs => {
+                        const logs = sLogs.val() || {};
+                        const cpfs = [...new Set(Object.values(logs).map(l => l.userCpf))];
+
+                        document.getElementById('listaContatos').innerHTML = cpfs.map(cpf => {
+                            const membroKey = Object.keys(membrosObj).find(k => membrosObj[k].cpf === cpf);
+                            const membro = membroKey ? membrosObj[membroKey] : { nome: "Usuário Externo" };
+                            
+                            // Verifica se esse CPF ganhou algo
+                            const ganhou = Object.values(rifasObj).some(r => r.ganhador && r.ganhador.cpf === cpf);
+
+                            return `<div class="contact-item ${chatAtivoCPF === cpf ? 'active' : ''}" onclick="abrirChat('${cpf}', '${membro.nome}')">
+                                <div class="contact-info">
+                                    <b>${membro.nome}</b>
+                                    <span>CPF: ${cpf}</span>
+                                    ${ganhou ? '<div class="winner-tag">🏆 GANHADOR</div>' : ''}
+                                </div>
+                            </div>`;
+                        }).join('');
+                        if(chatAtivoCPF) loadMessages();
+                    });
+                });
             });
         }
-        function abrirChat(cpf) {
+
+        function abrirChat(cpf, nome) {
             chatAtivoCPF = cpf;
-            document.getElementById('chatHeader').innerText = "CHAT: " + cpf;
+            document.getElementById('chatHeader').innerText = nome + " (" + cpf + ")";
             document.getElementById('respAdm').disabled = false;
             document.getElementById('btnEnviarChat').disabled = false;
             loadMessages();
         }
+
         function loadMessages() {
             db.ref('chatLog').on('value', s => {
-                const msgs = Object.values(s.val() || {}).filter(m => m.userCpf === chatAtivoCPF);
-                document.getElementById('chatMessagesBox').innerHTML = msgs.map(m => `
-                    <div class="msg-bubble ${m.from==='admin'?'msg-admin':'msg-user'}">${m.text}</div>`).join('');
-                const b = document.getElementById('chatMessagesBox'); b.scrollTop = b.scrollHeight;
+                const logs = Object.values(s.val() || {}).filter(m => m.userCpf === chatAtivoCPF);
+                document.getElementById('chatMessagesBox').innerHTML = logs.map(m => `
+                    <div class="msg-bubble ${m.from==='admin'?'msg-admin':'msg-user'}">
+                        ${m.text}<span class="msg-time">${m.time || ''}</span>
+                    </div>`).join('');
+                document.getElementById('chatMessagesBox').scrollTop = 99999;
             });
         }
+
         function responderChat() {
             const t = document.getElementById('respAdm').value; if(!t) return;
-            db.ref('chatLog').push({ userCpf: chatAtivoCPF, from:'admin', text:t, time: new Date().toLocaleTimeString() });
+            db.ref('chatLog').push({ userCpf: chatAtivoCPF, from:'admin', text:t, time: new Date().toLocaleTimeString().slice(0,5) });
             document.getElementById('respAdm').value = '';
         }
 

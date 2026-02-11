@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteador Oficial | COBRIFAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --primary: #ffcc00;
+            --primary-glow: rgba(255, 204, 0, 0.6);
+            --bg-dark: #050505;
+            --glass-bg: rgba(20, 20, 20, 0.95);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --white: #ffffff;
+            --green: #00ff66;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 204, 0, 0.1) 0%, transparent 40%),
+                url('https://images8.alphacoders.com/132/1328325.png');
+            background-size: cover; background-attachment: fixed;
+            color: var(--white); font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            width: 100%; padding: 30px; text-align: center;
+            background: rgba(0,0,0,0.8); border-bottom: 1px solid #333;
+        }
+        .logo { font-family: 'Orbitron'; font-size: 2.5rem; color: var(--primary); text-shadow: 0 0 20px var(--primary-glow); letter-spacing: 3px; }
+
+        /* --- GRID DE RIFAS --- */
+        .container { width: 90%; max-width: 1200px; margin-top: 50px; }
+        .page-title { font-family: 'Orbitron'; margin-bottom: 30px; text-align: center; color: #888; text-transform: uppercase; }
+        
+        .rifas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        
+        .rifa-card {
+            background: var(--glass-bg); border: var(--glass-border); border-radius: 15px; overflow: hidden;
+            transition: 0.3s; position: relative;
+        }
+        .rifa-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 0 30px rgba(255,204,0,0.2); }
+        
+        .rifa-img { width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid #333; }
+        .rifa-info { padding: 20px; text-align: center; }
+        .rifa-name { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 10px; color: #fff; }
+        
+        .btn-sortear {
+            width: 100%; padding: 15px; background: var(--primary); color: #000;
+            font-family: 'Orbitron'; font-weight: 900; border: none; cursor: pointer;
+            font-size: 1rem; text-transform: uppercase; transition: 0.3s;
+        }
+        .btn-sortear:hover { background: #ffdb4d; letter-spacing: 2px; }
+        
+        .status-badge {
+            position: absolute; top: 10px; right: 10px; padding: 5px 10px;
+            background: #000; color: var(--green); border: 1px solid var(--green);
+            font-family: 'Orbitron'; font-size: 0.7rem; border-radius: 4px;
+        }
+
+        /* --- TELA DE SORTEIO (MODAL FULLSCREEN) --- */
+        #sorteioScreen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+
+        .drum-roll {
+            font-size: 10rem; font-family: 'Orbitron'; font-weight: 900;
+            color: var(--primary); text-shadow: 0 0 50px var(--primary);
+            margin-bottom: 30px;
+        }
+
+        /* CARTÃO DO GANHADOR */
+        .winner-card {
+            display: none; width: 90%; max-width: 500px;
+            background: linear-gradient(145deg, #111, #0a0a0a);
+            border: 2px solid var(--primary); border-radius: 20px;
+            padding: 40px; text-align: center;
+            box-shadow: 0 0 100px rgba(255,204,0,0.3);
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn { 0% { opacity:0; transform:scale(0.5); } 100% { opacity:1; transform:scale(1); } }
+
+        .w-title { font-family: 'Orbitron'; color: #888; margin-bottom: 20px; font-size: 0.9rem; letter-spacing: 2px; }
+        .w-number { font-size: 5rem; color: var(--primary); font-family: 'Orbitron'; font-weight: 900; margin: 10px 0; line-height: 1; }
+        .w-name { font-size: 2rem; color: #fff; margin-bottom: 5px; font-weight: bold; }
+        
+        .w-details {
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;
+            margin: 20px 0; text-align: left; font-size: 1rem; color: #ccc;
+        }
+        .w-row { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 8px; }
+        .w-row:last-child { border: none; margin: 0; padding: 0; }
+
+        .btn-chat {
+            background: transparent; border: 2px solid var(--primary); color: var(--primary);
+            padding: 12px 30px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer;
+            text-decoration: none; display: inline-block; margin-top: 10px; transition: 0.3s;
+        }
+        .btn-chat:hover { background: var(--primary); color: #000; }
+
+        .btn-close {
+            position: absolute; top: 30px; right: 30px; color: #fff; font-size: 2rem;
+            cursor: pointer; opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">COB<span>RIFAS</span></div>
+    </header>
+
+    <div class="container">
+        <h2 class="page-title">Sala de Sorteios</h2>
+        <div class="rifas-grid" id="gridSorteios">
+            <div style="color:#666; text-align:center; width:100%;">Carregando rifas...</div>
+        </div>
+    </div>
+
+    <div id="sorteioScreen">
+        <div class="btn-close" onclick="fecharSorteio()">×</div>
+        
+        <h2 style="font-family:'Orbitron'; color:#fff; letter-spacing:5px; margin-bottom:20px;">SORTEANDO...</h2>
+        
+        <div id="numeroAnimado" class="drum-roll">000</div>
+
+        <div id="winnerCard" class="winner-card">
+            <div class="w-title">PARABÉNS AO GANHADOR</div>
+            <div class="w-number" id="resNumero">###</div>
+            <div class="w-name" id="resNome">Nome do Ganhador</div>
+            
+            <div class="w-details">
+                <div class="w-row"><span>CPF:</span> <b id="resCpf">***.***.***-**</b></div>
+                <div class="w-row"><span>Telefone:</span> <b id="resTel">(**) *****-****</b></div>
+                <div class="w-row"><span>Cotas Compradas:</span> <b id="resCotas">0</b></div>
+                <div class="w-row"><span>Valor Pago:</span> <b id="resValor" style="color:var(--green)">R$ 0,00</b></div>
+            </div>
+
+            <button class="btn-chat" id="btnChatLink">💬 ENTRAR EM CONTATO</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO FIREBASE (Igual ao seu admin)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg",
+            authDomain: "cobrifas.firebaseapp.com",
+            projectId: "cobrifas",
+            storageBucket: "cobrifas.firebasestorage.app",
+            messagingSenderId: "1098617388770",
+            appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // 1. CARREGAR RIFAS QUE PODEM SER SORTEADAS
+        function carregarRifas() {
+            db.ref('rifas').on('value', snapshot => {
+                const rifas = snapshot.val() || {};
+                const container = document.getElementById('gridSorteios');
+                container.innerHTML = '';
+
+                let temRifa = false;
+
+                Object.keys(rifas).forEach(id => {
+                    const r = rifas[id];
+                    const total = parseInt(r.total);
+                    const vendidas = r.numerosVendidos ? r.numerosVendidos.length : 0;
+                    
+                    // Mostrar apenas se estiver 100% vendida ou já tiver ganhador
+                    if (vendidas >= total || r.ganhador) {
+                        temRifa = true;
+                        const status = r.ganhador ? "FINALIZADA" : "AGUARDANDO SORTEIO";
+                        const btnText = r.ganhador ? "VER RESULTADO" : "REALIZAR SORTEIO";
+                        const corBtn = r.ganhador ? "background:#fff;" : ""; // Branco se ja foi, amarelo se nao
+
+                        container.innerHTML += `
+                            <div class="rifa-card">
+                                <div class="status-badge">${status}</div>
+                                <img src="${r.img}" class="rifa-img">
+                                <div class="rifa-info">
+                                    <div class="rifa-name">${r.nome}</div>
+                                    <p style="color:#888; font-size:0.8rem; margin-bottom:15px;">${vendidas}/${total} COTAS VENDIDAS</p>
+                                    <button class="btn-sortear" style="${corBtn}" onclick="iniciarSorteio('${id}')">${btnText}</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                if(!temRifa) container.innerHTML = '<p style="text-align:center; color:#666;">Nenhuma rifa pronta para sorteio no momento.</p>';
+            });
+        }
+
+        // 2. LÓGICA DO SORTEIO E ANIMAÇÃO
+        function iniciarSorteio(id) {
+            document.getElementById('sorteioScreen').style.display = 'flex';
+            document.getElementById('winnerCard').style.display = 'none';
+            document.getElementById('numeroAnimado').style.display = 'block';
+
+            // Buscar dados da rifa e pagamentos
+            db.ref(`rifas/${id}`).once('value', snapshot => {
+                const rifa = snapshot.val();
+                
+                // Se já tem ganhador, mostra direto
+                if (rifa.ganhador) {
+                    buscarDetalhesGanhador(id, rifa.ganhador.numero, true);
+                    return;
+                }
+
+                // Se não tem, faz animação e sorteia
+                const numeros = rifa.numerosVendidos || [];
+                if (numeros.length === 0) {
+                    alert("Erro: Nenhum número vendido!");
+                    fecharSorteio();
+                    return;
+                }
+
+                // Efeito Roleta (Animação)
+                let contador = 0;
+                const intervalo = setInterval(() => {
+                    // Mostra números aleatórios visualmente
+                    document.getElementById('numeroAnimado').innerText = Math.floor(Math.random() * rifa.total);
+                    contador++;
+                    
+                    if (contador > 30) { // Para após ~3 segundos
+                        clearInterval(intervalo);
+                        realizarLogicaSorteio(id, numeros, rifa);
+                    }
+                }, 80);
+            });
+        }
+
+        function realizarLogicaSorteio(rifaId, numerosVendidos, rifaObj) {
+            // 1. Escolhe o número vencedor matematicamente
+            const indiceSorteado = Math.floor(Math.random() * numerosVendidos.length);
+            const numeroVencedor = numerosVendidos[indiceSorteado];
+
+            // 2. Salva no banco (para ficar registrado)
+            // Precisamos achar QUEM comprou. Vamos varrer os pagamentos.
+            buscarDetalhesGanhador(rifaId, numeroVencedor, false);
+        }
+
+        function buscarDetalhesGanhador(rifaId, numeroVencedor, jaEstavaSorteado) {
+            db.ref('pagamentos').once('value', snapshot => {
+                const pagamentos = snapshot.val() || {};
+                let dadosVencedor = null;
+                let totalPago = 0;
+                let qtdCotas = 0;
+
+                // Procura nos pagamentos quem tem esse número
+                Object.values(pagamentos).forEach(pg => {
+                    if (pg.numeros && pg.numeros.includes(String(numeroVencedor))) {
+                        // Encontramos o pagamento premiado
+                        // Nota: Um usuário pode ter feito vários pagamentos, aqui pegamos os dados deste pagamento
+                        dadosVencedor = {
+                            nome: pg.usuario,
+                            cpf: pg.cpf, // Supondo que você salvou o CPF no pagamento
+                            telefone: pg.telefone || "Não informado", // Ideal salvar telefone no pagamento tb
+                            pagamentoId: pg.id // id interno
+                        };
+                        totalPago = pg.valor;
+                        qtdCotas = pg.cotas;
+                    }
+                });
+
+                if (!dadosVencedor) {
+                    // Fallback se não achar (não deveria acontecer se o banco ta integro)
+                    dadosVencedor = { nome: "Usuário Desconhecido", cpf: "00000000000", telefone: "0000000000" };
+                }
+
+                // Se for um novo sorteio, atualiza o banco
+                if (!jaEstavaSorteado) {
+                    db.ref(`rifas/${rifaId}`).update({
+                        ganhador: {
+                            nome: dadosVencedor.nome,
+                            numero: numeroVencedor,
+                            cpf: dadosVencedor.cpf,
+                            data: new Date().toISOString()
+                        }
+                    });
+                }
+
+                exibirResultadoFinal(numeroVencedor, dadosVencedor, qtdCotas, totalPago);
+            });
+        }
+
+        function exibirResultadoFinal(numero, user, cotas, valor) {
+            document.getElementById('numeroAnimado').innerText = numero;
+            
+            // Pequeno delay para "explodir" o card
+            setTimeout(() => {
+                document.getElementById('numeroAnimado').style.display = 'none';
+                document.getElementById('winnerCard').style.display = 'block';
+
+                // Preencher Card
+                document.getElementById('resNumero').innerText = numero;
+                document.getElementById('resNome').innerText = user.nome;
+                document.getElementById('resCpf').innerText = mascararCPF(user.cpf);
+                document.getElementById('resTel').innerText = mascararTelefone(user.telefone);
+                document.getElementById('resCotas').innerText = cotas;
+                document.getElementById('resValor').innerText = `R$ ${parseFloat(valor).toFixed(2)}`;
+
+                // Configurar botão de Chat
+                // Redireciona para o admin já "setando" o CPF para abrir o chat
+                // Nota: Você precisará adicionar uma pequena lógica no admin.html para ler ?chatCPF=...
+                const btnChat = document.getElementById('btnChatLink');
+                btnChat.onclick = function() {
+                    // Salva no LocalStorage ou manda via URL
+                    window.location.href = `admin.html?openChat=${user.cpf}`;
+                };
+
+            }, 500);
+        }
+
+        // --- MÁSCARAS DE PRIVACIDADE ---
+        function mascararCPF(cpf) {
+            // Ex: 123.456.789-00 -> ***.456.789-**
+            // Se vier limpo: 12345678900
+            let limpo = cpf.replace(/\D/g, '');
+            if(limpo.length !== 11) return "***.***.***-**";
+            return `***.${limpo.substr(3,3)}.${limpo.substr(6,3)}-**`;
+        }
+
+        function mascararTelefone(tel) {
+            // Ex: 11999998888 -> (11) 9****-8888
+            let limpo = tel.replace(/\D/g, '');
+            if(limpo.length < 10) return "(**) *****-****";
+            const ddd = limpo.substr(0,2);
+            const final = limpo.substr(-4);
+            return `(${ddd}) 9****-${final}`;
+        }
+
+        function fecharSorteio() {
+            document.getElementById('sorteioScreen').style.display = 'none';
+        }
+
+        // INICIALIZAR
+        window.onload = carregarRifas;
+
+    </script>
+</body>
+</html>

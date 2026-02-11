@@ -106,9 +106,36 @@
         #modalSorteio { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(15px); }
         .sorteio-card { text-align: center; width: 100%; max-width: 550px; padding: 40px; border: 2px solid var(--primary); border-radius: 20px; background: #000; }
         .sorteio-numero { font-size: 7rem; font-family: 'Orbitron'; color: var(--primary); text-shadow: 0 0 40px var(--primary); margin: 20px 0; font-weight: 900; }
+
+        /* --- TELA DE LOGIN (NOVO) --- */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #050505; z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 204, 0, 0.1) 0%, transparent 50%);
+        }
+        .login-box {
+            background: #111; border: 1px solid var(--primary); padding: 40px;
+            border-radius: 10px; width: 100%; max-width: 400px; text-align: center;
+            box-shadow: 0 0 50px rgba(255, 204, 0, 0.2);
+        }
+        .login-title { font-family: 'Orbitron'; font-size: 1.5rem; color: var(--primary); margin-bottom: 30px; letter-spacing: 2px; }
+        .login-input { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: #fff; margin-bottom: 15px; border-radius: 5px; text-align: center; }
+        .login-input:focus { border-color: var(--primary); outline: none; }
+        .login-btn { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; border-radius: 5px; transition: 0.3s; }
+        .login-btn:hover { background: #e6c200; box-shadow: 0 0 20px rgba(255, 204, 0, 0.4); }
     </style>
 </head>
 <body>
+
+    <div id="loginOverlay">
+        <div class="login-box">
+            <div class="login-title">ACESSO RESTRITO</div>
+            <input type="text" id="loginUser" class="login-input" placeholder="Usuário">
+            <input type="password" id="loginPass" class="login-input" placeholder="Senha">
+            <button class="login-btn" onclick="fazerLogin()">ENTRAR NO SISTEMA</button>
+        </div>
+    </div>
 
     <div class="admin-wrapper">
         <aside>
@@ -124,7 +151,7 @@
                     <div class="nav-link" onclick="window.open('sorteador.html', '_blank')" style="color:var(--primary);">🎲 SORTEADOR</div>
                 </nav>
             </div>
-            <div class="nav-link" onclick="location.href='index.html'" style="color:var(--red);">🚪 SAIR</div>
+            <div class="nav-link" onclick="logout()" style="color:var(--red);">🚪 SAIR</div>
         </aside>
 
         <main>
@@ -267,6 +294,33 @@
     </div>
 
     <script>
+        // --- SISTEMA DE LOGIN (NOVO) ---
+        const USER_ADM = "admin";
+        const PASS_ADM = "doresopolis2026*#";
+
+        function fazerLogin() {
+            const u = document.getElementById('loginUser').value;
+            const p = document.getElementById('loginPass').value;
+
+            if (u === USER_ADM && p === PASS_ADM) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                sessionStorage.setItem('admLogado', 'true');
+            } else {
+                alert("ACESSO NEGADO! Credenciais incorretas.");
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('admLogado');
+            location.reload(); // Recarrega para bloquear a tela
+        }
+
+        function checkAuth() {
+            if (sessionStorage.getItem('admLogado') === 'true') {
+                document.getElementById('loginOverlay').style.display = 'none';
+            }
+        }
+
         // --- CONFIGURAÇÃO FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg",
@@ -561,6 +615,7 @@
         }
 
         window.onload = () => { 
+            checkAuth(); // Verifica login ao carregar
             updateDash(); renderMembros(); renderRifas(); renderPagamentos(); carregarPix(); 
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('openChat')) {

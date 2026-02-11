@@ -70,17 +70,29 @@
         tr td:first-child { border-radius: 10px 0 0 10px; border-left: 3px solid var(--primary); }
         tr td:last-child { border-radius: 0 10px 10px 0; }
 
-        /* BUTTONS */
+        /* CHAT LAYOUT (WhatsApp Style) */
+        .chat-layout { display: grid; grid-template-columns: 300px 1fr; height: 600px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; }
+        .chat-sidebar { background: rgba(0, 0, 0, 0.8); border-right: 1px solid rgba(255, 255, 255, 0.1); overflow-y: auto; }
+        .contact-item { padding: 15px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer; transition: 0.3s; }
+        .contact-item:hover, .contact-item.active { background: rgba(255, 204, 0, 0.1); border-left: 3px solid var(--primary); }
+        .contact-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #333; }
+        .contact-info b { display: block; color: #fff; font-size: 0.9rem; }
+        .contact-info span { font-size: 0.7rem; color: #888; }
+        .chat-main { display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.95); }
+        .chat-header { padding: 15px; background: rgba(0, 0, 0, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-family: 'Orbitron'; color: var(--primary); }
+        .chat-messages-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg-bubble { max-width: 70%; padding: 10px 15px; border-radius: 10px; font-size: 0.9rem; position: relative; word-wrap: break-word; font-family: 'Rajdhani'; }
+        .msg-user { align-self: flex-start; background: #333; color: #fff; border-bottom-left-radius: 0; }
+        .msg-admin { align-self: flex-end; background: var(--primary); color: #000; border-bottom-right-radius: 0; font-weight: 600; }
+        .msg-time { font-size: 0.6rem; opacity: 0.6; text-align: right; margin-top: 4px; }
+        .chat-input-area { padding: 15px; background: rgba(0, 0, 0, 0.9); display: flex; gap: 10px; }
+
+        /* BUTTONS & INPUTS */
         .btn-action { padding: 8px 12px; border: none; border-radius: 4px; font-family: 'Orbitron'; font-size: 0.6rem; cursor: pointer; transition: 0.3s; margin-right: 5px; font-weight: bold; }
         .btn-green { background: var(--green); color: #000; }
         .btn-red { background: rgba(255, 68, 68, 0.1); color: var(--red); border: 1px solid var(--red); }
-        .btn-red:hover { background: var(--red); color: #fff; }
-        .btn-blue { background: rgba(0, 162, 255, 0.15); color: var(--blue); border: 1px solid var(--blue); }
         .btn-save { width:100%; padding:15px; background:var(--primary); border:none; font-weight:900; cursor:pointer; font-family: 'Orbitron'; color: #000; border-radius: 6px; margin-top: 10px; }
-
-        /* INPUTS */
         input, select { width:100%; padding:15px; background:rgba(0,0,0,0.5); border:1px solid #333; color:#fff; border-radius: 6px; font-family: 'Rajdhani'; margin-bottom: 15px; }
-        label { display:block; color:var(--primary); font-size:0.7rem; margin-bottom:8px; font-family:'Orbitron'; }
     </style>
 </head>
 <body>
@@ -94,6 +106,8 @@
                     <div class="nav-link" onclick="openTab(event, 'membros')">👥 MEMBROS</div>
                     <div class="nav-link" onclick="openTab(event, 'pagamentos')">💸 PAGAMENTOS</div>
                     <div class="nav-link" onclick="openTab(event, 'rifas')">⚡ RIFAS</div>
+                    <div class="nav-link" onclick="openTab(event, 'pix')">🔑 CHAVE PIX</div>
+                    <div class="nav-link" onclick="openTab(event, 'chat')">💬 CHAT</div>
                 </nav>
             </div>
             <div class="nav-link" onclick="location.href='index.html'" style="color:var(--red);">🚪 SAIR</div>
@@ -102,14 +116,14 @@
         <main>
             <section id="dash" class="tab-content active">
                 <div class="header-title">VISÃO GERAL</div>
-                <div id="statsContainer">Aguardando dados...</div>
+                <div id="statsContainer">Carregando dados da nuvem...</div>
             </section>
 
             <section id="membros" class="tab-content">
                 <div class="header-title">GERENCIAR MEMBROS</div>
                 <div class="glass-panel">
                     <table>
-                        <thead><tr><th>MEMBRO</th><th>CPF</th><th>CARGO</th><th>AÇÕES</th></tr></thead>
+                        <thead><tr><th>MEMBRO</th><th>CPF</th><th>STATUS</th><th>AÇÕES</th></tr></thead>
                         <tbody id="listaMembrosBody"></tbody>
                     </table>
                 </div>
@@ -131,11 +145,40 @@
                     <h3 style="margin-bottom:20px; font-family:Orbitron;">NOVA RIFA</h3>
                     <input type="text" id="rifaNome" placeholder="Nome da Skin">
                     <input type="text" id="rifaImg" placeholder="URL da Imagem">
-                    <input type="number" id="rifaPreco" placeholder="Preço unitário (R$)">
+                    <input type="number" id="rifaPreco" placeholder="Preço (R$)">
                     <input type="number" id="rifaTotal" placeholder="Total de Cotas">
                     <button class="btn-save" onclick="addRifa()">CRIAR RIFA NO FIREBASE</button>
                 </div>
                 <div id="listaRifasAdm"></div>
+            </section>
+
+            <section id="pix" class="tab-content">
+                <div class="header-title">CONFIGURAR CHAVE PIX</div>
+                <div class="glass-panel" style="max-width: 500px;">
+                    <select id="pixTipo">
+                        <option value="CPF">CPF</option>
+                        <option value="CNPJ">CNPJ</option>
+                        <option value="EMAIL">E-mail</option>
+                        <option value="ALEATORIA">Chave Aleatória</option>
+                    </select>
+                    <input type="text" id="pixChave" placeholder="Digite sua chave...">
+                    <button class="btn-save" onclick="salvarPixFirebase()">SALVAR CONFIGURAÇÃO</button>
+                </div>
+            </section>
+
+            <section id="chat" class="tab-content">
+                <div class="header-title">SUPORTE AO CLIENTE</div>
+                <div class="chat-layout">
+                    <div class="chat-sidebar" id="listaContatos"></div>
+                    <div class="chat-main">
+                        <div class="chat-header" id="chatHeaderName">SELECIONE UM MEMBRO</div>
+                        <div class="chat-messages-area" id="chatMessagesBox"></div>
+                        <div class="chat-input-area">
+                            <input type="text" id="respAdm" placeholder="Digite sua resposta..." disabled>
+                            <button class="btn-action btn-green" onclick="responderChat()" id="btnEnviarChat" disabled>ENVIAR</button>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
     </div>
@@ -154,114 +197,116 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // --- SISTEMA DE ABAS ---
         function openTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            e.currentTarget.classList.add('active');
+            if(e) e.currentTarget.classList.add('active');
+            if(id === 'chat') renderContatos();
         }
 
-        // --- GESTÃO DE RIFAS ---
-        function addRifa() {
-            const n = document.getElementById('rifaNome').value;
-            const i = document.getElementById('rifaImg').value;
-            const p = document.getElementById('rifaPreco').value;
-            const t = document.getElementById('rifaTotal').value;
-
-            if(!n || !i || !p || !t) return alert("Preencha todos os campos!");
-
-            const newRifaRef = db.ref('rifas').push();
-            newRifaRef.set({
-                nome: n,
-                img: i,
-                preco: p,
-                total: t,
-                vendidas: 0,
-                numerosVendidos: []
-            }).then(() => {
-                alert("Rifa criada com sucesso!");
-                document.getElementById('rifaNome').value = '';
+        /* --- PIX NO FIREBASE --- */
+        function salvarPixFirebase() {
+            db.ref('config/pix').set({
+                tipo: document.getElementById('pixTipo').value,
+                chave: document.getElementById('pixChave').value
+            }).then(() => alert("Chave Pix atualizada!"));
+        }
+        function carregarPix() {
+            db.ref('config/pix').once('value', s => {
+                const data = s.val();
+                if(data) {
+                    document.getElementById('pixTipo').value = data.tipo;
+                    document.getElementById('pixChave').value = data.chave;
+                }
             });
         }
 
-        function carregarRifasAdmin() {
-            db.ref('rifas').on('value', (snapshot) => {
-                const rifas = snapshot.val() || {};
-                const container = document.getElementById('listaRifasAdm');
-                container.innerHTML = Object.keys(rifas).map(id => {
+        /* --- RIFAS --- */
+        function addRifa() {
+            const n=document.getElementById('rifaNome').value, i=document.getElementById('rifaImg').value, p=document.getElementById('rifaPreco').value, t=document.getElementById('rifaTotal').value;
+            if(!n||!i||!p||!t) return alert("Campos vazios");
+            db.ref('rifas').push({ nome:n, img:i, preco:p, total:t, vendidas:0, numerosVendidos:[] });
+            alert("Rifa Criada!");
+        }
+        function renderRifas() {
+            db.ref('rifas').on('value', s => {
+                const rifas = s.val() || {};
+                document.getElementById('listaRifasAdm').innerHTML = Object.keys(rifas).map(id => {
                     const r = rifas[id];
-                    return `
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                        <div style="display:flex; align-items:center; gap:15px;">
-                            <img src="${r.img}" style="width:50px;">
-                            <b>${r.nome}</b>
-                        </div>
-                        <button class="btn-action btn-red" onclick="removerRifa('${id}')">EXCLUIR</button>
+                    return `<div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; align-items:center; gap:15px;"><img src="${r.img}" style="width:40px;"><b>${r.nome}</b></div>
+                        <button class="btn-action btn-red" onclick="db.ref('rifas/${id}').remove()">EXCLUIR</button>
                     </div>`;
                 }).join('');
             });
         }
-        function removerRifa(id) { if(confirm("Deseja excluir?")) db.ref('rifas/'+id).remove(); }
 
-        // --- GESTÃO DE PAGAMENTOS ---
-        function carregarPagamentosAdmin() {
-            db.ref('pagamentos').on('value', (snapshot) => {
-                const pagamentos = snapshot.val() || {};
-                const body = document.getElementById('listaPagamentosBody');
-                body.innerHTML = Object.keys(pagamentos).map(id => {
-                    const p = pagamentos[id];
+        /* --- PAGAMENTOS --- */
+        function renderPagamentos() {
+            db.ref('pagamentos').on('value', s => {
+                const pags = s.val() || {};
+                document.getElementById('listaPagamentosBody').innerHTML = Object.keys(pags).map(id => {
+                    const p = pags[id];
                     if(p.status !== 'pendente') return '';
-                    return `
-                    <tr>
-                        <td>${p.usuario}</td>
-                        <td>${p.rifa}</td>
-                        <td>R$ ${p.valor}</td>
-                        <td><a href="${p.comprovante}" download="comprovante.png" style="color:var(--primary); font-size:0.7rem;">BAIXAR</a></td>
-                        <td>
-                            <button class="btn-action btn-green" onclick="aprovarPagamento('${id}', '${p.rifaId}', ${p.cotas})">APROVAR</button>
-                            <button class="btn-action btn-red" onclick="recusarPagamento('${id}')">RECUSAR</button>
-                        </td>
-                    </tr>`;
-                }).join('') || '<tr><td colspan="5" style="text-align:center; padding:20px;">Nenhum pagamento pendente.</td></tr>';
+                    return `<tr><td>${p.usuario}</td><td>${p.rifa}</td><td>R$ ${p.valor}</td><td><a href="${p.comprovante}" download style="color:var(--primary)">BAIXAR</a></td><td>
+                        <button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${p.rifaId}',${p.cotas})">APROVAR</button></td></tr>`;
+                }).join('');
             });
         }
-
-        function aprovarPagamento(pagId, rifaId, qtdCotas) {
-            // 1. Atualizar Rifa (Números Vendidos)
-            db.ref('rifas/' + rifaId).once('value', (snap) => {
-                const r = snap.val();
-                let numeros = r.numerosVendidos || [];
-                const novosNumeros = [];
-                
-                // Gerar números únicos (ex: começando do 001)
-                while(novosNumeros.length < qtdCotas) {
-                    let num = Math.floor(Math.random() * r.total) + 1;
-                    let fmt = String(num).padStart(3, '0');
-                    if(!numeros.includes(fmt) && !novosNumeros.includes(fmt)) novosNumeros.push(fmt);
+        function aprovarPagamento(pagId, rifaId, qtd) {
+            db.ref('rifas/'+rifaId).once('value', s => {
+                const r = s.val();
+                let nums = r.numerosVendidos || [];
+                const novos = [];
+                while(novos.length < qtd) {
+                    let n = Math.floor(Math.random() * r.total) + 1;
+                    let fmt = String(n).padStart(3,'0');
+                    if(!nums.includes(fmt) && !novos.includes(fmt)) novos.push(fmt);
                 }
-
-                db.ref('rifas/' + rifaId).update({
-                    vendidas: r.vendidas + qtdCotas,
-                    numerosVendidos: [...numeros, ...novosNumeros]
-                });
-
-                // 2. Atualizar status do pagamento e salvar números ganhos
-                db.ref('pagamentos/' + pagId).update({
-                    status: 'aprovado',
-                    numeros: novosNumeros
-                });
-                
-                alert("Pagamento Aprovado!");
+                db.ref('rifas/'+rifaId).update({ vendidas: r.vendidas + qtd, numerosVendidos: [...nums, ...novos] });
+                db.ref('pagamentos/'+pagId).update({ status: 'aprovado', numeros: novos });
+                alert("Aprovado!");
             });
         }
 
-        function recusarPagamento(id) { db.ref('pagamentos/'+id).update({status: 'recusado'}); }
+        /* --- CHAT FIREBASE (WHATSAPP STYLE) --- */
+        let chatSelecionadoCPF = null;
+        function renderContatos() {
+            db.ref('chatLog').on('value', s => {
+                const logs = s.val() || {};
+                const cpfs = [...new Set(Object.values(logs).map(l => l.userCpf))];
+                document.getElementById('listaContatos').innerHTML = cpfs.map(cpf => {
+                    const active = chatSelecionadoCPF === cpf ? 'active' : '';
+                    return `<div class="contact-item ${active}" onclick="abrirChat('${cpf}')"><div class="contact-info"><b>CPF: ${cpf}</b><span>Ver conversa</span></div></div>`;
+                }).join('');
+                if(chatSelecionadoCPF) renderMensagens();
+            });
+        }
+        function abrirChat(cpf) {
+            chatSelecionadoCPF = cpf;
+            document.getElementById('chatHeaderName').innerText = "CONVERSA: " + cpf;
+            document.getElementById('respAdm').disabled = false;
+            document.getElementById('btnEnviarChat').disabled = false;
+            renderContatos();
+        }
+        function renderMensagens() {
+            db.ref('chatLog').once('value', s => {
+                const logs = Object.values(s.val() || {}).filter(l => l.userCpf === chatSelecionadoCPF);
+                document.getElementById('chatMessagesBox').innerHTML = logs.map(m => `
+                    <div class="msg-bubble ${m.from==='admin'?'msg-admin':'msg-user'}">${m.text}<div class="msg-time">${m.time}</div></div>
+                `).join('');
+                const box = document.getElementById('chatMessagesBox'); box.scrollTop = box.scrollHeight;
+            });
+        }
+        function responderChat() {
+            const txt = document.getElementById('respAdm').value;
+            if(!txt) return;
+            db.ref('chatLog').push({ userCpf: chatSelecionadoCPF, from: 'admin', text: txt, time: new Date().toLocaleTimeString().slice(0,5) });
+            document.getElementById('respAdm').value = ''; renderMensagens();
+        }
 
-        window.onload = () => {
-            carregarRifasAdmin();
-            carregarPagamentosAdmin();
-        };
+        window.onload = () => { carregarPix(); renderRifas(); renderPagamentos(); };
     </script>
 </body>
 </html>

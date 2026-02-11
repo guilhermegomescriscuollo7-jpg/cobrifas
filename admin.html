@@ -114,6 +114,7 @@
                     <div class="nav-link" onclick="openTab(event, 'rifas')">⚡ RIFAS</div>
                     <div class="nav-link" onclick="openTab(event, 'pix')">🔑 CHAVE PIX</div>
                     <div class="nav-link" onclick="openTab(event, 'chat')">💬 CHAT</div>
+                    <div class="nav-link" onclick="window.open('sorteador.html', '_blank')" style="color:var(--primary);">🎲 SORTEADOR</div>
                 </nav>
             </div>
             <div class="nav-link" onclick="location.href='index.html'" style="color:var(--red);">🚪 SAIR</div>
@@ -420,8 +421,17 @@
             });
         }
 
-        // ADICIONADO carregarPix() NO LOAD
-        window.onload = () => { updateDash(); renderMembros(); renderRifas(); renderPagamentos(); carregarPix(); };
+        // ADICIONADO carregarPix() E LOGICA DE CHAT REDIRECT
+        window.onload = () => { 
+            updateDash(); renderMembros(); renderRifas(); renderPagamentos(); carregarPix(); 
+            
+            // Lógica extra para abrir o chat se vier do Sorteador
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('openChat')) {
+                openTab(null, 'chat');
+                alert("O ganhador tem o CPF: " + urlParams.get('openChat') + ". Localize-o na lista de contatos.");
+            }
+        };
     </script>
 </body>
 </html>

@@ -188,21 +188,21 @@
     </div>
 
     <div id="modalPix">
-        <div class="modal-card-pix">
-            <h2 style="font-family:Orbitron; color:var(--primary); margin-bottom:20px;">PAGAMENTO PIX</h2>
-            <div class="pix-box">
-                <label style="color:var(--primary); font-size:0.7rem;">CHAVE PIX</label>
-                <div id="txtChavePix" style="color:#fff; font-size:1.1rem; font-weight:bold; word-break:break-all;">...</div>
-            </div>
-            <div class="upload-area">
-                <label for="compInput" class="upload-label">📎 ANEXAR COMPROVANTE</label>
-                <input type="file" id="compInput" accept="image/*, application/pdf" style="display:none;" onchange="validarArquivo()">
-                <small id="fileName" style="color:var(--green); display:block; margin-top:10px; font-weight:bold;"></small>
-            </div>
-            <button id="btnFinalizarPix" class="btn-action btn-disabled" style="background:var(--primary); color:#000; border:none; width:100%; margin-top:20px;" onclick="enviarPedidoFirebase()">JÁ REALIZEI O PAGAMENTO</button>
-            <button class="btn-action" style="background:transparent; color:#888; border:none; margin-top:10px;" onclick="document.getElementById('modalPix').style.display='none'">CANCELAR</button>
+    <div class="modal-card-pix">
+        <h2 style="font-family:Orbitron; color:var(--primary); margin-bottom:20px;">PAGAMENTO PIX</h2>
+        <div class="pix-box">
+            <label style="color:var(--primary); font-size:0.7rem;">CHAVE PIX</label>
+            <div id="txtChavePix" style="color:#fff; font-size:1.1rem; font-weight:bold; word-break:break-all;">---</div>
         </div>
+        <div class="upload-area">
+            <label for="compInput" class="upload-label">📎 ANEXAR COMPROVANTE</label>
+            <input type="file" id="compInput" accept="image/*, application/pdf" style="display:none;" onchange="validarArquivo()">
+            <small id="fileName" style="color:var(--green); display:block; margin-top:10px; font-weight:bold;"></small>
+        </div>
+        <button id="btnFinalizarPix" class="btn-action btn-disabled" style="background:var(--primary); color:#000; border:none; width:100%; margin-top:20px;" onclick="enviarPedidoFirebase()">JÁ REALIZEI O PAGAMENTO</button>
+        <button class="btn-action" style="background:transparent; color:#888; border:none; margin-top:10px;" onclick="document.getElementById('modalPix').style.display='none'">CANCELAR</button>
     </div>
+</div>
 
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg", authDomain: "cobrifas.firebaseapp.com", projectId: "cobrifas", storageBucket: "cobrifas.firebasestorage.app", messagingSenderId: "1098617388770", appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb" };
@@ -283,39 +283,57 @@
             document.getElementById('cartCount').innerText = c; document.getElementById('cartTotal').innerText = `R$ ${t.toFixed(2)}`;
         }
 
-        function abrirCheckoutPix() {
-            if(!carrinho.length) return alert("Carrinho vazio!");
-            db.ref('config/pix/chave').once('value', s => {
-                document.getElementById('txtChavePix').innerText = s.val() || "---";
-                document.getElementById('modalPix').style.display = 'flex'; toggleCart();
-            });
-        }
+      // 1. Abre o modal e busca a chave PIX no banco
+function abrirCheckoutPix() {
+    if(!carrinho.length) return alert("Seu carrinho está vazio!");
+    db.ref('config/pix/chave').once('value', s => {
+        document.getElementById('txtChavePix').innerText = s.val() || "Chave não configurada";
+        document.getElementById('modalPix').style.display = 'flex';
+        toggleCart(); // Fecha o carrinho lateral
+    });
+}
 
-        function validarArquivo() {
-            const file = document.getElementById('compInput').files[0];
-            if(file) {
-                document.getElementById('fileName').innerText = "✔ " + file.name;
-                const reader = new FileReader();
-                reader.onload = e => { 
-                    comprovanteBase64 = e.target.result;
-                    document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); 
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+// 2. Lê o arquivo e LIBERA o botão de pagamento
+function validarArquivo() {
+    const file = document.getElementById('compInput').files[0];
+    const btn = document.getElementById('btnFinalizarPix');
+    if(file) {
+        document.getElementById('fileName').innerText = "✔ " + file.name;
+        const reader = new FileReader();
+        reader.onload = e => { 
+            comprovanteBase64 = e.target.result; // Salva a imagem para enviar
+            btn.classList.remove('btn-disabled'); // Ativa o botão visualmente
+            btn.style.opacity = "1";
+            btn.style.pointerEvents = "auto";
+        };
+        reader.readAsDataURL(file);
+    }
+}
 
-        function enviarPedidoFirebase() {
-            if(!comprovanteBase64) return alert("O comprovante é obrigatório!");
-            carrinho.forEach(it => {
-                db.ref('pagamentos').push({
-                    usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, 
-                    valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', 
-                    comprovante: comprovanteBase64, data: new Date().toLocaleString()
-                });
-            });
-            carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none';
-            alert("Pedido enviado para análise!"); tab('minhas');
-        }
+// 3. Envia os dados para o Firebase
+function enviarPedidoFirebase() {
+    if(!comprovanteBase64) return alert("Você precisa anexar o comprovante!");
+    
+    carrinho.forEach(it => {
+        db.ref('pagamentos').push({
+            usuario: userAtivo.nome,
+            cpf: userAtivo.cpf,
+            rifa: it.nome,
+            rifaId: it.id,
+            valor: (it.preco * it.qtd).toFixed(2),
+            cotas: it.qtd,
+            status: 'pendente',
+            comprovante: comprovanteBase64,
+            data: new Date().toLocaleString()
+        });
+    });
+
+    carrinho = []; // Limpa o carrinho
+    updateUI(); // Atualiza a interface
+    document.getElementById('modalPix').style.display = 'none';
+    alert("Sucesso! Seu pedido foi enviado para análise do Admin.");
+    tab('minhas'); // Direciona para a aba de participações
+}
 
         function loadMinhas() {
             db.ref('pagamentos').orderByChild('cpf').equalTo(userAtivo.cpf).on('value', s => {
@@ -352,3 +370,4 @@
     </script>
 </body>
 </html>
+

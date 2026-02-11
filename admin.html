@@ -75,6 +75,7 @@
         .btn-action { padding: 8px 12px; border: none; border-radius: 4px; font-family: 'Orbitron'; font-size: 0.6rem; cursor: pointer; transition: 0.3s; margin-right: 5px; font-weight: bold; }
         .btn-green { background: var(--green); color: #000; }
         .btn-red { background: rgba(255, 68, 68, 0.1); color: var(--red); border: 1px solid var(--red); }
+        .btn-red:hover { background: var(--red); color: #fff; }
         .btn-gold { background: var(--primary); color: #000; box-shadow: 0 0 15px rgba(255,204,0,0.4); font-weight: 900; }
         input, select { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid #333; color: #fff; border-radius: 6px; font-family: 'Rajdhani'; margin-bottom: 15px; }
         .btn-save { width:100%; padding:15px; background:var(--primary); border:none; font-weight:900; cursor:pointer; font-family: 'Orbitron'; color: #000; border-radius: 6px; }
@@ -142,7 +143,15 @@
                 <div class="header-title">APROVAR PAGAMENTOS</div>
                 <div class="glass-panel">
                     <table>
-                        <thead><tr><th>USER</th><th>RIFA</th><th>VALOR</th><th>COMPROVANTE</th><th>AÇÃO</th></tr></thead>
+                        <thead>
+                            <tr>
+                                <th>USER</th>
+                                <th>CPF</th> <th>RIFA</th>
+                                <th>VALOR</th>
+                                <th>COMPROVANTE</th>
+                                <th>AÇÃO</th>
+                            </tr>
+                        </thead>
                         <tbody id="listaPagamentos"></tbody>
                     </table>
                 </div>
@@ -265,16 +274,22 @@
             });
         }
 
-        /* --- PAGAMENTOS --- */
+        /* --- PAGAMENTOS ATUALIZADOS (CPF E REPROVAR) --- */
         function renderPagamentos() {
             db.ref('pagamentos').on('value', s => {
                 const pags = s.val() || {};
                 document.getElementById('listaPagamentos').innerHTML = Object.keys(pags).filter(id => pags[id].status === 'pendente').map(id => {
                     const p = pags[id];
-                    return `<tr><td><b>${p.usuario}</b></td><td>${p.rifa}</td><td>R$ ${p.valor}</td>
-                        <td><a href="${p.comprovante}" download style="color:var(--primary)">BAIXAR</a></td>
-                        <td><button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${p.rifaId}',${p.cotas})">OK</button></td></tr>`;
-                }).join('') || '<tr><td colspan="5" align="center">Vazio.</td></tr>';
+                    return `<tr>
+                        <td><b>${p.usuario}</b></td>
+                        <td>${p.cpf}</td> <td>${p.rifa}</td>
+                        <td>R$ ${p.valor}</td>
+                        <td><a href="${p.comprovante}" download target="_blank" style="color:var(--primary)">BAIXAR</a></td>
+                        <td>
+                            <button class="btn-action btn-green" onclick="aprovarPagamento('${id}','${p.rifaId}',${p.cotas})">OK</button>
+                            <button class="btn-action btn-red" onclick="reprovarPagamento('${id}')">X</button> </td>
+                    </tr>`;
+                }).join('') || '<tr><td colspan="6" align="center">Vazio.</td></tr>';
             });
         }
 
@@ -292,6 +307,13 @@
                 db.ref(`pagamentos/${pagId}`).update({ status: 'aprovado', numeros: novos });
                 alert("Aprovado!");
             });
+        }
+
+        // FUNÇÃO DE REPROVAÇÃO
+        function reprovarPagamento(id) {
+            if(confirm("Deseja recusar este pagamento?")) {
+                db.ref(`pagamentos/${id}`).update({ status: 'recusado' });
+            }
         }
 
         /* --- SORTEIO REALTIME --- */

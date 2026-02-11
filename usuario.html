@@ -29,31 +29,56 @@
             color: #fff; font-family: 'Rajdhani', sans-serif;
         }
 
-        /* HEADER */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(0, 0, 0, 0.9); border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
+        /* --- HEADER --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 8%; background: rgba(0, 0, 0, 0.9); border-bottom: 2px solid var(--primary);
+            position: sticky; top: 0; z-index: 1000;
+        }
         .logo { font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900; color: #fff; text-decoration: none; }
         .logo span { color: var(--primary); }
-        .nav-user { display: flex; gap: 15px; align-items: center; }
-        .nav-item { font-family: 'Orbitron'; font-size: 0.7rem; color: #888; cursor: pointer; text-transform: uppercase; text-decoration: none; }
-        .nav-item.active, .nav-item:hover { color: var(--primary); }
+        
+        .nav-user { display: flex; gap: 10px; align-items: center; }
+        .nav-item { 
+            text-decoration: none; font-family: 'Orbitron'; font-size: 0.65rem; padding: 10px 15px; 
+            color: #888; cursor: pointer; border: 1px solid transparent; transition: 0.3s;
+        }
+        .nav-item.active, .nav-item:hover { color: var(--primary); border-color: rgba(255,204,0,0.3); background: rgba(255, 204, 0, 0.05); }
 
-        /* CONTAINERS */
+        /* --- LAYOUT --- */
         .container { padding: 40px 8%; }
-        .tab-content { display: none; animation: fadeIn 0.4s ease; }
-        .tab-content.active { display: block; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* CARDS */
+        /* --- GRID DE RIFAS --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; position: relative; }
-        .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; padding: 5px 15px; font-family: 'Orbitron'; font-weight: 900; font-size: 0.8rem; }
-        .skin-img { width: 100%; height: 140px; object-fit: contain; margin-bottom: 15px; }
-        .btn-buy { width: 100%; padding: 10px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; }
-        .btn-buy:hover { background: var(--primary); color: #000; }
+        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 4px; position: relative; }
+        .price-badge { position: absolute; top: 0; right: 0; background: var(--primary); color: #000; font-weight: 900; padding: 5px 15px; font-family: 'Orbitron'; font-size: 0.8rem; }
+        .skin-img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 15px; }
+        
+        .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; margin: 15px 0; overflow: hidden; }
+        .progress-fill { background: var(--primary); height: 100%; transition: 0.5s; }
 
-        /* MODAL VITÓRIA */
-        #modalWin { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:5000; align-items:center; justify-content:center; }
-        .win-card { text-align: center; padding: 40px; border: 2px solid var(--primary); background: #000; border-radius: 15px; box-shadow: 0 0 50px var(--primary); }
+        .btn-participar { 
+            width: 100%; padding: 12px; background: transparent; border: 1px solid var(--primary); 
+            color: var(--primary); font-family: 'Orbitron'; font-weight: 900; cursor: pointer; transition: 0.3s;
+        }
+        .btn-participar:hover { background: var(--primary); color: #000; }
+
+        /* --- MINHAS RIFAS (TABELA/LISTA) --- */
+        .my-ticket-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; margin-bottom: 15px; }
+        .ticket-header { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 10px; }
+        .ticket-numbers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .n-box { background: var(--primary); color: #000; font-family: 'Orbitron'; font-weight: bold; font-size: 0.7rem; padding: 4px 8px; border-radius: 3px; }
+
+        /* --- MODAL VITÓRIA --- */
+        #modalWin { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:5000; align-items:center; justify-content:center; backdrop-filter: blur(15px); }
+        .win-card { text-align: center; padding: 50px; border: 2px solid var(--primary); background: #000; border-radius: 20px; box-shadow: 0 0 100px var(--primary); animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { from { transform: scale(0.5); } to { transform: scale(1); } }
+
+        .btn-exit { color: var(--red); border: 1px solid var(--red); padding: 8px 18px; font-family: 'Orbitron'; font-size: 0.65rem; cursor: pointer; transition: 0.3s; }
+        .btn-exit:hover { background: var(--red); color: #fff; }
     </style>
 </head>
 <body>
@@ -61,35 +86,48 @@
     <header>
         <a href="index.html" class="logo">COB<span>RIFAS</span></a>
         <nav class="nav-user">
-            <div class="nav-item active" onclick="openTab(event, 'loja')">LOJA</div>
-            <div class="nav-item" onclick="openTab(event, 'minhas')">MINHAS PARTICIPAÇÕES</div>
-            <div class="nav-item" onclick="logout()" style="color:var(--red)">SAIR</div>
+            <div class="nav-item active" onclick="openTab(event, 'loja')">LOJA DE RIFAS</div>
+            <div class="nav-item" onclick="openTab(event, 'minhas')">MINHAS RIFAS</div>
+            <div class="nav-item" onclick="openTab(event, 'suporte')">SUPORTE</div>
+            <div class="btn-exit" onclick="logout()">SAIR</div>
         </nav>
     </header>
 
     <div class="container">
         <section id="loja" class="tab-content active">
-            <h2 style="font-family:Orbitron; margin-bottom:30px;">RIFAS DISPONÍVEIS</h2>
+            <h2 class="section-title">SKINS DISPONÍVEIS</h2>
             <div class="grid" id="gridLoja"></div>
         </section>
 
         <section id="minhas" class="tab-content">
-            <h2 style="font-family:Orbitron; margin-bottom:30px;">MEUS TÍTULOS</h2>
+            <h2 class="section-title">MEUS TÍTULOS DE SORTE</h2>
             <div id="listaMinhasRifas"></div>
+        </section>
+
+        <section id="suporte" class="tab-content">
+            <h2 class="section-title">CONTATO SUPORTE</h2>
+            <div style="background:var(--glass); padding:40px; border-radius:12px; text-align:center; border:1px solid #333;">
+                <p style="margin-bottom:20px;">Dúvidas sobre pagamentos ou sorteios?</p>
+                <button class="btn-participar" style="width:auto; padding:15px 40px;" onclick="window.open('https://wa.me/SEU_NUMERO')">CHAMAR NO WHATSAPP</button>
+            </div>
         </section>
     </div>
 
     <div id="modalWin">
         <div class="win-card">
-            <h1 style="font-family:Orbitron; color:var(--primary);">🏆 PARABÉNS!</h1>
-            <p style="margin: 20px 0; font-size: 1.2rem;">Você foi sorteado na rifa: <br><b id="winRifaName">---</b></p>
-            <p>Número da Sorte: <b id="winRifaNum" style="color:var(--primary)">---</b></p>
-            <button onclick="fecharWin()" style="margin-top:30px; padding:10px 30px; background:var(--primary); border:none; font-family:Orbitron; cursor:pointer;">REIVINDICAR PRÊMIO</button>
+            <span style="font-size: 5rem;">🏆</span>
+            <h1 style="font-family:Orbitron; color:var(--primary); margin: 20px 0;">PARABÉNS!</h1>
+            <p style="font-size: 1.2rem;">Você foi sorteado no item: <br><b id="winItem" style="font-size: 1.8rem;">---</b></p>
+            <div style="margin: 20px 0; background:rgba(255,255,0,0.1); padding:15px; border-radius:10px;">
+                <span style="color:#888; font-family:Orbitron; font-size:0.7rem;">NÚMERO SORTEADO:</span><br>
+                <b id="winNum" style="font-size:2.5rem; color:var(--primary);">#---</b>
+            </div>
+            <button class="btn-participar" style="background:var(--primary); color:#000;" onclick="fecharWin()">RESGATAR PREMIO</button>
         </div>
     </div>
 
     <script>
-        // 1. CONFIGURAÇÃO FIREBASE
+        // --- 1. CONFIGURAÇÃO FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg",
             authDomain: "cobrifas.firebaseapp.com",
@@ -101,11 +139,11 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Recupera sessão do login
+        // Recupera sessão (login)
         const user = JSON.parse(localStorage.getItem('sessaoAtiva'));
         if(!user) window.location.href = 'login.html';
 
-        /* --- CONTROLE DE ABAS --- */
+        /* --- SISTEMA DE ABAS --- */
         function openTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
@@ -121,13 +159,46 @@
                 const grid = document.getElementById('gridLoja');
                 grid.innerHTML = Object.keys(rifas).map(id => {
                     const r = rifas[id];
-                    if(r.ganhador) return ''; // Esconde sorteadas
+                    if(r.ganhador) return ''; // Esconde rifas finalizadas
+                    const pct = ((r.vendidas || 0) / r.total) * 100;
                     return `
                     <div class="card">
                         <div class="price-badge">R$ ${r.preco}</div>
                         <img src="${r.img}" class="skin-img">
-                        <h3 style="font-family:Orbitron; text-align:center;">${r.nome}</h3>
-                        <button class="btn-buy" onclick="comprar('${id}', '${r.nome}', '${r.preco}')" style="margin-top:15px;">PARTICIPAR</button>
+                        <h3 style="font-family:Orbitron; text-align:center; height:50px;">${r.nome}</h3>
+                        <div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div>
+                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#888; margin-bottom:15px;">
+                            <span>RESTANTES: ${r.total - (r.vendidas || 0)}</span>
+                            <span>${pct.toFixed(0)}%</span>
+                        </div>
+                        <button class="btn-participar" onclick="comprar('${id}', '${r.nome}', '${r.preco}')">COMPRAR COTAS</button>
+                    </div>`;
+                }).join('');
+            });
+        }
+
+        /* --- MINHAS RIFAS REALTIME --- */
+        function carregarMinhasRifas() {
+            db.ref('pagamentos').orderByChild('cpf').equalTo(user.cpf).on('value', (snapshot) => {
+                const pags = snapshot.val() || {};
+                const container = document.getElementById('listaMinhasRifas');
+                const arrayPags = Object.values(pags).reverse();
+
+                if(arrayPags.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; padding:50px; color:#555;">Nenhuma participação encontrada.</p>';
+                    return;
+                }
+
+                container.innerHTML = arrayPags.map(p => {
+                    const cor = p.status === 'aprovado' ? 'var(--green)' : p.status === 'recusado' ? 'var(--red)' : '#888';
+                    const nums = p.numeros ? p.numeros.map(n => `<span class="n-box">${n}</span>`).join('') : '<small>Aguardando aprovação do PIX...</small>';
+                    return `
+                    <div class="my-ticket-card">
+                        <div class="ticket-header">
+                            <div><b style="font-size:1.1rem;">${p.rifa}</b><br><small style="color:#666;">Data: ${p.data}</small></div>
+                            <div style="text-align:right;"><span style="color:${cor}; font-weight:bold; font-size:0.8rem;">● ${p.status.toUpperCase()}</span><br><b style="color:var(--primary)">R$ ${p.valor}</b></div>
+                        </div>
+                        <div class="ticket-numbers">${nums}</div>
                     </div>`;
                 }).join('');
             });
@@ -137,12 +208,16 @@
         function checkVitorias() {
             db.ref('rifas').on('value', (snapshot) => {
                 const rifas = snapshot.val() || {};
-                Object.values(rifas).forEach(r => {
-                    // Se houver ganhador E o CPF for o meu E eu ainda não vi
-                    if(r.ganhador && r.ganhador.cpf === user.cpf && !r.ganhador.visto) {
-                        document.getElementById('winRifaName').innerText = r.nome;
-                        document.getElementById('winRifaNum').innerText = r.ganhador.numero;
+                Object.keys(rifas).forEach(id => {
+                    const r = rifas[id];
+                    // Se houver ganhador E for o meu CPF E eu ainda não confirmei que vi
+                    if(r.ganhador && r.ganhador.cpf === user.cpf && !r.ganhador.vistoPeloUser) {
+                        document.getElementById('winItem').innerText = r.nome;
+                        document.getElementById('winNum').innerText = "#" + r.ganhador.numero;
                         document.getElementById('modalWin').style.display = 'flex';
+                        
+                        // Marca como visto no Firebase para não abrir o modal toda vez
+                        db.ref(`rifas/${id}/ganhador`).update({ vistoPeloUser: true });
                     }
                 });
             });
@@ -150,56 +225,30 @@
 
         function fecharWin() { document.getElementById('modalWin').style.display = 'none'; }
 
-        /* --- MINHAS RIFAS --- */
-        function carregarMinhasRifas() {
-            db.ref('pagamentos').orderByChild('cpf').equalTo(user.cpf).on('value', (snapshot) => {
-                const pags = snapshot.val() || {};
-                const container = document.getElementById('listaMinhasRifas');
-                container.innerHTML = Object.values(pags).map(p => {
-                    const cor = p.status === 'aprovado' ? 'var(--green)' : p.status === 'recusado' ? 'var(--red)' : '#888';
-                    return `
-                    <div style="background:rgba(255,255,255,0.03); padding:20px; border-radius:8px; margin-bottom:15px; border-left:4px solid ${cor}">
-                        <div style="display:flex; justify-content:space-between;">
-                            <b>${p.rifa}</b>
-                            <span style="color:${cor}; font-size:0.8rem; font-weight:bold;">${p.status.toUpperCase()}</span>
-                        </div>
-                        <div style="margin-top:10px; color:#aaa; font-size:0.8rem;">
-                            NÚMEROS: ${p.numeros ? p.numeros.join(', ') : 'Aguardando aprovação...'}
-                        </div>
-                    </div>`;
-                }).join('') || '<p style="color:#555">Você ainda não possui títulos.</p>';
-            });
-        }
-
-        /* --- COMPRAR (SIMPLIFICADO) --- */
-        function comprar(id, nome, preco) {
-            const qtd = prompt(`Quantas cotas de ${nome} deseja comprar?`, "10");
+        /* --- COMPRAR (MANDA PRO FIREBASE) --- */
+        function comprar(rifaId, nome, preco) {
+            const qtd = prompt(`Quantas cotas de ${nome} deseja adquirir?`, "10");
             if(!qtd || isNaN(qtd)) return;
 
-            // Simula fluxo de pagamento (para produção, aqui abriria o modal do PIX)
-            const comprovanteSimulado = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-
+            // Aqui abrimos o modal do PIX ou mandamos direto para aprovação
             db.ref('pagamentos').push({
                 usuario: user.nome,
                 cpf: user.cpf,
                 rifa: nome,
-                rifaId: id,
+                rifaId: rifaId,
                 cotas: parseInt(qtd),
                 valor: (parseFloat(preco) * parseInt(qtd)).toFixed(2),
                 status: 'pendente',
-                comprovante: comprovanteSimulado,
                 data: new Date().toLocaleString()
             }).then(() => {
-                alert("Pedido enviado! Vá em 'Minhas Participações' para ver o status.");
+                alert("Pedido realizado! Envie o comprovante no suporte se necessário.");
+                openTab(null, 'minhas'); // Muda para a aba de participações
             });
         }
 
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
 
-        window.onload = () => {
-            carregarLoja();
-            checkVitorias();
-        };
+        window.onload = () => { carregarLoja(); checkVitorias(); };
     </script>
 </body>
 </html>

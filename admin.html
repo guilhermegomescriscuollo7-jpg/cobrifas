@@ -133,6 +133,10 @@
             <section id="membros" class="tab-content">
                 <div class="header-title">GERENCIAR MEMBROS</div>
                 <div class="glass-panel">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <input type="text" id="buscaNome" placeholder="🔍 Filtrar por Nome..." onkeyup="filtrarTabelaMembros()">
+                        <input type="text" id="buscaCPF" placeholder="🔍 Filtrar por CPF..." onkeyup="filtrarTabelaMembros()">
+                    </div>
                     <table>
                         <thead><tr><th>MEMBRO</th><th>CPF</th><th>TEL</th><th>AÇÕES</th></tr></thead>
                         <tbody id="listaMembrosBody"></tbody>
@@ -231,6 +235,7 @@
         const db = firebase.database();
 
         let chatAtivoCPF = null;
+        let listaMembrosCache = {}; // Variável para guardar os membros e filtrar rápido
 
         function openTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
@@ -267,7 +272,7 @@
                 document.getElementById('listaRifasAdm').innerHTML = Object.keys(rifas).map(id => {
                     const r = rifas[id];
                     const v = r.numerosVendidos ? r.numerosVendidos.length : 0;
-                    // CALCULO DAS COTAS RESTANTES (NOVO)
+                    // CALCULO DAS COTAS RESTANTES
                     const restantes = parseInt(r.total) - v;
                     
                     let btn = r.ganhador ? '🏆 FINALIZADA' : (v >= r.total ? `<button class="btn-action btn-gold" onclick="abrirSorteio('${id}')">SORTEAR</button>` : 'EM ANDAMENTO');
@@ -285,7 +290,7 @@
             });
         }
 
-        /* --- PAGAMENTOS ATUALIZADOS (CPF E REPROVAR) --- */
+        /* --- PAGAMENTOS ATUALIZADOS --- */
         function renderPagamentos() {
             db.ref('pagamentos').on('value', s => {
                 const pags = s.val() || {};
@@ -320,7 +325,6 @@
             });
         }
 
-        // FUNÇÃO DE REPROVAÇÃO
         function reprovarPagamento(id) {
             if(confirm("Deseja recusar este pagamento?")) {
                 db.ref(`pagamentos/${id}`).update({ status: 'recusado' });
@@ -401,7 +405,6 @@
         }
 
         /* --- PIX E MEMBROS --- */
-        // NOVA FUNÇÃO: CARREGAR PIX (Mantém fixo na tela)
         function carregarPix() {
             db.ref('config/pix').on('value', s => {
                 const data = s.val();
@@ -419,23 +422,49 @@
             }).then(() => alert("Salvo!")); 
         }
 
+        // --- FUNÇÕES DE MEMBROS E FILTROS (NOVA LÓGICA) ---
         function renderMembros() {
+            // Apenas carrega os dados e salva na variavel cache
             db.ref('membros').on('value', s => {
-                const membros = s.val() || {};
-                document.getElementById('listaMembrosBody').innerHTML = Object.keys(membros).map(id => {
-                    const m = membros[id];
-                    return `<tr><td><div class="user-cell"><img src="${m.avatar}" class="user-img"><b>${m.nome}</b></div></td><td>${m.cpf}</td><td>${m.tel}</td>
-                        <td><button class="btn-action btn-orange" onclick="db.ref('membros/${id}').update({status:'BANIDO'})">BANIR</button>
-                        <button class="btn-action btn-red" onclick="if(confirm('Apagar?')) db.ref('membros/${id}').remove()">X</button></td></tr>`;
-                }).join('');
+                listaMembrosCache = s.val() || {};
+                filtrarTabelaMembros(); // Chama o filtro que gera a tabela
             });
         }
 
-        // ADICIONADO carregarPix() E LOGICA DE CHAT REDIRECT
+        function filtrarTabelaMembros() {
+            // Pega os valores digitados
+            const nomeFiltro = document.getElementById('buscaNome').value.toLowerCase();
+            const cpfFiltro = document.getElementById('buscaCPF').value;
+
+            // Gera o HTML filtrando os dados
+            const html = Object.keys(listaMembrosCache).map(id => {
+                const m = listaMembrosCache[id];
+                
+                // Lógica de Filtro
+                const matchNome = (m.nome || "").toLowerCase().includes(nomeFiltro);
+                const matchCPF = (m.cpf || "").includes(cpfFiltro);
+
+                if (matchNome && matchCPF) {
+                    return `<tr>
+                        <td><div class="user-cell"><img src="${m.avatar}" class="user-img"><b>${m.nome}</b></div></td>
+                        <td>${m.cpf}</td>
+                        <td>${m.tel}</td>
+                        <td>
+                            <button class="btn-action btn-orange" onclick="db.ref('membros/${id}').update({status:'BANIDO'})">BANIR</button>
+                            <button class="btn-action btn-red" onclick="if(confirm('Apagar?')) db.ref('membros/${id}').remove()">X</button>
+                        </td>
+                    </tr>`;
+                } else {
+                    return ""; // Não exibe se não bater com o filtro
+                }
+            }).join('');
+
+            document.getElementById('listaMembrosBody').innerHTML = html;
+        }
+
         window.onload = () => { 
             updateDash(); renderMembros(); renderRifas(); renderPagamentos(); carregarPix(); 
             
-            // Lógica extra para abrir o chat se vier do Sorteador
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('openChat')) {
                 openTab(null, 'chat');

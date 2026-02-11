@@ -42,6 +42,7 @@
         
         .cart-btn { position: relative; cursor: pointer; margin: 0 15px; color: var(--primary); font-size: 1.2rem; }
         .cart-badge { position: absolute; top: -8px; right: -8px; background: var(--red); color: #fff; font-size: 0.6rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .user-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
         /* --- SIDEBAR CARRINHO --- */
@@ -94,16 +95,10 @@
         .upload-label:hover { border-color: var(--primary); color: var(--primary); }
         .btn-disabled { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
 
-        /* --- CHAT & PERFIL --- */
+        /* --- OUTROS --- */
         #chatBox { height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; }
         .msg-u { align-self: flex-end; background: var(--primary); color: #000; padding: 10px 15px; border-radius: 8px; max-width: 75%; font-weight: 600; }
         .msg-a { align-self: flex-start; background: #333; color: #fff; padding: 10px 15px; border-radius: 8px; max-width: 75%; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
-        .input-group label { color: var(--primary); font-family: 'Orbitron'; font-size: 0.65rem; text-transform: uppercase; }
-        .input-group input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Rajdhani'; }
-
-        /* --- MINHAS RIFAS --- */
         .ticket-box { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #444; }
         .n-badge { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 3px; font-family: Orbitron; font-size: 0.7rem; margin: 3px; display: inline-block; font-weight: bold; }
     </style>
@@ -161,12 +156,11 @@
         <section id="perfil" class="tab-content">
             <h2 class="section-title">DADOS DO OPERADOR</h2>
             <div class="glass-panel">
-                <div class="form-grid">
-                    <div class="input-group"><label>NOME COMPLETO</label><input type="text" id="pNome"></div>
-                    <div class="input-group"><label>NICKNAME</label><input type="text" id="pNick"></div>
-                    <div class="input-group"><label>WHATSAPP</label><input type="text" id="pTel"></div>
-                    <div class="input-group"><label>CPF (TRAVADO)</label><input type="text" id="pCpf" disabled style="opacity:0.4"></div>
-                    <div class="input-group"><label>ATUALIZAR SENHA</label><input type="password" id="pPass" placeholder="••••••••"></div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+                    <div style="display:flex; flex-direction:column; gap:8px;"><label style="color:var(--primary); font-family:Orbitron; font-size:0.65rem;">NOME COMPLETO</label><input type="text" id="pNome" style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff;"></div>
+                    <div style="display:flex; flex-direction:column; gap:8px;"><label style="color:var(--primary); font-family:Orbitron; font-size:0.65rem;">NICKNAME</label><input type="text" id="pNick" style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff;"></div>
+                    <div style="display:flex; flex-direction:column; gap:8px;"><label style="color:var(--primary); font-family:Orbitron; font-size:0.65rem;">WHATSAPP</label><input type="text" id="pTel" style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff;"></div>
+                    <div style="display:flex; flex-direction:column; gap:8px;"><label style="color:var(--primary); font-family:Orbitron; font-size:0.65rem;">CPF (TRAVADO)</label><input type="text" id="pCpf" disabled style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff; opacity:0.4;"></div>
                 </div>
                 <button class="btn-action" style="background:var(--primary); color:#000; margin-top:30px; border:none;" onclick="saveP()">SALVAR ALTERAÇÕES</button>
             </div>
@@ -177,14 +171,7 @@
         <div class="modal-card-cota">
             <div class="modal-header-text">Quanto mais títulos, mais chances de ganhar!</div>
             <div class="modal-body">
-                <div class="cotas-grid">
-                    <div class="cota-item" onclick="setQtd(10)"><span class="cq">+10</span><span class="cp" id="p10">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item active" id="c50" onclick="setQtd(50)"><div class="tag-pop">Mais popular</div><span class="cq">+50</span><span class="cp" id="p50">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item" onclick="setQtd(100)"><span class="cq">+100</span><span class="cp" id="p100">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item" onclick="setQtd(500)"><span class="cq">+500</span><span class="cp" id="p500">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item" onclick="setQtd(1000)"><span class="cq">+1000</span><span class="cp" id="p1000">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                    <div class="cota-item" onclick="setQtd(2500)"><span class="cq">+2500</span><span class="cp" id="p2500">R$ 0,00</span><span class="cl">SELECIONAR</span></div>
-                </div>
+                <div class="cotas-grid" id="cotasGridContent"></div>
             </div>
             <div class="controls-row">
                 <div class="qtd-sel">
@@ -203,13 +190,12 @@
     <div id="modalPix">
         <div class="modal-card-pix">
             <h2 style="font-family:Orbitron; color:var(--primary); margin-bottom:20px;">PAGAMENTO PIX</h2>
-            <p style="color:#888; font-size:0.9rem;">Realize a transferência e anexe o comprovante abaixo:</p>
             <div class="pix-box">
                 <label style="color:var(--primary); font-size:0.7rem;">CHAVE PIX</label>
                 <div id="txtChavePix" style="color:#fff; font-size:1.1rem; font-weight:bold; word-break:break-all;">...</div>
             </div>
             <div class="upload-area">
-                <label for="compInput" class="upload-label">📎 ANEXAR COMPROVANTE (IMAGEM/PDF)</label>
+                <label for="compInput" class="upload-label">📎 ANEXAR COMPROVANTE</label>
                 <input type="file" id="compInput" accept="image/*, application/pdf" style="display:none;" onchange="validarArquivo()">
                 <small id="fileName" style="color:var(--green); display:block; margin-top:10px; font-weight:bold;"></small>
             </div>
@@ -219,7 +205,6 @@
     </div>
 
     <script>
-        // --- FIREBASE CONFIG ---
         const firebaseConfig = { apiKey: "AIzaSyBfX7oMSNn4gSL1Knfx-yvwBwkX4H7JjQg", authDomain: "cobrifas.firebaseapp.com", projectId: "cobrifas", storageBucket: "cobrifas.firebasestorage.app", messagingSenderId: "1098617388770", appId: "1:1098617388770:web:8b6124a9ece62c9f81a8bb" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -247,8 +232,7 @@
             db.ref('rifas').on('value', s => {
                 const rifas = s.val() || {};
                 const grid = document.getElementById('gridLoja');
-                const ativas = Object.keys(rifas).filter(id => !rifas[id].ganhador);
-                grid.innerHTML = ativas.map(id => {
+                grid.innerHTML = Object.keys(rifas).filter(id => !rifas[id].ganhador).map(id => {
                     const r = rifas[id]; const res = r.total - (r.vendidas || 0); const p = ((r.vendidas || 0) / r.total) * 100;
                     return `<div class="card"><div class="price-tag">R$ ${r.preco}</div><img src="${r.img}" class="skin-img"><h3>${r.nome}</h3><div class="progress-bg"><div class="progress-fill" style="width:${p}%"></div></div><div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#888; font-family:Orbitron; margin-bottom:15px;"><span>RESTANTES: <b style="color:var(--primary)">${res}</b></span><span>${p.toFixed(0)}%</span></div><button class="btn-action" onclick="openModal('${id}', ${r.preco}, ${res})">ESCOLHER COTAS</button></div>`;
                 }).join('');
@@ -257,24 +241,39 @@
 
         function openModal(id, preco, estoque) {
             rifaSelId = id; precoUnico = preco; estoqueSel = estoque;
-            [10, 50, 100, 500, 1000, 2500].forEach(q => {
-                const el = document.getElementById('p' + q); if(el) el.innerText = 'R$ ' + (q * preco).toFixed(2);
-            });
+            const grid = document.getElementById('cotasGridContent');
+            const opts = [10, 50, 100, 500, 1000, 2500];
+            grid.innerHTML = opts.map(q => {
+                const active = q === 50 ? 'active' : '';
+                const tag = q === 50 ? '<div class="tag-pop">Mais popular</div>' : '';
+                return `<div class="cota-item ${active}" onclick="setQtd(${q}, this)">${tag}<span class="cq">+${q}</span><span class="cp">R$ ${(q*preco).toFixed(2)}</span><span class="cl">SELECIONAR</span></div>`;
+            }).join('');
             document.getElementById('inQtd').value = 10; refreshTotal(); document.getElementById('modalCotas').style.display = 'flex';
         }
-        function setQtd(n) { if(n <= estoqueSel) { document.getElementById('inQtd').value = n; refreshTotal(); } }
-        function adjust(d) { let v = parseInt(document.getElementById('inQtd').value) + d; if(v > 0 && v <= estoqueSel) document.getElementById('inQtd').value = v; refreshTotal(); }
+
+        function setQtd(n, el) { 
+            if(n > estoqueSel) return alert("Estoque insuficiente!");
+            document.querySelectorAll('.cota-item').forEach(x => x.classList.remove('active'));
+            if(el) el.classList.add('active');
+            document.getElementById('inQtd').value = n; refreshTotal(); 
+        }
+
+        function adjust(d) { 
+            let v = parseInt(document.getElementById('inQtd').value) + d; 
+            if(v > 0 && v <= estoqueSel) { document.getElementById('inQtd').value = v; refreshTotal(); }
+        }
+
         function refreshTotal() { document.getElementById('totalModal').innerText = 'R$ ' + (parseInt(document.getElementById('inQtd').value) * precoUnico).toFixed(2); }
 
         function addCarrinho() {
-            const q = parseInt(document.getElementById('inQtd').value);
             db.ref('rifas/'+rifaSelId).once('value', s => {
-                carrinho.push({ id: rifaSelId, nome: s.val().nome, preco: precoUnico, qtd: q });
+                carrinho.push({ id: rifaSelId, nome: s.val().nome, preco: precoUnico, qtd: parseInt(document.getElementById('inQtd').value) });
                 updateUI(); document.getElementById('modalCotas').style.display = 'none'; toggleCart();
             });
         }
 
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
+
         function updateUI() {
             let t = 0, c = 0;
             document.getElementById('cartList').innerHTML = carrinho.map((it, i) => {
@@ -287,9 +286,8 @@
         function abrirCheckoutPix() {
             if(!carrinho.length) return alert("Carrinho vazio!");
             db.ref('config/pix/chave').once('value', s => {
-                document.getElementById('txtChavePix').innerText = s.val() || "Chave não configurada";
-                document.getElementById('modalPix').style.display = 'flex';
-                toggleCart();
+                document.getElementById('txtChavePix').innerText = s.val() || "---";
+                document.getElementById('modalPix').style.display = 'flex'; toggleCart();
             });
         }
 
@@ -300,7 +298,7 @@
                 const reader = new FileReader();
                 reader.onload = e => { 
                     comprovanteBase64 = e.target.result;
-                    document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); // ATIVA O BOTÃO
+                    document.getElementById('btnFinalizarPix').classList.remove('btn-disabled'); 
                 };
                 reader.readAsDataURL(file);
             }
@@ -310,10 +308,9 @@
             if(!comprovanteBase64) return alert("O comprovante é obrigatório!");
             carrinho.forEach(it => {
                 db.ref('pagamentos').push({
-                    usuario: userAtivo.nome, cpf: userAtivo.cpf,
-                    rifa: it.nome, rifaId: it.id, valor: (it.preco*it.qtd).toFixed(2),
-                    cotas: it.qtd, status: 'pendente', comprovante: comprovanteBase64,
-                    data: new Date().toLocaleString()
+                    usuario: userAtivo.nome, cpf: userAtivo.cpf, rifa: it.nome, rifaId: it.id, 
+                    valor: (it.preco*it.qtd).toFixed(2), cotas: it.qtd, status: 'pendente', 
+                    comprovante: comprovanteBase64, data: new Date().toLocaleString()
                 });
             });
             carrinho = []; updateUI(); document.getElementById('modalPix').style.display = 'none';
@@ -351,7 +348,7 @@
         }
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
         function saveP() { db.ref('membros/'+userFirebaseId).update({ nome: document.getElementById('pNome').value, tel: document.getElementById('pTel').value }).then(() => alert("Salvo!")); }
-        window.onload = init;
+        window.onload = carregarPagina;
     </script>
 </body>
 </html>
